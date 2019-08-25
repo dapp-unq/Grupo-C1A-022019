@@ -1,0 +1,14 @@
+---------------------------------------------------------------------
+TAG XXXXXX
+---------------------------------------------------------------------
+NEW FEATURES (lo que están entregando y está funcionando):
+* xxx
+* xxx
+
+NOTES (ej: funcionalidad que falta, alguna consideración especial):
+* xxx
+* xxx
+
+KNOWN ISSUES (ej: funcionalidad que saben que están funcionando diferente, algún error conocido en la funcionalidad terminada, etc) :
+* xxx
+* xxx
