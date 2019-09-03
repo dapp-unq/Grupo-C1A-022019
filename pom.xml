@@ -19,6 +19,7 @@
         <junit.version>4.12</junit.version>
         <lombok.version>1.18.8</lombok.version>
         <mockito.version>3.0.0</mockito.version>
+        <validation-api.version>2.0.1.Final</validation-api.version>
     </properties>
 
     <dependencies>
@@ -29,6 +30,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${validation-api.version}</version>
         </dependency>
 
         <!-- Lombok -->
