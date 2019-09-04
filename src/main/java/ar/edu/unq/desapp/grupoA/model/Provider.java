@@ -10,14 +10,14 @@ public class Provider {
 
     @NonNull private String name;
     @NonNull private String logo;
-    @NonNull private String city;
+    @NonNull private City city;
     @NonNull private String location;
     @NonNull private String description;
 
-    public Provider(String name, String logo, String city, String location, String description){
+    public Provider(String name, String logo, City city, String location, String description){
         this.name = validateNotEmpty(name, "nombre");
         this.logo = validateNotEmpty(logo, "logo");
-        this.city = validateNotEmpty(city, "localidad");
+        this.city = validateNotEmptyCity(city, "localidad");
         this.location = validateNotEmpty(location, "direccion");
         this.description = validateDescriptionSize(description);
     }
@@ -36,13 +36,19 @@ public class Provider {
             throw new EmptyStringException("El campo " + parameterName + " no puede ser vacío");
         return parameter;
     }
+    
+    private City validateNotEmptyCity(City parameter, String parameterName) {
+        if(parameter.equals(null))
+            throw new NullPointerException("El campo " + parameterName + " no puede ser vacío");
+        return parameter;
+    }
 
     public void setLogo(String logo){
         this.logo = validateNotEmpty(logo, "logo");
     }
 
-    public void setCity(String city){
-        this.city = validateNotEmpty(city, "localidad");
+    public void setCity(City city){
+        this.city = validateNotEmptyCity(city, "localidad");
     }
 
     public void setName(String name){

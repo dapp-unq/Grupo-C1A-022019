@@ -11,17 +11,17 @@ public class ProviderTest {
 
     @Before
     public void setUp() {
-        provider = new Provider("PerezH", "url", "Quilmes", "Triunvirato 1523", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        provider = new Provider("PerezH", "url", City.Quilmes, "Triunvirato 1523", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullNameThrowsException() {
-        new Provider(null, "url", "Quilmes", "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        new Provider(null, "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerCreationWithEmptyNameThrowsException() {
-        new Provider("", "url", "Quilmes", "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        new Provider("", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     @Test(expected = NullPointerException.class)
@@ -36,12 +36,12 @@ public class ProviderTest {
 
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullLogoThrowsException() {
-        new Provider("name", null, "Quilmes", "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        new Provider("name", null, City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerCreationWithEmptyLogoThrowsException() {
-        new Provider("name", "", "Quilmes", "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        new Provider("name", "", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     @Test(expected = NullPointerException.class)
@@ -59,29 +59,19 @@ public class ProviderTest {
         new Provider("name", "url", null, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
-    @Test(expected = EmptyStringException.class)
-    public void providerCreationWithEmptyCityThrowsException() {
-        new Provider("name", "url", "", "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-    }
-
     @Test(expected = NullPointerException.class)
     public void providerWithNullCityThrowsException() {
         provider.setCity(null);
     }
 
-    @Test(expected = EmptyStringException.class)
-    public void providerWithEmptyCityThrowsException() {
-        provider.setCity("");
-    }
-
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullLocationThrowsException() {
-        new Provider("name", "url", "Quilmes", null, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        new Provider("name", "url", City.Quilmes, null, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerCreationWithEmptyLocationThrowsException() {
-        new Provider("name", "url", "Quilmes", "", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        new Provider("name", "url", City.Quilmes, "", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     @Test(expected = NullPointerException.class)
@@ -96,23 +86,23 @@ public class ProviderTest {
 
     @Test(expected = DescriptionLengthException.class)
     public void providerCreationWithEmptyDescriptionThrowsException() {
-        new Provider("name", "url", "Quilmes", "Quilmes", "");
+        new Provider("name", "url", City.Quilmes, "Quilmes", "");
     }
 
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullDescriptionThrowsException() {
-        new Provider("name", "url", "Quilmes", "Quilmes", null);
+        new Provider("name", "url", City.Quilmes, "Quilmes", null);
     }
 
     @Test(expected = DescriptionLengthException.class)
     public void providerCreationWith29LengthDescriptionThrowsException() {
-        new Provider("name", "url", "Quilmes", "Quilmes", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        new Provider("name", "url", City.Quilmes, "Quilmes", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     @Test(expected = DescriptionLengthException.class)
     public void providerCreationWith201LengthDescriptionThrowsException() {
         String twoHundredAndOneString = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        new Provider("name", "url", "Quilmes", "Quilmes", twoHundredAndOneString);
+        new Provider("name", "url", City.Quilmes, "Quilmes", twoHundredAndOneString);
     }
 
 }
