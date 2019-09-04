@@ -13,15 +13,25 @@ public class Provider {
     @NonNull private City city;
     @NonNull private String location;
     @NonNull private String description;
+    @NonNull private String website;
 
-    public Provider(String name, String logo, City city, String location, String description){
+    public Provider(String name, String logo, City city, String location, String description, 
+    		String website)
+    {
         this.name = validateNotEmpty(name, "nombre");
         this.logo = validateNotEmpty(logo, "logo");
         this.city = validateNotEmptyCity(city, "localidad");
         this.location = validateNotEmpty(location, "direccion");
         this.description = validateDescriptionSize(description);
+        this.website = validateNotNull(website, "sitio web");
     }
 
+    private String validateNotNull(String parameter, String parameterName) {
+        if(parameter.equals(null))
+            throw new NullPointerException("El campo " + parameterName + " no puede ser vacío");
+        return parameter;
+    }
+    
     private String validateDescriptionSize(String description) {
         int length = description.length();
         if(length < 30)
@@ -38,7 +48,7 @@ public class Provider {
     }
     
     private City validateNotEmptyCity(City parameter, String parameterName) {
-        if(parameter.equals(null))
+        if(parameter.toString().isEmpty())
             throw new NullPointerException("El campo " + parameterName + " no puede ser vacío");
         return parameter;
     }
@@ -61,6 +71,10 @@ public class Provider {
 
     public void setDescription(String description){
         this.description = validateDescriptionSize(description);
+    }
+    
+    public void setWebsite(String website){
+        this.website = validateNotNull(website, "sitio web");
     }
 
 }
