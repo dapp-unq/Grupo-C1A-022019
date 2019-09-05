@@ -14,17 +14,17 @@ public class ProviderTest {
 
     @Before
     public void setUp() {
-        provider = new Provider("PerezH", "url", City.Quilmes, "Triunvirato 1523", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com");
+        provider = new Provider("PerezH", "url", City.Quilmes, "Triunvirato 1523", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com");
     }
 
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullNameThrowsException() {
-        new Provider(null, "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com");
+        new Provider(null, "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com");
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerCreationWithEmptyNameThrowsException() {
-        new Provider("", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com");
+        new Provider("", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com");
     }
 
     @Test(expected = NullPointerException.class)
@@ -39,12 +39,12 @@ public class ProviderTest {
 
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullLogoThrowsException() {
-        new Provider("name", null, City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com");
+        new Provider("name", null, City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com");
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerCreationWithEmptyLogoThrowsException() {
-        new Provider("name", "", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com");
+        new Provider("name", "", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com");
     }
 
     @Test(expected = NullPointerException.class)
@@ -59,7 +59,7 @@ public class ProviderTest {
 
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullCityThrowsException() {
-        new Provider("name", "url", null, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com");
+        new Provider("name", "url", null, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com");
     }
 
     @Test(expected = NullPointerException.class)
@@ -69,12 +69,12 @@ public class ProviderTest {
 
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullLocationThrowsException() {
-        new Provider("name", "url", City.Quilmes, null, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com");
+        new Provider("name", "url", City.Quilmes, null, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com");
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerCreationWithEmptyLocationThrowsException() {
-        new Provider("name", "url", City.Quilmes, "", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com");
+        new Provider("name", "url", City.Quilmes, "", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com");
     }
 
     @Test(expected = NullPointerException.class)
@@ -89,34 +89,53 @@ public class ProviderTest {
 
     @Test(expected = DescriptionLengthException.class)
     public void providerCreationWithEmptyDescriptionThrowsException() {
-        new Provider("name", "url", City.Quilmes, "Quilmes", "", "sitio_web.com");
+        new Provider("name", "url", City.Quilmes, "Quilmes", "", "sitio_web.com", "emailde.perezh@gmail.com");
     }
 
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullDescriptionThrowsException() {
-        new Provider("name", "url", City.Quilmes, "Quilmes", null, "sitio_web.com");
+        new Provider("name", "url", City.Quilmes, "Quilmes", null, "sitio_web.com", "emailde.perezh@gmail.com");
     }
 
     @Test(expected = DescriptionLengthException.class)
     public void providerCreationWith29LengthDescriptionThrowsException() {
-        new Provider("name", "url", City.Quilmes, "Quilmes", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com");
+        new Provider("name", "url", City.Quilmes, "Quilmes", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com");
     }
 
     @Test(expected = DescriptionLengthException.class)
     public void providerCreationWith201LengthDescriptionThrowsException() {
         String twoHundredAndOneString = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        new Provider("name", "url", City.Quilmes, "Quilmes", twoHundredAndOneString, "sitio_web.com");
+        new Provider("name", "url", City.Quilmes, "Quilmes", twoHundredAndOneString, "sitio_web.com", "emailde.perezh@gmail.com");
     }
     
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullWebsiteThrowsException() {
-        new Provider("name", "url", City.Quilmes, "Quilmes", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null);
+        new Provider("name", "url", City.Quilmes, "Quilmes", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, "emailde.perezh@gmail.com");
     }
     
     @Test(expected = NullPointerException.class)
-    public void providerWithNullWebsiteThrowsException() 
-    {
+    public void providerWithNullWebsiteThrowsException() {
     	 provider.setWebsite(null);
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void providerCreationWithNullEmailThrowsException() {
+        new Provider("name", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", null);
+    }
+
+    @Test(expected = EmptyStringException.class)
+    public void providerCreationWithEmptyEmailThrowsException() {
+        new Provider("name", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "");
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void providerWithNullEmailThrowsException() {
+        provider.setEmail(null);
+    }
+
+    @Test(expected = EmptyStringException.class)
+    public void providerWithEmptyEmailThrowsException() {
+        provider.setEmail("");
     }
     
 }

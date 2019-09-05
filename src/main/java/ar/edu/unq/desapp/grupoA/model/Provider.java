@@ -1,7 +1,11 @@
 package ar.edu.unq.desapp.grupoA.model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
+import ar.edu.unq.desapp.grupoA.model.Exception.InvalidEmailException;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -14,9 +18,11 @@ public class Provider {
     @NonNull private String location;
     @NonNull private String description;
     @NonNull private String website;
+    @NonNull private String email;
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     public Provider(String name, String logo, City city, String location, String description, 
-    		String website)
+    		String website, String email)
     {
         this.name = validateNotEmpty(name, "nombre");
         this.logo = validateNotEmpty(logo, "logo");
@@ -24,6 +30,20 @@ public class Provider {
         this.location = validateNotEmpty(location, "direccion");
         this.description = validateDescriptionSize(description);
         this.website = validateNotNull(website, "sitio web");
+        this.email = validateEmail(email);
+    }
+
+	private String validateEmail(String email) 
+	{
+		validateNotEmpty(email, "e-mail");
+		if (! validate(email))
+			throw new InvalidEmailException("El email no es válido");
+		return email;
+	}
+    
+    public static boolean validate(String emailStr) {
+    	Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+    	return matcher.find();
     }
 
     private String validateNotNull(String parameter, String parameterName) {
@@ -75,6 +95,10 @@ public class Provider {
     
     public void setWebsite(String website){
         this.website = validateNotNull(website, "sitio web");
+    }
+    
+    public void setEmail(String email){
+        this.email = validateEmail(email);
     }
 
 }
