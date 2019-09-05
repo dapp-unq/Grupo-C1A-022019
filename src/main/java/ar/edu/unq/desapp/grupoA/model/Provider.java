@@ -1,9 +1,11 @@
 package ar.edu.unq.desapp.grupoA.model;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoA.model.Exception.EmptyServiceHoursDaysException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
 import ar.edu.unq.desapp.grupoA.model.Exception.InvalidEmailException;
 import ar.edu.unq.desapp.grupoA.model.Exception.InvalidPhoneNumberException;
@@ -21,11 +23,13 @@ public class Provider {
     @NonNull private String website;
     @NonNull private String email;
     @NonNull private String phoneNumber;
+    @NonNull private List<ServiceHours> openingHoursDays;
+    
     private static final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     private static final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
     
     public Provider(String name, String logo, City city, String location, String description, 
-    		String website, String email, String phone)
+    		String website, String email, String phone, List<ServiceHours> serviceHours)
     {
         this.name = validateNotEmpty(name, "nombre");
         this.logo = validateNotEmpty(logo, "logo");
@@ -35,9 +39,17 @@ public class Provider {
         this.website = validateNotNull(website, "sitio web");
         this.email = validateEmail(email);
         this.phoneNumber = validatePhoneNumber(phone);
+        this.openingHoursDays = validateNotEmptyOpeningHoursDays(serviceHours, "horarios y días de atención");
     }
     
-    private @NonNull String validatePhoneNumber(String phone) 
+    private List<ServiceHours> validateNotEmptyOpeningHoursDays(List<ServiceHours> serviceHours, String parameterName) 
+    {
+    	if(serviceHours.isEmpty())
+            throw new EmptyServiceHoursDaysException("El campo " + parameterName + " no puede ser vacío");
+        return serviceHours;
+	}
+
+	private String validatePhoneNumber(String phone) 
     {
     	validateNotEmpty(phone, "número de teléfono");
 		if (! validatePhoneRegEx(phone))
@@ -120,6 +132,10 @@ public class Provider {
     
     public void setPhoneNumber(String phone){
         this.phoneNumber = validatePhoneNumber(phone);
+    }
+    
+    public void setOpeningHoursDays(List<ServiceHours> serviceHours){
+        this.openingHoursDays = validateNotEmptyOpeningHoursDays(serviceHours, "horarios y días de atención");
     }
 
 }
