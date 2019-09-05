@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
 import ar.edu.unq.desapp.grupoA.model.Exception.InvalidEmailException;
+import ar.edu.unq.desapp.grupoA.model.Exception.InvalidPhoneNumberException;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -19,10 +20,12 @@ public class Provider {
     @NonNull private String description;
     @NonNull private String website;
     @NonNull private String email;
-    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
+    @NonNull private String phoneNumber;
+    private static final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
+    
     public Provider(String name, String logo, City city, String location, String description, 
-    		String website, String email)
+    		String website, String email, String phone)
     {
         this.name = validateNotEmpty(name, "nombre");
         this.logo = validateNotEmpty(logo, "logo");
@@ -31,18 +34,32 @@ public class Provider {
         this.description = validateDescriptionSize(description);
         this.website = validateNotNull(website, "sitio web");
         this.email = validateEmail(email);
+        this.phoneNumber = validatePhoneNumber(phone);
+    }
+    
+    private @NonNull String validatePhoneNumber(String phone) 
+    {
+    	validateNotEmpty(phone, "número de teléfono");
+		if (! validatePhoneRegEx(phone))
+			throw new InvalidPhoneNumberException("El número de teléfono debe componerse con '+' seguido por la característica.");
+		return phone;
+	}
+
+	private static boolean validatePhoneRegEx(String phone) {
+    	Matcher matcher = VALID_PHONE_REGEX.matcher(phone);
+    	return matcher.find();
     }
 
 	private String validateEmail(String email) 
 	{
 		validateNotEmpty(email, "e-mail");
-		if (! validate(email))
+		if (! validateEmailRegEx(email))
 			throw new InvalidEmailException("El email no es válido");
 		return email;
 	}
     
-    public static boolean validate(String emailStr) {
-    	Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+    public static boolean validateEmailRegEx(String _email) {
+    	Matcher matcher = VALID_EMAIL_REGEX.matcher(_email);
     	return matcher.find();
     }
 
@@ -99,6 +116,10 @@ public class Provider {
     
     public void setEmail(String email){
         this.email = validateEmail(email);
+    }
+    
+    public void setPhoneNumber(String phone){
+        this.phoneNumber = validatePhoneNumber(phone);
     }
 
 }
