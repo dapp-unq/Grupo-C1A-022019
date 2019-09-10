@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoA.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,12 +25,13 @@ public class Provider {
     @NonNull private String email;
     @NonNull private String phoneNumber;
     @NonNull private List<ServiceHours> openingHoursDays;
+    @NonNull private List<City> deliveryCities;
     
     private static final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     private static final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
     
-    public Provider(String name, String logo, City city, String location, String description, 
-    		String website, String email, String phone, List<ServiceHours> serviceHours)
+    public Provider(String name, String logo, City city, String location, String description, String website, 
+    		String email, String phone, List<ServiceHours> serviceHours, double km)
     {
         this.name = validateNotEmpty(name, "nombre");
         this.logo = validateNotEmpty(logo, "logo");
@@ -40,9 +42,19 @@ public class Provider {
         this.email = validateEmail(email);
         this.phoneNumber = validatePhoneNumber(phone);
         this.openingHoursDays = validateNotEmptyOpeningHoursDays(serviceHours, "horarios y días de atención");
+        this.deliveryCities = calculateDeliveryCities(km, location);
     }
     
-    private List<ServiceHours> validateNotEmptyOpeningHoursDays(List<ServiceHours> serviceHours, String parameterName) 
+    private @NonNull List<City> calculateDeliveryCities(Double km, String location) 
+    {
+    	List<City> cities = new ArrayList<City>();
+    	
+    	// TODO: FALTA COMUNICARSE EN GMAP PARA VER TODAS LAS LOCALIDADES DONDE HACE ENTREGAS DESDE LA CIUDAD DEL LOCAL.
+		
+    	return cities;
+	}
+
+	private List<ServiceHours> validateNotEmptyOpeningHoursDays(List<ServiceHours> serviceHours, String parameterName) 
     {
     	if(serviceHours.isEmpty())
             throw new EmptyServiceHoursDaysException("El campo " + parameterName + " no puede ser vacío");
@@ -136,6 +148,10 @@ public class Provider {
     
     public void setOpeningHoursDays(List<ServiceHours> serviceHours){
         this.openingHoursDays = validateNotEmptyOpeningHoursDays(serviceHours, "horarios y días de atención");
+    }
+    
+    public void setkm(double km){
+        this.deliveryCities = calculateDeliveryCities(km, this.location);
     }
 
 }
