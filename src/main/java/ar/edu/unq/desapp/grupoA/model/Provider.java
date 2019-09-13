@@ -15,7 +15,6 @@ import lombok.NonNull;
 
 @Getter
 public class Provider {
-
     @NonNull private String name;
     @NonNull private String logo;
     @NonNull private City city;
@@ -27,8 +26,8 @@ public class Provider {
     @NonNull private List<ServiceHours> openingHoursDays;
     @NonNull private List<City> deliveryCities;
     
-    private static final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-    private static final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
+    private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    private final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
     
     public Provider(String name, String logo, City city, String location, String description, String website, 
     		String email, String phone, List<ServiceHours> serviceHours, double km)
@@ -45,7 +44,7 @@ public class Provider {
         this.deliveryCities = calculateDeliveryCities(km, location);
     }
     
-    private @NonNull List<City> calculateDeliveryCities(Double km, String location) 
+    private List<City> calculateDeliveryCities(Double km, String location) 
     {
     	List<City> cities = new ArrayList<City>();
     	
@@ -69,7 +68,7 @@ public class Provider {
 		return phone;
 	}
 
-	private static boolean validatePhoneRegEx(String phone) {
+	private boolean validatePhoneRegEx(String phone) {
     	Matcher matcher = VALID_PHONE_REGEX.matcher(phone);
     	return matcher.find();
     }
@@ -82,7 +81,7 @@ public class Provider {
 		return email;
 	}
     
-    public static boolean validateEmailRegEx(String _email) {
+    public boolean validateEmailRegEx(String _email) {
     	Matcher matcher = VALID_EMAIL_REGEX.matcher(_email);
     	return matcher.find();
     }

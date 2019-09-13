@@ -1,10 +1,10 @@
 package ar.edu.unq.desapp.grupoA.model;
 
+import static org.junit.Assert.assertEquals;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
@@ -19,10 +19,7 @@ public class ProviderTest {
     private List<ServiceHours> openingHours;
 
     @Before
-    public void setUp() {
-    	openingHours = new ArrayList<ServiceHours>();
-    	openingHours.add(new ServiceHours(DayOfWeek.MONDAY, LocalTime.of(10, 00), LocalTime.of(21, 00)));
-    }
+    public void setUp() {}
 
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullNameThrowsException() {
@@ -220,5 +217,68 @@ public class ProviderTest {
     public void providerWithEmptyServiceHoursDaysThrowsException() {
     	provider = ProviderBuilder.aProvider().build();
         provider.setOpeningHoursDays(new ArrayList<ServiceHours>());
+    }
+    
+    @Test
+    public void createValidProvider() {
+    	provider = ProviderBuilder.aProvider().build();
+    }
+    
+    @Test
+    public void providerCreationWithViandaLizName() {
+    	provider = ProviderBuilder.aProvider().withName("ViandaLiz").build();
+    	assertEquals("ViandaLiz", provider.getName()); 
+    }
+    
+    @Test
+    public void providerCreationWithLogoLizPNGLogo() {
+    	provider = ProviderBuilder.aProvider().withLogo("logoLiz.png").build();
+    	assertEquals("logoLiz.png", provider.getLogo()); 
+    }
+    
+    @Test
+    public void providerCreationWithQuilmesCity() {
+    	provider = ProviderBuilder.aProvider().withCity(City.Quilmes).build();
+    	assertEquals(City.Quilmes, provider.getCity()); 
+    }
+    
+    @Test
+    public void providerCreationWithSaenzPenaLocation() {
+    	provider = ProviderBuilder.aProvider().withLocation("Roque Sáenz Peña 352").build();
+    	assertEquals("Roque Sáenz Peña 352", provider.getLocation()); 
+    }
+    
+    @Test
+    public void providerCreationWithValidDescrition() {
+    	provider = ProviderBuilder.aProvider().withDescription("La comidas más rica y nutritiva hecha con productos orgánicos, y sin uso de conservantes").build();
+    	assertEquals("La comidas más rica y nutritiva hecha con productos orgánicos, y sin uso de conservantes", provider.getDescription()); 
+    }
+    
+    @Test
+    public void providerCreationWithValidWebsite() {
+    	provider = ProviderBuilder.aProvider().withWebsite("viandaLiz.com.ar").build();
+    	assertEquals("viandaLiz.com.ar", provider.getWebsite()); 
+    }
+    
+    @Test
+    public void providerCreationWithValidEmail() {
+    	provider = ProviderBuilder.aProvider().withEmail("vianda-liz@gmail.com").build();
+    	assertEquals("vianda-liz@gmail.com", provider.getEmail()); 
+    }
+    
+    @Test
+    public void providerCreationWithValidPhoneNumber() {
+    	provider = ProviderBuilder.aProvider().withPhoneNumber("+42112555005").build();
+    	assertEquals("+42112555005", provider.getPhoneNumber()); 
+    }
+    
+    @Test
+    public void providerCreationWithValidOpeningHoursDays() {
+    	openingHours = new ArrayList<ServiceHours>();
+    	openingHours.add(new ServiceHours(DayOfWeek.MONDAY, LocalTime.of(9, 00), LocalTime.of(21, 00)));
+    	openingHours.add(new ServiceHours(DayOfWeek.WEDNESDAY, LocalTime.of(10, 00), LocalTime.of(22, 00)));
+    	openingHours.add(new ServiceHours(DayOfWeek.FRIDAY, LocalTime.of(9, 00), LocalTime.of(21, 00)));
+    	provider = ProviderBuilder.aProvider().withOpeningHoursDays(openingHours).build();
+    	assertEquals(openingHours, provider.getOpeningHoursDays()); 
     }
 }
