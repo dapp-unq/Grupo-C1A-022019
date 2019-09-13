@@ -22,187 +22,203 @@ public class ProviderTest {
     public void setUp() {
     	openingHours = new ArrayList<ServiceHours>();
     	openingHours.add(new ServiceHours(DayOfWeek.MONDAY, LocalTime.of(10, 00), LocalTime.of(21, 00)));
-        provider = new Provider("PerezH", "url", City.Quilmes, "Triunvirato 1523", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", openingHours, 15);
     }
 
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullNameThrowsException() {
-        new Provider(null, "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withName(null).build();
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerCreationWithEmptyNameThrowsException() {
-        new Provider("", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withName("").build();
     }
 
     @Test(expected = NullPointerException.class)
     public void providerWithNullNameThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setName(null);
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerWithEmptyNameThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setName("");
     }
 
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullLogoThrowsException() {
-        new Provider("name", null, City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withLogo(null).build();
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerCreationWithEmptyLogoThrowsException() {
-        new Provider("name", "", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withLogo("").build();
     }
 
     @Test(expected = NullPointerException.class)
     public void providerWithNullLogoThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setLogo(null);
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerWithEmptyLogoThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setLogo("");
     }
 
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullCityThrowsException() {
-        new Provider("name", "url", null, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withCity(null).build();
     }
 
     @Test(expected = NullPointerException.class)
-    public void providerWithNullCityThrowsException() {
+    public void providerWithNullCityThrowsException() 
+    {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setCity(null);
     }
 
     @Test(expected = NullPointerException.class)
-    public void providerCreationWithNullLocationThrowsException() {
-        new Provider("name", "url", City.Quilmes, null, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", openingHours, 15);
+    public void providerCreationWithNullLocationThrowsException() 
+    {
+    	provider = ProviderBuilder.aProvider().withLocation(null).build();
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerCreationWithEmptyLocationThrowsException() {
-        new Provider("name", "url", City.Quilmes, "", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withLocation("").build();
     }
 
     @Test(expected = NullPointerException.class)
     public void providerWithNullLocationThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setLocation(null);
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerWithEmptyLocationThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setLocation("");
     }
 
     @Test(expected = DescriptionLengthException.class)
     public void providerCreationWithEmptyDescriptionThrowsException() {
-        new Provider("name", "url", City.Quilmes, "Quilmes", "", "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withDescription("").build();
     }
 
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullDescriptionThrowsException() {
-        new Provider("name", "url", City.Quilmes, "Quilmes", null, "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withDescription(null).build();
     }
 
     @Test(expected = DescriptionLengthException.class)
     public void providerCreationWith29LengthDescriptionThrowsException() {
-        new Provider("name", "url", City.Quilmes, "Quilmes", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withDescription("123abcdefghijklmnopqrstuvwxyz").build();
     }
 
     @Test(expected = DescriptionLengthException.class)
     public void providerCreationWith201LengthDescriptionThrowsException() {
-        String twoHundredAndOneString = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        new Provider("name", "url", City.Quilmes, "Quilmes", twoHundredAndOneString, "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withDescription("abcdefghijklmnopqrstuvwxyz123456789abcdefghijklmnopqrstuvwxyz123456789abcdefghijklmnopqrstuvwxyz123456789abcdefghijklmnopqrstuvwxyz123456789abcdefghijklmnopqrstuvwxyz123456789abcdefghijklmnopqrstuvwxyz").build(); 
     }
     
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullWebsiteThrowsException() {
-        new Provider("name", "url", City.Quilmes, "Quilmes", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, "emailde.perezh@gmail.com", "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withWebsite(null).build();
     }
     
     @Test(expected = NullPointerException.class)
     public void providerWithNullWebsiteThrowsException() {
-    	 provider.setWebsite(null);
+    	provider = ProviderBuilder.aProvider().build();
+    	provider.setWebsite(null);
     }
     
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullEmailThrowsException() {
-        new Provider("name", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", null, "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withEmail(null).build();
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerCreationWithEmptyEmailThrowsException() {
-        new Provider("name", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "", "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withEmail("").build();
     }
     
     @Test(expected = InvalidEmailException.class)
     public void providerCreationWithInvalidEmailThrowsException() {
-        new Provider("name", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "mailinvalido", "+540012345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withEmail("invalid mail").build();
     }
     
     @Test(expected = NullPointerException.class)
     public void providerWithNullEmailThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setEmail(null);
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerWithEmptyEmailThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setEmail("");
     }
     
     @Test(expected = InvalidEmailException.class)
     public void providerWithInvalidEmailThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setEmail("123mail");
     }
     
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullPhoneNumberThrowsException() {
-        new Provider("name", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", null, openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withPhoneNumber(null).build();
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerCreationWithEmptyPhoneNumberThrowsException() {
-        new Provider("name", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", "", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withPhoneNumber("").build();
     }
     
     @Test(expected = InvalidPhoneNumberException.class)
     public void providerCreationWithInvalidPhoneNumberThrowsException() {
-        new Provider("name", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", "12345678", openingHours, 15);
+    	provider = ProviderBuilder.aProvider().withPhoneNumber("teléfono123").build();
     }
     
     @Test(expected = NullPointerException.class)
     public void providerWithNullPhoneNumberThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setPhoneNumber(null);
     }
 
     @Test(expected = EmptyStringException.class)
     public void providerWithEmptyPhoneNumberThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setPhoneNumber("");
     }
     
     @Test(expected = InvalidPhoneNumberException.class)
     public void providerWithInvalidPhoneNumberThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setPhoneNumber("teléfono123");
     }
     
     @Test(expected = NullPointerException.class)
     public void providerCreationWithNullServiceHoursDaysThrowsException() {
-        new Provider("name", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", null, 15);
+    	provider = ProviderBuilder.aProvider().withOpeningHoursDays(null).build();
     }
 
     @Test(expected = EmptyServiceHoursDaysException.class)
     public void providerCreationWithEmptyServiceHoursDaysThrowsException() {
-        new Provider("name", "url", City.Quilmes, "location", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "sitio_web.com", "emailde.perezh@gmail.com", "+540012345678", new ArrayList<ServiceHours>(), 15);
+    	provider = ProviderBuilder.aProvider().withOpeningHoursDays(new ArrayList<ServiceHours>()).build();
     }
     
     @Test(expected = NullPointerException.class)
     public void providerWithNullServiceHoursDaysThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setOpeningHoursDays(null);
     }
 
     @Test(expected = EmptyServiceHoursDaysException.class)
     public void providerWithEmptyServiceHoursDaysThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
         provider.setOpeningHoursDays(new ArrayList<ServiceHours>());
     }
 }
