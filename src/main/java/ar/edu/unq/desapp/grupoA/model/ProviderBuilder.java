@@ -16,15 +16,14 @@ public class ProviderBuilder
     private String email = "noe-mail@gmail.com";
     private String phoneNumber = "+541125983441";
     private List<ServiceHours> openingHoursDays = inicializedOpeningHoursDays();
-
+    private double km = 15;
+    
 	private ArrayList<ServiceHours> inicializedOpeningHoursDays() 
 	{
 		ArrayList<ServiceHours> opening = new ArrayList<ServiceHours>();
 		opening.add(new ServiceHours(DayOfWeek.MONDAY, LocalTime.of(10, 00), LocalTime.of(21, 00)));
 		return opening;
 	}
-	
-    private double km = 15;
 	
 	public static ProviderBuilder aProvider()
 	{
