@@ -13,7 +13,7 @@ public class MenuBuilder
 	private Integer deliveryPrice = 30;
 	private List<GregorianCalendar> efectiveDate = inicializeEfectiveDate();
 	private List<LocalTime> deliverySchedules = inicializeDeliverySchedules();
-	private LocalTime averigeDeliveryTime;
+	private LocalTime averigeDeliveryTime = LocalTime.of(0, 30);
 	private Integer price = 10;
 	private Integer minQuantity1 = 70;
 	private Integer minPrice1 = 100;
@@ -51,7 +51,7 @@ public class MenuBuilder
 	
 	public Menu build()
 	{
-		return new Menu(name, description, category, deliveryPrice, efectiveDate, deliverySchedules, averigeDeliveryTime, deliveryPrice, minQuantity1, minPrice1, minQuantity2, minPrice2, dailyStock);
+		return new Menu(name, description, category, deliveryPrice, efectiveDate, deliverySchedules, averigeDeliveryTime, price, minQuantity1, minPrice1, minQuantity2, minPrice2, dailyStock);
 	}
 	
 	public MenuBuilder withName(String aName)

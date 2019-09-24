@@ -4,10 +4,11 @@ import java.time.LocalTime;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoA.model.Exception.DataIncompleteException;
+import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyListException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
+import ar.edu.unq.desapp.grupoA.model.Exception.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoA.model.Exception.NameLengthException;
 import ar.edu.unq.desapp.grupoA.model.Exception.PriceAmountException;
 import lombok.Getter;
@@ -32,7 +33,7 @@ public class Menu
 	
 	public Menu(String name, String description, List<Category> category, Integer deliveryPrice, 
 			List<GregorianCalendar> efectiveDate, List<LocalTime> deliverySchedules, 
-			LocalTime averigeDeliveryTime, Integer price, Integer minQuantity1, Integer minPrice1,
+			@NonNull LocalTime averigeDeliveryTime, Integer price, Integer minQuantity1, Integer minPrice1,
 			Integer minQuantity2, Integer minPrice2, Integer dailyStock) 
 	{
 		this.name = validateName(name);
@@ -42,12 +43,19 @@ public class Menu
 		this.efectiveDate = validateEfectiveDate(efectiveDate);
 		this.deliverySchedules = validateDeliverySchedules(deliverySchedules);
 		this.averigeDeliveryTime = averigeDeliveryTime;
-		this.price = price;
+		this.price = validatePrice(price);
 		this.minQuantity1 = minQuantity1;
 		this.minPrice1 = minPrice1;
 		this.minQuantity2 = minQuantity2;
 		this.minPrice2 = minPrice2;
 		this.dailyStock = dailyStock;
+	}
+
+	private @NonNull Integer validatePrice(Integer price) 
+	{
+		if(price <= 0)
+			throw new IrrationalPriceException("El menú debe tener un valor mayor a 0");
+		return price;
 	}
 
 	private @NonNull List<LocalTime> validateDeliverySchedules(List<LocalTime> deliverySchedules) 
@@ -132,12 +140,12 @@ public class Menu
 		this.deliverySchedules = validateDeliverySchedules(deliverySchedules);
 	}
 
-	public void setAverigeDeliveryTime(LocalTime averigeDeliveryTime) {
+	public void setAverigeDeliveryTime(@NonNull LocalTime averigeDeliveryTime) {
 		this.averigeDeliveryTime = averigeDeliveryTime;
 	}
 
 	public void setPrice(Integer price) {
-		this.price = price;
+		this.price = validatePrice(price);
 	}
 
 	public void setMinQuantity1(Integer minQuantity1) {

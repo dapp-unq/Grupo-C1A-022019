@@ -9,9 +9,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoA.model.Exception.DataIncompleteException;
+import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyListException;
+import ar.edu.unq.desapp.grupoA.model.Exception.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoA.model.Exception.NameLengthException;
 import ar.edu.unq.desapp.grupoA.model.Exception.PriceAmountException;
 
@@ -367,4 +368,74 @@ public class MenuTest
 		menu.setDeliverySchedules(deliverySchedules);
 		assertEquals(deliverySchedules, menu.getDeliverySchedules());
     }
+	
+	@Test(expected = NullPointerException.class)
+    public void menuCreationWithNullAverigeDeliveryTimeThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withAverigeDeliveryTime(null).build();
+    }
+	
+	@Test
+    public void menuCreationWithValidAverigeDeliveryTime() 
+	{
+		menu = MenuBuilder.aMenu().withAverigeDeliveryTime(LocalTime.of(0,30)).build();
+		assertEquals(LocalTime.of(0,30), menu.getAverigeDeliveryTime());
+    }
+	
+	@Test (expected = NullPointerException.class)
+    public void menuWithNullAverigeDeliveryTimeThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setAverigeDeliveryTime(null);
+    }
+	
+	@Test
+    public void menuWithValidateAverigeDeliveryTime() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setAverigeDeliveryTime(LocalTime.of(1,10));
+		assertEquals(LocalTime.of(1,10), menu.getAverigeDeliveryTime());
+    }
+	
+	@Test(expected = NullPointerException.class)
+    public void menuCreationWithNullPriceThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withPrice(null).build();
+    }
+	
+	@Test(expected = IrrationalPriceException.class)
+    public void menuCreationWithIrrationalPriceThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withPrice(-5).build();
+    }
+	
+	@Test
+    public void menuCreationWithValidPrice() 
+	{
+		menu = MenuBuilder.aMenu().withPrice(100).build();
+		assertEquals(new Integer(100), menu.getPrice());
+    }
+	
+	@Test (expected = NullPointerException.class)
+    public void menuWithNullPriceThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setPrice(null);
+    }
+	
+	@Test (expected = IrrationalPriceException.class)
+    public void menuWith0PriceThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setPrice(0);
+    }
+	
+	@Test
+    public void menuWithValidatePrice() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setPrice(150);
+		assertEquals(new Integer(150), menu.getPrice());
+    }
+	
 }
