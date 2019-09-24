@@ -2,9 +2,13 @@ package ar.edu.unq.desapp.grupoA.model;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 
 import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoA.model.Exception.EmptyListException;
 import ar.edu.unq.desapp.grupoA.model.Exception.NameLengthException;
 
 public class MenuTest 
@@ -117,5 +121,50 @@ public class MenuTest
 		menu = MenuBuilder.aMenu().build();
 		menu.setDescription("Pizza de mozza con lluvia de aceitunas");
 		assertEquals("Pizza de mozza con lluvia de aceitunas", menu.getDescription());
+    }
+	
+	@Test(expected = NullPointerException.class)
+    public void menuCreationWithNullCategoriesThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withCategory(null).build();
+    }
+	
+	@Test(expected = EmptyListException.class)
+    public void menuCreationWithEmptyCategoriesThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withCategory(new ArrayList<Category>()).build();
+    }
+	
+	@Test
+    public void menuCreationWithValidCategory() 
+	{
+		List<Category> categories = new ArrayList<Category> ();
+		categories.add(Category.Pizza);
+		menu = MenuBuilder.aMenu().withCategory(categories).build();
+		assertEquals(categories, menu.getCategory());
+    }
+	
+	@Test (expected = NullPointerException.class)
+    public void menuWithNullCategoryThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setCategory(null);
+    }
+	
+	@Test (expected = EmptyListException.class)
+    public void menuWithEmptyCategoryNameThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setCategory(new ArrayList<Category> ());
+    }
+	
+	@Test
+    public void menuWithValidCategory() 
+	{
+		List<Category> categories = new ArrayList<Category> ();
+		categories.add(Category.Pizza);
+		menu = MenuBuilder.aMenu().build();
+		menu.setCategory(categories);
+		assertEquals(categories, menu.getCategory());
     }
 }

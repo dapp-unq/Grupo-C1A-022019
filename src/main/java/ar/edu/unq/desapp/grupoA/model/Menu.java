@@ -1,10 +1,12 @@
 package ar.edu.unq.desapp.grupoA.model;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoA.model.Exception.EmptyListException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
 import ar.edu.unq.desapp.grupoA.model.Exception.NameLengthException;
 import lombok.Getter;
@@ -34,7 +36,7 @@ public class Menu
 	{
 		this.name = validateName(name);
 		this.description = validateDescription(description);
-		this.category = category;
+		this.category = validateNotEmptyList(category, "categorías");
 		this.deliveryPrice = deliveryPrice;
 		this.efectiveDate = efectiveDate;
 		this.deliverySchedules = deliverySchedules;
@@ -45,6 +47,12 @@ public class Menu
 		this.minQuantity2 = minQuantity2;
 		this.minPrice2 = minPrice2;
 		this.dailyStock = dailyStock;
+	}
+
+	private <T> List<T> validateNotEmptyList(List<T> parameter, String parameterName) {
+		if(parameter.isEmpty())
+	           throw new EmptyListException("El campo " + parameterName + " no puede ser vacío");
+		return parameter;
 	}
 
 	private String validateDescription(String description) 
@@ -83,7 +91,7 @@ public class Menu
 	}
 
 	public void setCategory(List<Category> category) {
-		this.category = category;
+		this.category = validateNotEmptyList(category, "categorías");
 	}
 
 	public void setDeliveryPrice(Double deliveryPrice) {
