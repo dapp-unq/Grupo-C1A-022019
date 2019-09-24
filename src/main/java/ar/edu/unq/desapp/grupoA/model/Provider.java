@@ -25,10 +25,11 @@ public class Provider {
     @NonNull private String phoneNumber;
     @NonNull private List<ServiceHours> openingHoursDays;
     @NonNull private List<City> deliveryCities;
+    @NonNull private List<Menu> currentMenu;
     
     private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     private final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
-    
+	
     public Provider(String name, String logo, City city, String location, String description, String website, 
     		String email, String phone, List<ServiceHours> serviceHours, double km)
     {
@@ -42,6 +43,7 @@ public class Provider {
         this.phoneNumber = validatePhoneNumber(phone);
         this.openingHoursDays = validateNotEmptyOpeningHoursDays(serviceHours, "horarios y días de atención");
         this.deliveryCities = calculateDeliveryCities(km, location);
+        this.currentMenu = new ArrayList<>(20);
     }
     
     private List<City> calculateDeliveryCities(Double km, String location) 
@@ -151,6 +153,12 @@ public class Provider {
     
     public void setkm(double km){
         this.deliveryCities = calculateDeliveryCities(km, this.location);
+    }
+    
+    // falta testear
+    public void addMenu(Menu menu)
+    {
+    	this.currentMenu.add(menu);
     }
 
 }

@@ -64,7 +64,7 @@ public class Menu
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = validateName(name);
 	}
 
 	public void setDescription(String description) {
