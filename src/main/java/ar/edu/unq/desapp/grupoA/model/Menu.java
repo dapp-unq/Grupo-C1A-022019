@@ -6,6 +6,7 @@ import java.util.List;
 
 import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
+import ar.edu.unq.desapp.grupoA.model.Exception.NameLengthException;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -32,7 +33,7 @@ public class Menu
 			Double minQuantity2, Double minPrice2, Double dailyStock) 
 	{
 		this.name = validateName(name);
-		this.description = description;
+		this.description = validateDescription(description);
 		this.category = category;
 		this.deliveryPrice = deliveryPrice;
 		this.efectiveDate = efectiveDate;
@@ -46,13 +47,23 @@ public class Menu
 		this.dailyStock = dailyStock;
 	}
 
+	private String validateDescription(String description) 
+	{
+		Integer size = description.length();
+		if(size < 20)
+			throw new DescriptionLengthException("La descripción del menú debe tener al menos 20 caracteres.");
+		if(size > 40)
+			throw new DescriptionLengthException("La descripción del menú debe tener menos de 40 caracteres.");
+		return validateNotEmpty(description, "descripción");
+	}
+
 	private String validateName(String name) 
 	{
 		Integer size = name.length();
 		if( size < 4)
-			throw new DescriptionLengthException("El nombre del menú debe tener al menos 4 caracteres.");
+			throw new NameLengthException("El nombre del menú debe tener al menos 4 caracteres.");
 		if( size > 30)
-			throw new DescriptionLengthException("El nombre del menú debe tener menos de 30 caracteres.");
+			throw new NameLengthException("El nombre del menú debe tener menos de 30 caracteres.");
 		return validateNotEmpty(name, "nombre");
 	}
 
@@ -68,7 +79,7 @@ public class Menu
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
+		this.description = validateDescription(description);
 	}
 
 	public void setCategory(List<Category> category) {
