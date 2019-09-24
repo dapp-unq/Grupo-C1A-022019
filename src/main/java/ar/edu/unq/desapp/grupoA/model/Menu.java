@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoA.model.Exception.DataIncompleteException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyListException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
 import ar.edu.unq.desapp.grupoA.model.Exception.NameLengthException;
@@ -25,8 +26,8 @@ public class Menu
 	@NonNull private Integer price;
 	@NonNull private Integer minQuantity1;
 	@NonNull private Integer minPrice1;
-	@NonNull private double minQuantity2;
-	@NonNull private double minPrice2;
+	@NonNull private Integer minQuantity2;
+	@NonNull private Integer minPrice2;
 	@NonNull private Integer dailyStock;
 	
 	public Menu(String name, String description, List<Category> category, Integer deliveryPrice, 
@@ -38,8 +39,8 @@ public class Menu
 		this.description = validateDescription(description);
 		this.category = validateNotEmptyList(category, "categorías");
 		this.deliveryPrice = validateDeliveryPrice(deliveryPrice);
-		this.efectiveDate = efectiveDate;
-		this.deliverySchedules = deliverySchedules;
+		this.efectiveDate = validateEfectiveDate(efectiveDate);
+		this.deliverySchedules = validateDeliverySchedules(deliverySchedules);
 		this.averigeDeliveryTime = averigeDeliveryTime;
 		this.price = price;
 		this.minQuantity1 = minQuantity1;
@@ -49,7 +50,23 @@ public class Menu
 		this.dailyStock = dailyStock;
 	}
 
-	private Integer validateDeliveryPrice(Integer price) 
+	private @NonNull List<LocalTime> validateDeliverySchedules(List<LocalTime> deliverySchedules) 
+	{
+		validateNotEmptyList(deliverySchedules, "horarios de entrega");
+		if(deliverySchedules.size() !=2)
+			throw new DataIncompleteException("El menú debe tener un horario de entrega inicial y final");
+		return deliverySchedules;
+	}
+
+	private @NonNull List<GregorianCalendar> validateEfectiveDate(List<GregorianCalendar> efectiveDate) 
+	{
+		validateNotEmptyList(efectiveDate, "fecha de vigencia");
+		if(efectiveDate.size() !=2)
+			throw new DataIncompleteException("El menú debe tener una fecha de vigencia inicial y otra de su finalización.");
+		return efectiveDate;
+	}
+
+	private @NonNull Integer validateDeliveryPrice(Integer price) 
 	{
 		if(price > 40)
 			throw new PriceAmountException("El monto máximo es de 40");
@@ -64,7 +81,7 @@ public class Menu
 		return parameter;
 	}
 
-	private String validateDescription(String description) 
+	private @NonNull String validateDescription(String description) 
 	{
 		Integer size = description.length();
 		if(size < 20)
@@ -74,7 +91,7 @@ public class Menu
 		return validateNotEmpty(description, "descripción");
 	}
 
-	private String validateName(String name) 
+	private @NonNull String validateName(String name) 
 	{
 		Integer size = name.length();
 		if( size < 4)
@@ -108,11 +125,11 @@ public class Menu
 	}
 
 	public void setEfectiveDate(List<GregorianCalendar> efectiveDate) {
-		this.efectiveDate = efectiveDate;
+		this.efectiveDate = validateEfectiveDate(efectiveDate);
 	}
 
 	public void setDeliverySchedules(List<LocalTime> deliverySchedules) {
-		this.deliverySchedules = deliverySchedules;
+		this.deliverySchedules = validateDeliverySchedules(deliverySchedules);
 	}
 
 	public void setAverigeDeliveryTime(LocalTime averigeDeliveryTime) {
@@ -135,7 +152,7 @@ public class Menu
 		this.minQuantity2 = minQuantity2;
 	}
 
-	public void setMinPrice2(double minPrice2) {
+	public void setMinPrice2(Integer minPrice2) {
 		this.minPrice2 = minPrice2;
 	}
 

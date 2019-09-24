@@ -1,14 +1,16 @@
 package ar.edu.unq.desapp.grupoA.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.junit.Test;
 
 import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoA.model.Exception.DataIncompleteException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyListException;
 import ar.edu.unq.desapp.grupoA.model.Exception.NameLengthException;
 import ar.edu.unq.desapp.grupoA.model.Exception.PriceAmountException;
@@ -232,5 +234,137 @@ public class MenuTest
 		menu = MenuBuilder.aMenu().build();
 		menu.setDeliveryPrice(0);
 		assertEquals(new Integer(0), menu.getDeliveryPrice());
+    }
+	
+	@Test(expected = NullPointerException.class)
+    public void menuCreationWithNullEfectiveDatesThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withEfectiveDate(null).build();
+    }
+	
+	@Test(expected = EmptyListException.class)
+    public void menuCreationWithEmptyEfectiveDatesThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withEfectiveDate(new ArrayList<GregorianCalendar>()).build();
+    }
+	
+	@Test(expected = DataIncompleteException.class)
+    public void menuCreationWithIncompleteEfectiveDatesThrowsException() 
+	{
+		List<GregorianCalendar> efectiveDates = new ArrayList<GregorianCalendar>();
+		efectiveDates.add(new GregorianCalendar(2019,5,10));
+		menu = MenuBuilder.aMenu().withEfectiveDate(efectiveDates).build();
+    }
+	
+	@Test
+    public void menuCreationWithValidEfectiveDates() 
+	{
+		List<GregorianCalendar> efectiveDates = new ArrayList<GregorianCalendar>();
+		efectiveDates.add(new GregorianCalendar(2019,5,10));
+		efectiveDates.add(new GregorianCalendar(2019,10,10));
+		menu = MenuBuilder.aMenu().withEfectiveDate(efectiveDates).build();
+		assertEquals(efectiveDates, menu.getEfectiveDate());
+    }
+	
+	@Test (expected = NullPointerException.class)
+    public void menuWithNullEfectiveDatesThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setEfectiveDate(null);
+    }
+	
+	@Test (expected = EmptyListException.class)
+    public void menuWithEmptyEfectiveDatesThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setEfectiveDate(new ArrayList<GregorianCalendar>());
+    }
+	
+	@Test (expected = DataIncompleteException.class)
+    public void menuWithIncompleteEfectiveDatesThrowsException() 
+	{
+		List<GregorianCalendar> efectiveDates = new ArrayList<GregorianCalendar>();
+		efectiveDates.add(new GregorianCalendar(0,0,0));
+		efectiveDates.add(new GregorianCalendar(0,0,0));
+		efectiveDates.add(new GregorianCalendar(0,0,0));
+		menu = MenuBuilder.aMenu().build();
+		menu.setEfectiveDate(efectiveDates);
+    }
+	
+	@Test
+    public void menuWithValidateEfectiveDates() 
+	{
+		List<GregorianCalendar> efectiveDates = new ArrayList<GregorianCalendar>();
+		efectiveDates.add(new GregorianCalendar(2019,5,10));
+		efectiveDates.add(new GregorianCalendar(2019,10,10));
+		menu = MenuBuilder.aMenu().build();
+		menu.setEfectiveDate(efectiveDates);
+		assertEquals(efectiveDates, menu.getEfectiveDate());
+    }
+	
+	@Test(expected = NullPointerException.class)
+    public void menuCreationWithNullDeliverySchedulesThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDeliverySchedules(null).build();
+    }
+	
+	@Test(expected = EmptyListException.class)
+    public void menuCreationWithEmptyDeliverySchedulesThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDeliverySchedules(new ArrayList<LocalTime>()).build();
+    }
+	
+	@Test(expected = DataIncompleteException.class)
+    public void menuCreationWithIncompleteDeliverySchedulesThrowsException() 
+	{
+		List<LocalTime> deliverySchedules = new ArrayList<LocalTime>();
+		deliverySchedules.add(LocalTime.of(12,00));
+		menu = MenuBuilder.aMenu().withDeliverySchedules(deliverySchedules).build();
+    }
+	
+	@Test
+    public void menuCreationWithValidDeliverySchedules() 
+	{
+		List<LocalTime> deliverySchedules = new ArrayList<LocalTime>();
+		deliverySchedules.add(LocalTime.of(12,00));
+		deliverySchedules.add(LocalTime.of(22,30));
+		menu = MenuBuilder.aMenu().withDeliverySchedules(deliverySchedules).build();
+		assertEquals(deliverySchedules, menu.getDeliverySchedules());
+    }
+	
+	@Test (expected = NullPointerException.class)
+    public void menuWithNullDeliverySchedulesThrowsException()
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setDeliverySchedules(null);
+    }
+	
+	@Test (expected = EmptyListException.class)
+    public void menuWithEmptyDeliverySchedulesThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setDeliverySchedules(new ArrayList<LocalTime>());
+    }
+	
+	@Test (expected = DataIncompleteException.class)
+    public void menuWithIncompleteDeliverySchedulesThrowsException() 
+	{
+		List<GregorianCalendar> efectiveDates = new ArrayList<GregorianCalendar>();
+		efectiveDates.add(new GregorianCalendar(0,0,0));
+		efectiveDates.add(new GregorianCalendar(0,0,0));
+		efectiveDates.add(new GregorianCalendar(0,0,0));
+		menu = MenuBuilder.aMenu().build();
+		menu.setEfectiveDate(efectiveDates);
+    }
+	
+	@Test
+    public void menuWithValidateDeliverySchedules() 
+	{
+		List<LocalTime> deliverySchedules = new ArrayList<LocalTime>();
+		deliverySchedules.add(LocalTime.of(12,00));
+		deliverySchedules.add(LocalTime.of(22,30));
+		menu = MenuBuilder.aMenu().build();
+		menu.setDeliverySchedules(deliverySchedules);
+		assertEquals(deliverySchedules, menu.getDeliverySchedules());
     }
 }
