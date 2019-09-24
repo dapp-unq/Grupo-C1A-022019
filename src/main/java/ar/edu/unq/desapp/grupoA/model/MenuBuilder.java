@@ -10,16 +10,16 @@ public class MenuBuilder
 	private String name = "no name";
 	private String description = "no menu description 1";
 	private List<Category> category = inicializeCategory();
-	private double deliveryPrice = 30;
+	private Integer deliveryPrice = 30;
 	private List<GregorianCalendar> efectiveDate = inicializeEfectiveDate();
 	private List<LocalTime> deliverySchedules = inicializeDeliverySchedules();
 	private LocalTime averigeDeliveryTime;
-	private double price = 0;
-	private double minQuantity1 = 70;
-	private double minPrice1 = 100;
-	private double minQuantity2 = 150;
-	private double minPrice2 = 100;
-	private double dailyStock = 1000;
+	private Integer price = 10;
+	private Integer minQuantity1 = 70;
+	private Integer minPrice1 = 100;
+	private Integer minQuantity2 = 150;
+	private Integer minPrice2 = 100;
+	private Integer dailyStock = 1000;
 	
 	private List<Category> inicializeCategory() 
 	{
@@ -72,7 +72,7 @@ public class MenuBuilder
 		return this;
 	}
 	
-	public MenuBuilder withDeliveryPrice(double aPrice)
+	public MenuBuilder withDeliveryPrice(Integer aPrice)
 	{
 		this.deliveryPrice = aPrice;
 		return this;
@@ -96,37 +96,37 @@ public class MenuBuilder
 		return this;
 	}
 	
-	public MenuBuilder withPrice(double aPrice)
+	public MenuBuilder withPrice(Integer aPrice)
 	{
 		this.price = aPrice;
 		return this;
 	}
 	
-	public MenuBuilder withMinQuantity1(double aQuantity)
+	public MenuBuilder withMinQuantity1(Integer aQuantity)
 	{
 		this.minQuantity1 = aQuantity;
 		return this;
 	}
 	
-	public MenuBuilder withMinQuantity2(double aQuantity)
+	public MenuBuilder withMinQuantity2(Integer aQuantity)
 	{
 		this.minQuantity2 = aQuantity;
 		return this;
 	}
 	
-	public MenuBuilder withMinPrice1(double aPrice)
+	public MenuBuilder withMinPrice1(Integer aPrice)
 	{
 		this.minPrice1 = aPrice;
 		return this;
 	}
 	
-	public MenuBuilder withMinPrice2(double aPrice)
+	public MenuBuilder withMinPrice2(Integer aPrice)
 	{
 		this.minPrice2 = aPrice;
 		return this;
 	}
 	
-	public MenuBuilder withDailyStock(double aStock)
+	public MenuBuilder withDailyStock(Integer aStock)
 	{
 		this.dailyStock = aStock;
 		return this;

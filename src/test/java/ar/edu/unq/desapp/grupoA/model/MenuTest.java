@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoA.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyListException;
 import ar.edu.unq.desapp.grupoA.model.Exception.NameLengthException;
+import ar.edu.unq.desapp.grupoA.model.Exception.PriceAmountException;
 
 public class MenuTest 
 {
@@ -166,5 +168,69 @@ public class MenuTest
 		menu = MenuBuilder.aMenu().build();
 		menu.setCategory(categories);
 		assertEquals(categories, menu.getCategory());
+    }
+	
+	@Test
+    public void menuCreationWith0DeliveryPrice() 
+	{
+		menu = MenuBuilder.aMenu().withDeliveryPrice(0).build();
+		assertEquals(new Integer(0), menu.getDeliveryPrice());
+    }
+	
+	@Test(expected = PriceAmountException.class)
+    public void menuCreationWith50DeliveryPriceThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDeliveryPrice(50).build();
+    }
+	
+	@Test
+    public void menuCreationWithValidNullDeliveryPrice() 
+	{
+		menu = MenuBuilder.aMenu().withDeliveryPrice(40).build();
+		assertEquals(new Integer(40), menu.getDeliveryPrice());
+    }
+	
+	@Test
+    public void menuCreationWithValidDeliveryPrice() 
+	{
+		menu = MenuBuilder.aMenu().withDeliveryPrice(40).build();
+		assertEquals(new Integer(40), menu.getDeliveryPrice());
+    }
+	
+	@Test (expected = PriceAmountException.class)
+    public void menuWith5DeliveryPriceThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setDeliveryPrice(5);
+    }
+	
+	@Test (expected = PriceAmountException.class)
+    public void menuWith45DeliveryPriceThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setDeliveryPrice(45);
+    }
+	
+	@Test (expected = NullPointerException.class)
+    public void menuWithValidateNullDeliveryPriceThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setDeliveryPrice(null);
+    }
+	
+	@Test
+    public void menuWithValidateDeliveryPrice() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setDeliveryPrice(10);
+		assertEquals(new Integer(10), menu.getDeliveryPrice());
+    }
+	
+	@Test
+    public void menuWithValidateEmptyDeliveryPrice() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setDeliveryPrice(0);
+		assertEquals(new Integer(0), menu.getDeliveryPrice());
     }
 }
