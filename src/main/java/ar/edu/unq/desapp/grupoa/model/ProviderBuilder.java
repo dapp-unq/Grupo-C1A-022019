@@ -17,6 +17,7 @@ public class ProviderBuilder
     private String phoneNumber = "+541125983441";
     private List<ServiceHours> openingHoursDays = inicializedOpeningHoursDays();
     private double km = 15;
+    private List<Menu> currentMenu = new ArrayList<Menu>();
     
 	private ArrayList<ServiceHours> inicializedOpeningHoursDays() 
 	{

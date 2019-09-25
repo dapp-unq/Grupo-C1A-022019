@@ -1,17 +1,18 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import ar.edu.unq.desapp.grupoa.model.City;
-import ar.edu.unq.desapp.grupoa.model.Provider;
-import ar.edu.unq.desapp.grupoa.model.ProviderBuilder;
-import ar.edu.unq.desapp.grupoa.model.ServiceHours;
+import ar.edu.unq.desapp.grupoa.model.exceptions.CurrentMenuQuantityException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyServiceHoursDaysException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
@@ -285,5 +286,32 @@ public class ProviderTest {
     	openingHours.add(new ServiceHours(DayOfWeek.FRIDAY, LocalTime.of(9, 00), LocalTime.of(21, 00)));
     	provider = ProviderBuilder.aProvider().withOpeningHoursDays(openingHours).build();
     	assertEquals(openingHours, provider.getOpeningHoursDays()); 
+    }
+    
+    @Test
+    public void providerWithoutCurrentMenusAddACurrentMenu() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu = mock(Menu.class);
+    	provider.addMenu(mockMenu);
+    	assertTrue(provider.getCurrentMenu().contains(mockMenu)); 
+    }
+    
+    @Test (expected = CurrentMenuQuantityException.class)
+    public void providerWith20CurrentMenusAddACurrentMenuThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu = mock(Menu.class);
+    	Menu mockMenu21 = mock(Menu.class);
+    	
+    	provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+    	provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+    	provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+    	provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+    	provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+    	provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+    	provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+    	provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+    	provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+    	provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+    	provider.addMenu(mockMenu21);
     }
 }

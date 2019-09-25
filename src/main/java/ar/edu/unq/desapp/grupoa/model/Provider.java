@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ar.edu.unq.desapp.grupoa.model.exceptions.CurrentMenuQuantityException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyServiceHoursDaysException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
@@ -27,6 +28,7 @@ public class Provider {
     private String phoneNumber;
     private List<ServiceHours> openingHoursDays;
     private List<City> deliveryCities;
+    private List<Menu> currentMenu;
 
     private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     private final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
@@ -43,6 +45,7 @@ public class Provider {
         this.phoneNumber = validatePhoneNumber(phone);
         this.openingHoursDays = validateNotEmptyOpeningHoursDays(serviceHours, "horarios y días de atención");
         this.deliveryCities = calculateDeliveryCities(km, location);
+        this.currentMenu = new ArrayList<Menu>();
     }
 
     private List<City> calculateDeliveryCities(Double km, String location) {
@@ -144,4 +147,15 @@ public class Provider {
         this.deliveryCities = calculateDeliveryCities(km, this.location);
     }
 
+    public void addMenu(Menu aMenu)
+    {
+    	this.validationCurrentMenuQuantity();
+    	this.currentMenu.add(aMenu);
+    }
+
+	private void validationCurrentMenuQuantity() 
+	{
+		if(this.currentMenu.size() == 20)
+			throw new CurrentMenuQuantityException("No se puede agregar más menús: Solo se puede tener hasta 20 menús vigentes.");
+	}
 }
