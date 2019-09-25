@@ -7,11 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
-import ar.edu.unq.desapp.grupoA.model.Exception.EmptyServiceHoursDaysException;
-import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
-import ar.edu.unq.desapp.grupoA.model.Exception.InvalidEmailException;
-import ar.edu.unq.desapp.grupoA.model.Exception.InvalidPhoneNumberException;
+
+import ar.edu.unq.desapp.grupoa.model.City;
+import ar.edu.unq.desapp.grupoa.model.Provider;
+import ar.edu.unq.desapp.grupoa.model.ProviderBuilder;
+import ar.edu.unq.desapp.grupoa.model.ServiceHours;
+import ar.edu.unq.desapp.grupoa.model.Exception.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoa.model.Exception.EmptyServiceHoursDaysException;
+import ar.edu.unq.desapp.grupoa.model.Exception.EmptyStringException;
+import ar.edu.unq.desapp.grupoa.model.Exception.InvalidEmailException;
+import ar.edu.unq.desapp.grupoa.model.Exception.InvalidPhoneNumberException;
 
 public class ProviderTest {
 

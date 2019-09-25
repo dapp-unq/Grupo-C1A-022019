@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoA.model.Exception;
+package ar.edu.unq.desapp.grupoa.model.Exception;
 
 public class IrrationalPriceException extends RuntimeException {
 	public IrrationalPriceException(String message) {

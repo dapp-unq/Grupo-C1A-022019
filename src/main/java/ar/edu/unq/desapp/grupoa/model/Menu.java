@@ -1,16 +1,16 @@
-package ar.edu.unq.desapp.grupoA.model;
+package ar.edu.unq.desapp.grupoa.model;
 
 import java.time.LocalTime;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import ar.edu.unq.desapp.grupoA.model.Exception.DataIncompleteException;
-import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
-import ar.edu.unq.desapp.grupoA.model.Exception.EmptyListException;
-import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
-import ar.edu.unq.desapp.grupoA.model.Exception.IrrationalAmountException;
-import ar.edu.unq.desapp.grupoA.model.Exception.IrrationalPriceException;
-import ar.edu.unq.desapp.grupoA.model.Exception.NameLengthException;
+import ar.edu.unq.desapp.grupoa.model.Exception.DataIncompleteException;
+import ar.edu.unq.desapp.grupoa.model.Exception.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoa.model.Exception.EmptyListException;
+import ar.edu.unq.desapp.grupoa.model.Exception.EmptyStringException;
+import ar.edu.unq.desapp.grupoa.model.Exception.IrrationalAmountException;
+import ar.edu.unq.desapp.grupoa.model.Exception.IrrationalPriceException;
+import ar.edu.unq.desapp.grupoa.model.Exception.NameLengthException;
 import lombok.Getter;
 import lombok.NonNull;
 

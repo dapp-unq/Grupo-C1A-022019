@@ -1,9 +1,11 @@
 package ar.edu.unq.desapp.grupoA.model;
 
-import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
-import ar.edu.unq.desapp.grupoA.model.Exception.InvalidEmailException;
-import ar.edu.unq.desapp.grupoA.model.Exception.InvalidPhoneNumberException;
 import org.junit.Test;
+
+import ar.edu.unq.desapp.grupoa.model.User;
+import ar.edu.unq.desapp.grupoa.model.Exception.EmptyStringException;
+import ar.edu.unq.desapp.grupoa.model.Exception.InvalidEmailException;
+import ar.edu.unq.desapp.grupoa.model.Exception.InvalidPhoneNumberException;
 
 public class UserTest {
 

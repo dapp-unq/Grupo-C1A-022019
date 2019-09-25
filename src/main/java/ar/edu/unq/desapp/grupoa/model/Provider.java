@@ -1,15 +1,15 @@
-package ar.edu.unq.desapp.grupoA.model;
+package ar.edu.unq.desapp.grupoa.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
-import ar.edu.unq.desapp.grupoA.model.Exception.EmptyServiceHoursDaysException;
-import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
-import ar.edu.unq.desapp.grupoA.model.Exception.InvalidEmailException;
-import ar.edu.unq.desapp.grupoA.model.Exception.InvalidPhoneNumberException;
+import ar.edu.unq.desapp.grupoa.model.Exception.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoa.model.Exception.EmptyServiceHoursDaysException;
+import ar.edu.unq.desapp.grupoa.model.Exception.EmptyStringException;
+import ar.edu.unq.desapp.grupoa.model.Exception.InvalidEmailException;
+import ar.edu.unq.desapp.grupoa.model.Exception.InvalidPhoneNumberException;
 import lombok.Getter;
 import lombok.NonNull;
 

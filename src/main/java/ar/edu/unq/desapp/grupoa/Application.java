@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoA;
+package ar.edu.unq.desapp.grupoa;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

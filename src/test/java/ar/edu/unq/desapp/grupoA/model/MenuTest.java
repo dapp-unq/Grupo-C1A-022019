@@ -9,12 +9,16 @@ import java.util.List;
 
 import org.junit.Test;
 
-import ar.edu.unq.desapp.grupoA.model.Exception.DataIncompleteException;
-import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
-import ar.edu.unq.desapp.grupoA.model.Exception.EmptyListException;
-import ar.edu.unq.desapp.grupoA.model.Exception.IrrationalPriceException;
-import ar.edu.unq.desapp.grupoA.model.Exception.NameLengthException;
-import ar.edu.unq.desapp.grupoA.model.Exception.IrrationalAmountException;
+import ar.edu.unq.desapp.grupoa.model.Category;
+import ar.edu.unq.desapp.grupoa.model.Menu;
+import ar.edu.unq.desapp.grupoa.model.MenuBuilder;
+import ar.edu.unq.desapp.grupoa.model.Offer;
+import ar.edu.unq.desapp.grupoa.model.Exception.DataIncompleteException;
+import ar.edu.unq.desapp.grupoa.model.Exception.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoa.model.Exception.EmptyListException;
+import ar.edu.unq.desapp.grupoa.model.Exception.IrrationalAmountException;
+import ar.edu.unq.desapp.grupoa.model.Exception.IrrationalPriceException;
+import ar.edu.unq.desapp.grupoa.model.Exception.NameLengthException;
 
 public class MenuTest 
 {

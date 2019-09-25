@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoA.model;
+package ar.edu.unq.desapp.grupoa.model;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
