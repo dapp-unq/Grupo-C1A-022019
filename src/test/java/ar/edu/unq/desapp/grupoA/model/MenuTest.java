@@ -721,4 +721,51 @@ public class MenuTest
 		menu.setOffer2(new Offer(40, 1001));
     }
 	
+	// Test: Menu2 edition validation with menu 1
+	
+	@Test (expected = IrrationalAmountException.class)
+    public void menuWith50kMinQuantityOffer1SetTo45QuantityOffer2ThrowsException() 
+	{
+		Offer offer1 = new Offer(50, 8);
+		Offer offer2 = new Offer(60, 6);
+		
+		menu = MenuBuilder.aMenu().withDailyStock(100).withPrice(10)
+				.withOffer1(offer1)
+				.withOffer2(offer2)
+				.build();
+		
+		menu.setOffer2(new Offer(45, 6));
+    }
+	
+	@Test (expected = IrrationalPriceException.class)
+    public void menuWith10PriceOffer1Set15PriceOffer2ThrowsException() 
+	{
+		Offer offer1 = new Offer(10, 10);
+		Offer offer2 = new Offer(40, 5);
+		
+		menu = MenuBuilder.aMenu().withDailyStock(100).withPrice(20)
+				.withOffer1(offer1)
+				.withOffer2(offer2)
+				.build();
+		
+		menu.setOffer2(new Offer(40, 15));
+    }
+	
+	@Test
+    public void menuWith50QuantityAnd15PriceOffer1Set55QuantityAnd10PriceOffer2() 
+	{
+		Offer offer1 = new Offer(50, 15);
+		Offer offer2 = new Offer(60, 5);
+		
+		menu = MenuBuilder.aMenu().withDailyStock(100).withPrice(20)
+				.withOffer1(offer1)
+				.withOffer2(offer2)
+				.build();
+		
+		menu.setOffer2(new Offer(55, 10));
+		
+		assertEquals(new Integer(55), menu.getOffer2().getQuantity());
+		assertEquals(new Integer(10), menu.getOffer2().getPrice());
+    }
+	
 }
