@@ -3,13 +3,11 @@ package ar.edu.unq.desapp.grupoa.model;
 import lombok.Getter;
 
 @Getter
-public class Offer 
-{
+public class Offer {
 	private Integer quantity;
 	private Integer price;
-	
-	public Offer(Integer quantity, Integer price) 
-	{
+
+	public Offer(Integer quantity, Integer price) {
 		this.quantity = quantity;
 		this.price = price;
 	}
@@ -21,10 +19,9 @@ public class Offer
 	public void setPrice(Integer price) {
 		this.price = price;
 	}
-	
-	public Boolean isEffectiveOffer()
-	{
+
+	public Boolean isEffectiveOffer() {
 		return (!this.quantity.equals(0) && !this.price.equals(0));
 	}
-	
+
 }
