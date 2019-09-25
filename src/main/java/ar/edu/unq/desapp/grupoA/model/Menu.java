@@ -40,18 +40,50 @@ public class Menu
 		this.deliveryPrice = validateDeliveryPrice(deliveryPrice);
 		this.efectiveDate = validateEfectiveDate(efectiveDate);
 		this.deliverySchedules = validateDeliverySchedules(deliverySchedules);
-		this.averigeDeliveryTime = averigeDeliveryTime;
+		this.averigeDeliveryTime = averigeDeliveryTime; // O = Neutro
 		this.price = validatePrice(price);
 		this.dailyStock = validateDailyStock(dailyStock);
 		this.offer1 = validationOffert1(minQuantity1);
-		this.offer2 = minQuantity2;
+		this.offer2 = validationOffert2(minQuantity2); // Offer(0,0) = Neutro?
 	}
 
-	private @NonNull Offer validationOffert1(Offer minQuantity1) 
+	private @NonNull Offer validationOffert2(Offer aOffer) 
 	{
-		this.validationQuantityOffer(minQuantity1.getQuantity(), 10, 70);
-		this.validationPriceOffer(minQuantity1.getPrice(), 0, 1000);
-		return minQuantity1;
+		this.validationQuantityOffer(aOffer.getQuantity(), 40, 150);
+		this.validationPriceOffer(aOffer.getPrice(), 0, 1000);
+		this.validationWithOffert1(aOffer.getQuantity(), aOffer.getPrice());
+		return aOffer;
+	}
+
+	private void validationWithOffert1(Integer aQuantity, Integer aPrice) 
+	{
+		if(aQuantity <= this.offer1.getQuantity())
+			throw new IrrationalAmountException("La cantidad minima de la oferta 2 debe ser inferior a la cantidad mínima de la oferta 1.");
+		if(aPrice >= this.offer1.getPrice())
+			throw new IrrationalPriceException("El precio de la oferta 2 debe ser inferior al precio de la oferta 1");
+	}
+
+	private @NonNull Offer validationOffert1(Offer aOffer) 
+	{
+		this.validationQuantityOffer(aOffer.getQuantity(), 10, 70);
+		this.validationPriceOffer(aOffer.getPrice(), 0, 1000);
+		//
+		// AQUÍ FALTA VALIDAR CON LA OFERTA 2 EN CASO DE EXISTIR.
+		/*
+		if(! this.offer2.equals(null))
+		{
+			this.validationWithOffer2(aOffer.getQuantity(), aOffer.getPrice());
+		}
+		*/
+		return aOffer;
+	}
+
+	private void validationWithOffer2(Integer aQuantity, Integer aPrice) 
+	{
+		if (aQuantity >= this.offer2.getQuantity())
+			throw new IrrationalAmountException("La cantidad mínima de la oferta 1 debe ser menor a la cantidad mínima de la oferta 2.");
+		if (aPrice >= this.offer2.getPrice())
+			throw new IrrationalPriceException("El precio de la oferta 1 debe ser mayor al precio de la oferta 2.");
 	}
 
 	private void validationPriceOffer(Integer aPrice, Integer minPrice, Integer maxPrice) 
@@ -67,7 +99,6 @@ public class Menu
 	private void validationQuantityOffer(Integer aQuantity, Integer minQuantity, Integer maxQuantity) 
 	{
 		if(aQuantity > this.dailyStock)
-			
 			throw new IrrationalAmountException("La cantidad mínima de la oferta no puede ser mayor al del stock diario");
 		if(aQuantity < minQuantity)
 			throw new IrrationalAmountException("La cantidad mínima de la oferta debe ser mayor a " + minQuantity + " unidades");
@@ -182,21 +213,9 @@ public class Menu
 	public void setOffer1(Offer aOffer){
 		this.offer1 = validationOffert1(aOffer);
 	}
-
-	public void setMinQuantity1(Integer minQuantity1) {
-		//this.minQuantity1 = minQuantity1;
-	}
-
-	public void setMinPrice1(Integer minPrice1) {
-		//this.minPrice1 = minPrice1;
-	}
-
-	public void setMinQuantity2(Integer minQuantity2) {
-		//this.minQuantity2 = minQuantity2;
-	}
-
-	public void setMinPrice2(Integer minPrice2) {
-		//this.minPrice2 = minPrice2;
+	
+	public void setOffer2(Offer aOffer){
+		this.offer2 = validationOffert2(aOffer);
 	}
 
 	public void setDailyStock(Integer dailyStock) {

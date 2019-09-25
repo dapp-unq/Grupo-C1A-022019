@@ -15,7 +15,7 @@ public class MenuBuilder
 	private List<LocalTime> deliverySchedules = inicializeDeliverySchedules();
 	private LocalTime averigeDeliveryTime = LocalTime.of(0, 30);
 	private Integer price = 10;
-	private Integer dailyStock = 30;
+	private Integer dailyStock = 50;
 	private Offer offer1 = new Offer(10,8);
 	private Offer offer2 = new Offer(40,6);
 	
