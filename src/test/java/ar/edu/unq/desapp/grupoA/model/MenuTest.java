@@ -479,4 +479,133 @@ public class MenuTest
 		assertEquals(new Integer(65), menu.getDailyStock());
     }
 	
+	@Test(expected = NullPointerException.class)
+    public void menuCreationWithNullOfferThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withOffer1(null).build();
+    }
+	
+	@Test(expected = IrrationalAmountException.class)
+    public void menuCreationWith10DailyStockAnd20MinQuantityOffer1ThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(10).withOffer1MinQuantity(20).build();
+    }
+	
+	@Test
+    public void menuCreationWith10DailyStockAndValid10MinQuantityOffer1() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(10).withOffer1MinQuantity(10).build();
+		assertEquals(new Integer(10), menu.getOffer1().getQuantity());
+    }
+	
+	@Test(expected = IrrationalAmountException.class)
+    public void menuCreationWith10DailyStockAnd5MinQuantityOffer1ThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(10).withOffer1MinQuantity(5).build();
+    }
+	
+	@Test(expected = IrrationalAmountException.class)
+    public void menuCreationWith100DailyStockAnd71MinQuantityOffer1ThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(100).withOffer1MinQuantity(71).build();
+    }
+	
+
+	
+	// <*><*><*><*><*><*><*><*><*><*><*><*><*><*><*>
+	// <*><*><*><*><*><*><*><*><*><*><*><*><*><*><*>
+	// <*><*><*><*><*><*><*><*><*><*><*><*><*><*><*>
+	
+	
+	
+	@Test(expected = IrrationalPriceException.class)
+    public void menuCreationWith15PriceMenuAnd2PriceOffer1ThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withPrice(15).withOffer1Price(20).build();
+    }
+	
+	@Test
+    public void menuCreationWith15PriceMenuAndValid10PriceOffer1() 
+	{
+		menu = MenuBuilder.aMenu().withPrice(15).withOffer1Price(10).build();
+		assertEquals(new Integer(10), menu.getOffer1().getPrice());
+    }
+	
+	@Test(expected = IrrationalPriceException.class)
+    public void menuCreationWith15PriceMenuAndIrrationalPriceOffer1ThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withPrice(15).withOffer1Price(-1).build();
+    }
+	
+	@Test(expected = IrrationalPriceException.class)
+    public void menuCreationWith15PriceMenuAnd1001PriceOffer1ThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withPrice(15).withOffer1Price(1001).build();
+    }
+	
+	@Test (expected = NullPointerException.class)
+    public void menuWithNullOffer1ThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setOffer1(null);
+    }
+	
+	@Test (expected = IrrationalAmountException.class)
+    public void menuWith10DailyStockAnd20MinQuantityOffer1ThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(10).withPrice(15).build();
+		menu.setOffer1(new Offer(20, 10));
+    }
+	
+	@Test 
+    public void menuWith20DailyStock15PriceMenuAndValid13MinQuantityOffer1() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(20).withPrice(15).build();
+		menu.setOffer1(new Offer(13, 12));
+		assertEquals(new Integer(13), menu.getOffer1().getQuantity());
+    }
+	
+	@Test (expected = IrrationalAmountException.class)
+    public void menuWith10DailyStock15PriceMenuAnd5MinQuantityOffer1ThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(10).withPrice(15).build();
+		menu.setOffer1(new Offer(5, 10));
+    }
+	
+	@Test (expected = IrrationalAmountException.class)
+    public void menuWith100DailyStock15PriceMenuAnd71MinQuantityOffer1ThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(100).withPrice(15).build();
+		menu.setOffer1(new Offer(71, 10));
+    }
+
+	@Test (expected = IrrationalPriceException.class)
+    public void menuWith20DailyStock15PriceAnd20PriceOffer1ThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(20).withPrice(15).build();
+		menu.setOffer1(new Offer(15, 20));
+    }
+	
+	@Test
+    public void menuWith20DailyStock15PriceAndValid20PriceOffer1() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(20).withPrice(15).build();
+		menu.setOffer1(new Offer(15, 10));
+		assertEquals(new Integer(10), menu.getOffer1().getPrice());
+    }
+	
+	@Test (expected = IrrationalPriceException.class)
+    public void menuWith20DailyStock15PriceAndIrrationalPriceOffer1ThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(20).withPrice(15).build();
+		menu.setOffer1(new Offer(15, -2));
+    }
+	
+	@Test (expected = IrrationalPriceException.class)
+    public void menuWith20DailyStock15PriceAnd1001PriceOffer1ThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(20).withPrice(15).build();
+		menu.setOffer1(new Offer(15, 1001));
+    }
+	
 }

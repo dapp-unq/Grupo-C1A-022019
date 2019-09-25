@@ -8,9 +8,9 @@ import ar.edu.unq.desapp.grupoA.model.Exception.DataIncompleteException;
 import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyListException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
+import ar.edu.unq.desapp.grupoA.model.Exception.IrrationalAmountException;
 import ar.edu.unq.desapp.grupoA.model.Exception.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoA.model.Exception.NameLengthException;
-import ar.edu.unq.desapp.grupoA.model.Exception.IrrationalAmountException;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -25,16 +25,14 @@ public class Menu
 	@NonNull private List<LocalTime> deliverySchedules;
 	@NonNull private LocalTime averigeDeliveryTime;
 	@NonNull private Integer price;
-	@NonNull private Integer minQuantity1;
-	@NonNull private Integer minPrice1;
-	@NonNull private Integer minQuantity2;
-	@NonNull private Integer minPrice2;
 	@NonNull private Integer dailyStock;
+	@NonNull private Offer offer1;
+	@NonNull private Offer offer2;
 	
 	public Menu(String name, String description, List<Category> category, Integer deliveryPrice, 
 			List<GregorianCalendar> efectiveDate, List<LocalTime> deliverySchedules, 
-			@NonNull LocalTime averigeDeliveryTime, Integer price, Integer minQuantity1, Integer minPrice1,
-			Integer minQuantity2, Integer minPrice2, Integer dailyStock) 
+			@NonNull LocalTime averigeDeliveryTime, Integer price, Integer dailyStock, Offer minQuantity1,
+			Offer minQuantity2) 
 	{
 		this.name = validateName(name);
 		this.description = validateDescription(description);
@@ -45,10 +43,36 @@ public class Menu
 		this.averigeDeliveryTime = averigeDeliveryTime;
 		this.price = validatePrice(price);
 		this.dailyStock = validateDailyStock(dailyStock);
-		this.minQuantity1 = minQuantity1;
-		this.minPrice1 = minPrice1;
-		this.minQuantity2 = minQuantity2;
-		this.minPrice2 = minPrice2;
+		this.offer1 = validationOffert1(minQuantity1);
+		this.offer2 = minQuantity2;
+	}
+
+	private @NonNull Offer validationOffert1(Offer minQuantity1) 
+	{
+		this.validationQuantityOffer(minQuantity1.getQuantity(), 10, 70);
+		this.validationPriceOffer(minQuantity1.getPrice(), 0, 1000);
+		return minQuantity1;
+	}
+
+	private void validationPriceOffer(Integer aPrice, Integer minPrice, Integer maxPrice) 
+	{
+		if(aPrice >= this.price)
+			throw new IrrationalPriceException("El precio de la oferta debe ser menor al precio normal del menú"); 
+		if(aPrice < minPrice)
+			throw new IrrationalPriceException("El precio de la oferta debe ser mayor a " + minPrice + ".");
+		if(aPrice > maxPrice)
+			throw new IrrationalPriceException("El precio de la oferta debe ser menor a " + maxPrice + ".");
+	}
+
+	private void validationQuantityOffer(Integer aQuantity, Integer minQuantity, Integer maxQuantity) 
+	{
+		if(aQuantity > this.dailyStock)
+			
+			throw new IrrationalAmountException("La cantidad mínima de la oferta no puede ser mayor al del stock diario");
+		if(aQuantity < minQuantity)
+			throw new IrrationalAmountException("La cantidad mínima de la oferta debe ser mayor a " + minQuantity + " unidades");
+		if(aQuantity > maxQuantity)	
+			throw new IrrationalAmountException("La cantidad mínima de la oferta no puede superar las " + maxQuantity + " unidades");
 	}
 
 	private @NonNull Integer validateDailyStock(Integer dailyStock) 
@@ -154,21 +178,25 @@ public class Menu
 	public void setPrice(Integer price) {
 		this.price = validatePrice(price);
 	}
+	
+	public void setOffer1(Offer aOffer){
+		this.offer1 = validationOffert1(aOffer);
+	}
 
 	public void setMinQuantity1(Integer minQuantity1) {
-		this.minQuantity1 = minQuantity1;
+		//this.minQuantity1 = minQuantity1;
 	}
 
 	public void setMinPrice1(Integer minPrice1) {
-		this.minPrice1 = minPrice1;
+		//this.minPrice1 = minPrice1;
 	}
 
 	public void setMinQuantity2(Integer minQuantity2) {
-		this.minQuantity2 = minQuantity2;
+		//this.minQuantity2 = minQuantity2;
 	}
 
 	public void setMinPrice2(Integer minPrice2) {
-		this.minPrice2 = minPrice2;
+		//this.minPrice2 = minPrice2;
 	}
 
 	public void setDailyStock(Integer dailyStock) {

@@ -15,11 +15,9 @@ public class MenuBuilder
 	private List<LocalTime> deliverySchedules = inicializeDeliverySchedules();
 	private LocalTime averigeDeliveryTime = LocalTime.of(0, 30);
 	private Integer price = 10;
-	private Integer minQuantity1 = 70;
-	private Integer minPrice1 = 100;
-	private Integer minQuantity2 = 150;
-	private Integer minPrice2 = 100;
-	private Integer dailyStock = 1000;
+	private Integer dailyStock = 30;
+	private Offer offer1 = new Offer(10,8);
+	private Offer offer2 = new Offer(40,6);
 	
 	private List<Category> inicializeCategory() 
 	{
@@ -51,7 +49,7 @@ public class MenuBuilder
 	
 	public Menu build()
 	{
-		return new Menu(name, description, category, deliveryPrice, efectiveDate, deliverySchedules, averigeDeliveryTime, price, minQuantity1, minPrice1, minQuantity2, minPrice2, dailyStock);
+		return new Menu(name, description, category, deliveryPrice, efectiveDate, deliverySchedules, averigeDeliveryTime, price, dailyStock, offer1, offer2);
 	}
 	
 	public MenuBuilder withName(String aName)
@@ -102,27 +100,39 @@ public class MenuBuilder
 		return this;
 	}
 	
-	public MenuBuilder withMinQuantity1(Integer aQuantity)
+	public MenuBuilder withOffer1(Offer aOffer)
 	{
-		this.minQuantity1 = aQuantity;
+		this.offer1 = aOffer;
 		return this;
 	}
 	
-	public MenuBuilder withMinQuantity2(Integer aQuantity)
+	public MenuBuilder withOffer1MinQuantity(Integer aQuantity)
 	{
-		this.minQuantity2 = aQuantity;
+		this.offer1 = new Offer(aQuantity, offer1.getPrice());
 		return this;
 	}
 	
-	public MenuBuilder withMinPrice1(Integer aPrice)
+	public MenuBuilder withOffer1Price(Integer aPrice)
 	{
-		this.minPrice1 = aPrice;
+		this.offer1 = new Offer(offer1.getQuantity(), aPrice);
 		return this;
 	}
 	
-	public MenuBuilder withMinPrice2(Integer aPrice)
+	public MenuBuilder withOffer2(Offer aOffer)
 	{
-		this.minPrice2 = aPrice;
+		this.offer2 = aOffer;
+		return this;
+	}
+	
+	public MenuBuilder withOffer2MinQuantity(Integer aQuantity)
+	{
+		this.offer2 = new Offer(aQuantity, offer2.getPrice());
+		return this;
+	}
+	
+	public MenuBuilder withOffer2Price(Integer aPrice)
+	{
+		this.offer2 = new Offer(offer2.getQuantity(), aPrice);
 		return this;
 	}
 	
