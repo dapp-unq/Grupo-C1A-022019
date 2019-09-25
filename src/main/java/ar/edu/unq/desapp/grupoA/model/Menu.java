@@ -10,7 +10,7 @@ import ar.edu.unq.desapp.grupoA.model.Exception.EmptyListException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
 import ar.edu.unq.desapp.grupoA.model.Exception.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoA.model.Exception.NameLengthException;
-import ar.edu.unq.desapp.grupoA.model.Exception.PriceAmountException;
+import ar.edu.unq.desapp.grupoA.model.Exception.IrrationalAmountException;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -44,11 +44,18 @@ public class Menu
 		this.deliverySchedules = validateDeliverySchedules(deliverySchedules);
 		this.averigeDeliveryTime = averigeDeliveryTime;
 		this.price = validatePrice(price);
+		this.dailyStock = validateDailyStock(dailyStock);
 		this.minQuantity1 = minQuantity1;
 		this.minPrice1 = minPrice1;
 		this.minQuantity2 = minQuantity2;
 		this.minPrice2 = minPrice2;
-		this.dailyStock = dailyStock;
+	}
+
+	private @NonNull Integer validateDailyStock(Integer dailyStock) 
+	{
+		if(dailyStock <= 0)
+			throw new IrrationalAmountException("El menú debe tener al menos una unidad diaria disponible");
+		return dailyStock;
 	}
 
 	private @NonNull Integer validatePrice(Integer price) 
@@ -77,9 +84,9 @@ public class Menu
 	private @NonNull Integer validateDeliveryPrice(Integer price) 
 	{
 		if(price > 40)
-			throw new PriceAmountException("El monto máximo es de 40");
+			throw new IrrationalPriceException("El precio máximo de envío es de 40");
 		if(price < 10 && price != 0)
-			throw new PriceAmountException("El monto mínimo es de 10");
+			throw new IrrationalPriceException("El precio mínimo de envío es de 10");
 		return price;
 	}
 
@@ -165,7 +172,7 @@ public class Menu
 	}
 
 	public void setDailyStock(Integer dailyStock) {
-		this.dailyStock = dailyStock;
+		this.dailyStock = validateDailyStock(dailyStock);
 	}
 	
 }

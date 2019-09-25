@@ -14,7 +14,7 @@ import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoA.model.Exception.EmptyListException;
 import ar.edu.unq.desapp.grupoA.model.Exception.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoA.model.Exception.NameLengthException;
-import ar.edu.unq.desapp.grupoA.model.Exception.PriceAmountException;
+import ar.edu.unq.desapp.grupoA.model.Exception.IrrationalAmountException;
 
 public class MenuTest 
 {
@@ -180,7 +180,7 @@ public class MenuTest
 		assertEquals(new Integer(0), menu.getDeliveryPrice());
     }
 	
-	@Test(expected = PriceAmountException.class)
+	@Test(expected = IrrationalPriceException.class)
     public void menuCreationWith50DeliveryPriceThrowsException() 
 	{
 		menu = MenuBuilder.aMenu().withDeliveryPrice(50).build();
@@ -200,14 +200,14 @@ public class MenuTest
 		assertEquals(new Integer(40), menu.getDeliveryPrice());
     }
 	
-	@Test (expected = PriceAmountException.class)
+	@Test (expected = IrrationalPriceException.class)
     public void menuWith5DeliveryPriceThrowsException() 
 	{
 		menu = MenuBuilder.aMenu().build();
 		menu.setDeliveryPrice(5);
     }
 	
-	@Test (expected = PriceAmountException.class)
+	@Test (expected = IrrationalPriceException.class)
     public void menuWith45DeliveryPriceThrowsException() 
 	{
 		menu = MenuBuilder.aMenu().build();
@@ -436,6 +436,47 @@ public class MenuTest
 		menu = MenuBuilder.aMenu().build();
 		menu.setPrice(150);
 		assertEquals(new Integer(150), menu.getPrice());
+    }
+	
+	@Test(expected = NullPointerException.class)
+    public void menuCreationWithNullDailyStockThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(null).build();
+    }
+	
+	@Test(expected = IrrationalAmountException.class)
+    public void menuCreationWithIrrationalDailyStockThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(-1).build();
+    }
+	
+	@Test
+    public void menuCreationWithValidDailyStock() 
+	{
+		menu = MenuBuilder.aMenu().withDailyStock(50).build();
+		assertEquals(new Integer(50), menu.getDailyStock());
+    }
+	
+	@Test (expected = NullPointerException.class)
+    public void menuWithNullDailyStockThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setDailyStock(null);
+    }
+	
+	@Test (expected = IrrationalAmountException.class)
+    public void menuWith0DailyStockThrowsException() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setDailyStock(0);
+    }
+	
+	@Test
+    public void menuWithValidateDailyStock() 
+	{
+		menu = MenuBuilder.aMenu().build();
+		menu.setDailyStock(65);
+		assertEquals(new Integer(65), menu.getDailyStock());
     }
 	
 }
