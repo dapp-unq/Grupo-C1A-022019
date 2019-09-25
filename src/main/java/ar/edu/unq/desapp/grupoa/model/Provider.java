@@ -168,4 +168,14 @@ public class Provider {
 			throw new MenuNotFoundException("No se encontró un menú con el nombre: " + menuName);
 		return searchMenu.get();
 	}
+	
+	public void removeMenuWithName(String menuName)
+	{
+		this.removeMenu(this.searchMenu(menuName));
+	}
+	
+	public void removeMenu(Menu aMenu)
+	{
+		this.currentMenu.remove(aMenu);
+	}
 }

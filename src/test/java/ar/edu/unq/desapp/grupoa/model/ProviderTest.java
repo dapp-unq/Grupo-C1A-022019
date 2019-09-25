@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
@@ -335,5 +336,62 @@ public class ProviderTest {
     	
     	provider.addMenu(mockMenu);
     	provider.searchMenu("Pizza especial Liz");
+    }
+    
+    @Test
+    public void providerWithMenuWithNameXThenRemoveMenuWithNameX() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu = mock(Menu.class);
+    	Mockito.when(mockMenu.hasName("Pizza especial Liz")).thenReturn(true);
+  
+    	provider.addMenu(mockMenu);
+    	provider.removeMenuWithName("Pizza especial Liz");
+    	assertFalse(provider.getCurrentMenu().contains(mockMenu));
+    }
+    
+    @Test (expected = MenuNotFoundException.class)
+    public void providerWithMenuWithNameXThenRemoveMenuWithNameYThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu = mock(Menu.class);
+    	Mockito.when(mockMenu.hasName("Pizza especial Liz")).thenReturn(false);
+  
+    	provider.addMenu(mockMenu);
+    	provider.removeMenuWithName("Pizza especial Liz");
+    }
+    
+    @Test
+    public void providerWithMenuXThenRemoveMenuX() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu = mock(Menu.class);
+  
+    	provider.addMenu(mockMenu);
+    	provider.removeMenu(mockMenu);
+    	assertFalse(provider.getCurrentMenu().contains(mockMenu));
+    }
+    
+    @Test
+    public void providerWithMenuXThenRemoveMenuYThenDoesNothing() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu1 = mock(Menu.class);
+    	Menu mockMenu2 = mock(Menu.class);
+    	provider.addMenu(mockMenu1);
+    	
+    	assertTrue(provider.getCurrentMenu().contains(mockMenu1));
+    	assertEquals(1, provider.getCurrentMenu().size());
+    	
+    	provider.removeMenu(mockMenu2);
+    	
+    	assertTrue(provider.getCurrentMenu().contains(mockMenu1));
+    	assertEquals(1, provider.getCurrentMenu().size());
+    }
+    
+    @Test
+    public void providerWithoutCurrentMenuThenRemoveMenuXThenDoesNothing() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu = mock(Menu.class);
+    	
+    	assertEquals(0, provider.getCurrentMenu().size());
+    	provider.removeMenu(mockMenu);
+    	assertEquals(0, provider.getCurrentMenu().size());
     }
 }
