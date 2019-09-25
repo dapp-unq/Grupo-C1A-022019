@@ -17,7 +17,7 @@ public class MenuBuilder
 	private Integer price = 10;
 	private Integer dailyStock = 50;
 	private Offer offer1 = new Offer(10,8);
-	private Offer offer2 = new Offer(40,6);
+	private Offer offer2 = new Offer(0,0);
 	
 	private List<Category> inicializeCategory() 
 	{
@@ -126,13 +126,13 @@ public class MenuBuilder
 	
 	public MenuBuilder withOffer2MinQuantity(Integer aQuantity)
 	{
-		this.offer2 = new Offer(aQuantity, offer2.getPrice());
+		this.offer2 = new Offer(aQuantity, 6);
 		return this;
 	}
 	
 	public MenuBuilder withOffer2Price(Integer aPrice)
 	{
-		this.offer2 = new Offer(offer2.getQuantity(), aPrice);
+		this.offer2 = new Offer(40, aPrice);
 		return this;
 	}
 	

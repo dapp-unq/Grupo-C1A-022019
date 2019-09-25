@@ -44,14 +44,17 @@ public class Menu
 		this.price = validatePrice(price);
 		this.dailyStock = validateDailyStock(dailyStock);
 		this.offer1 = validationOffert1(minQuantity1);
-		this.offer2 = validationOffert2(minQuantity2); // Offer(0,0) = Neutro?
+		this.offer2 = validationOffert2(minQuantity2); // Offer(0,0) = Neutro
 	}
 
 	private @NonNull Offer validationOffert2(Offer aOffer) 
 	{
-		this.validationQuantityOffer(aOffer.getQuantity(), 40, 150);
-		this.validationPriceOffer(aOffer.getPrice(), 0, 1000);
-		this.validationWithOffert1(aOffer.getQuantity(), aOffer.getPrice());
+		if (aOffer.isEffectiveOffer())
+		{
+			this.validationQuantityOffer(aOffer.getQuantity(), 40, 150);
+			this.validationPriceOffer(aOffer.getPrice(), 0, 1000);
+			this.validationWithOffert1(aOffer.getQuantity(), aOffer.getPrice());
+		}
 		return aOffer;
 	}
 
@@ -67,14 +70,6 @@ public class Menu
 	{
 		this.validationQuantityOffer(aOffer.getQuantity(), 10, 70);
 		this.validationPriceOffer(aOffer.getPrice(), 0, 1000);
-		//
-		// AQUÍ FALTA VALIDAR CON LA OFERTA 2 EN CASO DE EXISTIR.
-		/*
-		if(! this.offer2.equals(null))
-		{
-			this.validationWithOffer2(aOffer.getQuantity(), aOffer.getPrice());
-		}
-		*/
 		return aOffer;
 	}
 
@@ -82,7 +77,7 @@ public class Menu
 	{
 		if (aQuantity >= this.offer2.getQuantity())
 			throw new IrrationalAmountException("La cantidad mínima de la oferta 1 debe ser menor a la cantidad mínima de la oferta 2.");
-		if (aPrice >= this.offer2.getPrice())
+		if (aPrice <= this.offer2.getPrice())
 			throw new IrrationalPriceException("El precio de la oferta 1 debe ser mayor al precio de la oferta 2.");
 	}
 
@@ -211,9 +206,20 @@ public class Menu
 	}
 	
 	public void setOffer1(Offer aOffer){
-		this.offer1 = validationOffert1(aOffer);
+		this.offer1 = validationSetOffert1(aOffer);
 	}
 	
+	private @NonNull Offer validationSetOffert1(Offer aOffer) 
+	{
+		this.validationQuantityOffer(aOffer.getQuantity(), 10, 70);
+		this.validationPriceOffer(aOffer.getPrice(), 0, 1000);
+		if(this.offer2.isEffectiveOffer())
+		{
+			this.validationWithOffer2(aOffer.getQuantity(), aOffer.getPrice());
+		}
+		return aOffer;
+	}
+
 	public void setOffer2(Offer aOffer){
 		this.offer2 = validationOffert2(aOffer);
 	}

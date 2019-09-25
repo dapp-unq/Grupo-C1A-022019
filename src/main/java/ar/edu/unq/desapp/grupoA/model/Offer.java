@@ -22,4 +22,9 @@ public class Offer
 		this.price = price;
 	}
 	
+	public Boolean isEffectiveOffer()
+	{
+		return (!this.quantity.equals(0) && !this.price.equals(0));
+	}
+	
 }
