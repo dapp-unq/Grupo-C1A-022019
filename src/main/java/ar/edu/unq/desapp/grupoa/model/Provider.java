@@ -1,21 +1,22 @@
-package ar.edu.unq.desapp.grupoA.model;
+package ar.edu.unq.desapp.grupoa.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
-import ar.edu.unq.desapp.grupoA.model.Exception.EmptyServiceHoursDaysException;
-import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
-import ar.edu.unq.desapp.grupoA.model.Exception.InvalidEmailException;
-import ar.edu.unq.desapp.grupoA.model.Exception.InvalidPhoneNumberException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyServiceHoursDaysException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
 import lombok.Getter;
 import lombok.NonNull;
 
 @Getter
 @NonNull
 public class Provider {
+
     private String name;
     private String logo;
     private City city;
@@ -30,14 +31,14 @@ public class Provider {
     private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     private final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
 
-    public Provider(String name, String logo, City city, String location, String description, String website,
+    public Provider(String name, String logo, City city, String location, String description, @NonNull String website,
                     String email, String phone, List<ServiceHours> serviceHours, double km) {
         this.name = validateNotEmpty(name, "nombre");
         this.logo = validateNotEmpty(logo, "logo");
         this.city = validateNotEmptyCity(city, "localidad");
         this.location = validateNotEmpty(location, "direccion");
         this.description = validateDescriptionSize(description);
-        this.website = validateNotNull(website, "sitio web");
+        this.website = website;
         this.email = validateEmail(email);
         this.phoneNumber = validatePhoneNumber(phone);
         this.openingHoursDays = validateNotEmptyOpeningHoursDays(serviceHours, "horarios y días de atención");
@@ -82,12 +83,6 @@ public class Provider {
         return matcher.find();
     }
 
-    private String validateNotNull(String parameter, String parameterName) {
-        if (parameter.equals(null))
-            throw new NullPointerException("El campo " + parameterName + " no puede ser vacío");
-        return parameter;
-    }
-
     private String validateDescriptionSize(String description) {
         int length = description.length();
         if (length < 30)
@@ -129,8 +124,8 @@ public class Provider {
         this.description = validateDescriptionSize(description);
     }
 
-    public void setWebsite(String website) {
-        this.website = validateNotNull(website, "sitio web");
+    public void setWebsite(@NonNull String website) {
+        this.website = website;
     }
 
     public void setEmail(String email) {

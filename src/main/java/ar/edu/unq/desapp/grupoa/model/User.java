@@ -1,13 +1,14 @@
-package ar.edu.unq.desapp.grupoA.model;
+package ar.edu.unq.desapp.grupoa.model;
 
-import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
-import ar.edu.unq.desapp.grupoA.model.Exception.InvalidEmailException;
-import ar.edu.unq.desapp.grupoA.model.Exception.InvalidPhoneNumberException;
 import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
 
 @Getter
 @NonNull

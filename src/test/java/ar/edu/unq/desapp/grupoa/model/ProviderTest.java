@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoA.model;
+package ar.edu.unq.desapp.grupoa.model;
 
 import static org.junit.Assert.assertEquals;
 import java.time.DayOfWeek;
@@ -7,11 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import ar.edu.unq.desapp.grupoA.model.Exception.DescriptionLengthException;
-import ar.edu.unq.desapp.grupoA.model.Exception.EmptyServiceHoursDaysException;
-import ar.edu.unq.desapp.grupoA.model.Exception.EmptyStringException;
-import ar.edu.unq.desapp.grupoA.model.Exception.InvalidEmailException;
-import ar.edu.unq.desapp.grupoA.model.Exception.InvalidPhoneNumberException;
+
+import ar.edu.unq.desapp.grupoa.model.City;
+import ar.edu.unq.desapp.grupoa.model.Provider;
+import ar.edu.unq.desapp.grupoa.model.ProviderBuilder;
+import ar.edu.unq.desapp.grupoa.model.ServiceHours;
+import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyServiceHoursDaysException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
 
 public class ProviderTest {
 
