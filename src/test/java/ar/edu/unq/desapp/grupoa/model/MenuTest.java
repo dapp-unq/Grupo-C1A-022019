@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoA.model;
+package ar.edu.unq.desapp.grupoa.model;
 
 import static org.junit.Assert.assertEquals;
 
@@ -13,12 +13,12 @@ import ar.edu.unq.desapp.grupoa.model.Category;
 import ar.edu.unq.desapp.grupoa.model.Menu;
 import ar.edu.unq.desapp.grupoa.model.MenuBuilder;
 import ar.edu.unq.desapp.grupoa.model.Offer;
-import ar.edu.unq.desapp.grupoa.model.Exception.DataIncompleteException;
-import ar.edu.unq.desapp.grupoa.model.Exception.DescriptionLengthException;
-import ar.edu.unq.desapp.grupoa.model.Exception.EmptyListException;
-import ar.edu.unq.desapp.grupoa.model.Exception.IrrationalAmountException;
-import ar.edu.unq.desapp.grupoa.model.Exception.IrrationalPriceException;
-import ar.edu.unq.desapp.grupoa.model.Exception.NameLengthException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.DataIncompleteException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyListException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
 
 public class MenuTest 
 {

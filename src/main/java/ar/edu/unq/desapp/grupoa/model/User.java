@@ -6,9 +6,9 @@ import lombok.NonNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ar.edu.unq.desapp.grupoa.model.Exception.EmptyStringException;
-import ar.edu.unq.desapp.grupoa.model.Exception.InvalidEmailException;
-import ar.edu.unq.desapp.grupoa.model.Exception.InvalidPhoneNumberException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
 
 @Getter
 @NonNull
