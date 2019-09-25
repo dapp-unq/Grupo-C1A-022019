@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import ar.edu.unq.desapp.grupoa.model.exceptions.CurrentMenuQuantityException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
@@ -18,6 +19,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyServiceHoursDaysException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.MenuNotFoundException;
 
 public class ProviderTest {
 
@@ -313,5 +315,25 @@ public class ProviderTest {
     	provider.addMenu(mockMenu); provider.addMenu(mockMenu);
     	provider.addMenu(mockMenu); provider.addMenu(mockMenu);
     	provider.addMenu(mockMenu21);
+    }
+    
+    @Test
+    public void providerWithMenuWithNameXLooksForMenuWithNameXThenReturnMenu() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu = mock(Menu.class);
+    	Mockito.when(mockMenu.hasName("Pizza especial Liz")).thenReturn(true);
+    	
+    	provider.addMenu(mockMenu);
+    	assertEquals(mockMenu, provider.searchMenu("Pizza especial Liz"));
+    }
+    
+    @Test (expected = MenuNotFoundException.class)
+    public void providerWithMenuWithNameXLooksForMenuWithNameYThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu = mock(Menu.class);
+    	Mockito.when(mockMenu.hasName("Pizza especial Liz")).thenReturn(false);
+    	
+    	provider.addMenu(mockMenu);
+    	provider.searchMenu("Pizza especial Liz");
     }
 }

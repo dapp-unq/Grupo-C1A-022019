@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoa.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,6 +12,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyServiceHoursDaysException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.MenuNotFoundException;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -157,5 +159,13 @@ public class Provider {
 	{
 		if(this.currentMenu.size() == 20)
 			throw new CurrentMenuQuantityException("No se puede agregar más menús: Solo se puede tener hasta 20 menús vigentes.");
+	}
+	
+	public Menu searchMenu(String menuName)
+	{
+		Optional<Menu> searchMenu = this.currentMenu.stream().filter(menu -> menu.hasName(menuName)).findFirst();
+		if (! searchMenu.isPresent())
+			throw new MenuNotFoundException("No se encontró un menú con el nombre: " + menuName);
+		return searchMenu.get();
 	}
 }
