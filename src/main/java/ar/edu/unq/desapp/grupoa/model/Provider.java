@@ -55,10 +55,11 @@ public class Provider {
 
 	private List<City> calculateDeliveryCities(Double km, String location) {
 		List<City> cities = new ArrayList<City>();
-
 		// TODO: FALTA COMUNICARSE EN GMAP PARA VER TODAS LAS LOCALIDADES DONDE HACE
 		// ENTREGAS DESDE LA CIUDAD DEL LOCAL.
-
+		cities.add(City.Quilmes);
+		cities.add(City.Bernal);
+		cities.add(City.Ezpeleta);
 		return cities;
 	}
 
@@ -200,6 +201,14 @@ public class Provider {
 	public List<Menu> menusWithCategory(Category aCategory)
 	{
 		return this.currentMenu.stream().filter(menu -> menu.hasCategory(aCategory)).collect(Collectors.toList());
+	}
+	
+	public List<Menu> menusWithLocation(City aCity)
+	{
+		List<Menu> result =  new ArrayList<Menu>();
+		if (this.deliveryCities.contains(aCity))
+			result = this.currentMenu;
+		return result;
 	}
 
 }

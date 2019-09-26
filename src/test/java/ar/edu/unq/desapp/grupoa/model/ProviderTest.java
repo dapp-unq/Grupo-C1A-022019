@@ -531,4 +531,31 @@ public class ProviderTest {
 		assertTrue(provider.menusWithCategory(Category.Pizza).contains(mockMenu1));
 		assertFalse(provider.menusWithCategory(Category.Pizza).contains(mockMenu2));
 	}
+	
+	@Test
+	public void providerWithCurrentMenusThenAskForMenusWithLocationQuilmesThenReturnMenus() {
+		provider = ProviderBuilder.aProvider().build();
+		Menu mockMenu1 = mock(Menu.class);
+		Menu mockMenu2 = mock(Menu.class);
+		
+		provider.addMenu(mockMenu1);
+		provider.addMenu(mockMenu2);
+		
+		assertTrue(provider.menusWithLocation(City.Quilmes).contains(mockMenu1));
+		assertTrue(provider.menusWithLocation(City.Quilmes).contains(mockMenu2));
+		assertEquals(2, provider.menusWithLocation(City.Quilmes).size());
+	}
+	
+	@Test
+	public void providerWithCurrentMenusThenAskForMenusWithLocationLuisGuillonThenReturnEmptyList() {
+		provider = ProviderBuilder.aProvider().build();
+		Menu mockMenu1 = mock(Menu.class);
+		Menu mockMenu2 = mock(Menu.class);
+		
+		provider.addMenu(mockMenu1);
+		provider.addMenu(mockMenu2);
+		
+		assertTrue(provider.menusWithLocation(City.Luis_Guillon).isEmpty());
+	}
+	
 }
