@@ -1,6 +1,8 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -816,4 +818,15 @@ public class MenuTest
 		assertEquals(new Integer(10), menu.getOffer1().getPrice());
     }
 	
+	@Test
+	public void menuWithNameXAskIfHasNameXThenReturnTrue() {
+		menu = MenuBuilder.aMenu().withName("Pizza especial Liz").build();
+		assertTrue(menu.hasName("Pizza especial Liz"));
+	}
+	
+	@Test
+	public void menuWithNameXAskIfHasNameYThenReturnFalse() {
+		menu = MenuBuilder.aMenu().withName("Pizza especial Liz").build();
+		assertFalse(menu.hasName("Pizza de mozzarella"));
+	}
 }

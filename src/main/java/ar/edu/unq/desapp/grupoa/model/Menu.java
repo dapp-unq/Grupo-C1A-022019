@@ -215,4 +215,8 @@ public class Menu {
 		this.dailyStock = validateDailyStock(dailyStock);
 	}
 
+	public Boolean hasName(String menuName) {
+		return this.name.equals(menuName);
+	}
+
 }
