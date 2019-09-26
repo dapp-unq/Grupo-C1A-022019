@@ -28,10 +28,6 @@ public class ProviderTest {
 	private Provider provider;
 	private List<ServiceHours> openingHours;
 
-	@Before
-	public void setUp() {
-	}
-
 	@Test(expected = NullPointerException.class)
 	public void providerCreationWithNullNameThrowsException() {
 		provider = ProviderBuilder.aProvider().withName(null).build();
