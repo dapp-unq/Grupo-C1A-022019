@@ -13,6 +13,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.MenuNotFoundException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.MenuWithRepeatedNameException;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -151,16 +152,23 @@ public class Provider {
 
     public void addMenu(Menu aMenu)
     {
-    	this.validationCurrentMenuQuantity();
+    	this.validationCurrentMenuQuantity(aMenu.getName());
     	this.currentMenu.add(aMenu);
     }
 
-	private void validationCurrentMenuQuantity() 
+	private void validationCurrentMenuQuantity(String menuName) 
 	{
 		if(this.currentMenu.size() == 20)
 			throw new CurrentMenuQuantityException("No se puede agregar más menús: Solo se puede tener hasta 20 menús vigentes.");
+		if(this.anyCurrentMenuHasName(menuName))
+			throw new MenuWithRepeatedNameException("Ya existe un menú con el nombre " + menuName + ". Entente con otro diferente.");
 	}
 	
+	public boolean anyCurrentMenuHasName(String menuName) 
+	{
+		return this.currentMenu.stream().anyMatch(menu -> menu.hasName(menuName));
+	}
+
 	public Menu searchMenu(String menuName)
 	{
 		Optional<Menu> searchMenu = this.currentMenu.stream().filter(menu -> menu.hasName(menuName)).findFirst();
@@ -178,4 +186,11 @@ public class Provider {
 	{
 		this.currentMenu.remove(aMenu);
 	}
+	
+	public void editMenu(String nameMenuEdit, Menu newMenu)
+	{
+		this.removeMenuWithName(nameMenuEdit);
+		this.addMenu(newMenu);
+	}
+	
 }

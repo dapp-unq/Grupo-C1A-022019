@@ -21,6 +21,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.MenuNotFoundException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.MenuWithRepeatedNameException;
 
 public class ProviderTest {
 
@@ -299,6 +300,17 @@ public class ProviderTest {
     	assertTrue(provider.getCurrentMenu().contains(mockMenu)); 
     }
     
+    @Test (expected = MenuWithRepeatedNameException.class)
+    public void providerWithMenuWithNameXAndAddMenuWithTheSameNameThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu1 = mock(Menu.class);
+    	Menu mockMenu2 = mock(Menu.class);
+    	Mockito.when(mockMenu1.hasName("Pizza especial Liz")).thenReturn(true);
+    	Mockito.when(mockMenu2.getName()).thenReturn("Pizza especial Liz");
+    	provider.addMenu(mockMenu1);
+    	provider.addMenu(mockMenu2); 
+    }
+    
     @Test (expected = CurrentMenuQuantityException.class)
     public void providerWith20CurrentMenusAddACurrentMenuThrowsException() {
     	provider = ProviderBuilder.aProvider().build();
@@ -393,5 +405,55 @@ public class ProviderTest {
     	assertEquals(0, provider.getCurrentMenu().size());
     	provider.removeMenu(mockMenu);
     	assertEquals(0, provider.getCurrentMenu().size());
+    }
+    
+    @Test
+    public void providerWithoutCurrentMenuThenAskIfAnyHasNameXThenReturnFalse() {
+    	provider = ProviderBuilder.aProvider().build();
+    	
+    	assertFalse(provider.anyCurrentMenuHasName("Pizza especial Liz"));
+    }
+    
+    @Test
+    public void providerWithMenuWithNameZThenAskIfAnyHasNameXThenReturnFalse() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu = mock(Menu.class);
+    	Mockito.when(mockMenu.hasName("Pizza especial Liz")).thenReturn(false);
+    	provider.addMenu(mockMenu);
+    	assertFalse(provider.anyCurrentMenuHasName("Pizza especial Liz"));
+    }
+    
+    @Test
+    public void providerWithMenuWithNameXThenAskIfAnyHasNameXThenReturnTrue() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu = mock(Menu.class);
+    	Mockito.when(mockMenu.hasName("Pizza especial Liz")).thenReturn(true);
+    	provider.addMenu(mockMenu);
+    	assertTrue(provider.anyCurrentMenuHasName("Pizza especial Liz"));
+    }
+    
+    @Test
+    public void providerWithMenuWithNameXThenEditMenuWithNameX() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu1 = mock(Menu.class);
+    	Menu mockMenu2 = mock(Menu.class);
+    	Mockito.when(mockMenu1.hasName("Pizza especial Liz")).thenReturn(true);
+    	Mockito.when(mockMenu2.getName()).thenReturn("Pizza de mozza Liz");
+    	Mockito.when(mockMenu2.hasName("Pizza de mozza Liz")).thenReturn(true);
+    	provider.addMenu(mockMenu1);
+    	
+    	provider.editMenu("Pizza especial Liz", mockMenu2);
+    	assertFalse(provider.getCurrentMenu().contains(mockMenu1));
+    	assertTrue(provider.getCurrentMenu().contains(mockMenu2));
+    	assertTrue(provider.anyCurrentMenuHasName("Pizza de mozza Liz"));
+    }
+    
+    @Test (expected = MenuNotFoundException.class)
+    public void providerWithoutCurrentMenusEditMenuWithNameXThrowsException() {
+    	provider = ProviderBuilder.aProvider().build();
+    	Menu mockMenu = mock(Menu.class);
+    	Mockito.when(mockMenu.getName()).thenReturn("Pizza especial Liz");
+    	
+    	provider.editMenu("Pizza especial Liz", mockMenu);
     }
 }
