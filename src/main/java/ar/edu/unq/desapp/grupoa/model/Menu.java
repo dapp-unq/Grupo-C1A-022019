@@ -218,5 +218,15 @@ public class Menu {
 	public Boolean hasName(String menuName) {
 		return this.name.equals(menuName);
 	}
+	
+	public Boolean hasNameMatchedWith(String text)
+	{
+		return this.name.toLowerCase().contains(text.toLowerCase());
+	}
+	
+	public Boolean hasCategory(Category category)
+	{
+		return this.category.contains(category);
+	}
 
 }

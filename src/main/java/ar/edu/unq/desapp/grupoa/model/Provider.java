@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import ar.edu.unq.desapp.grupoa.model.exceptions.CurrentMenuQuantityException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyServiceHoursDaysException;
@@ -188,6 +190,16 @@ public class Provider {
 	public void editMenu(String nameMenuEdit, Menu newMenu) {
 		this.removeMenuWithName(nameMenuEdit);
 		this.addMenu(newMenu);
+	}
+	
+	public List<Menu> menusWithNameMatchedWith(String text)
+	{
+		return this.currentMenu.stream().filter(menu -> menu.hasNameMatchedWith(text)).collect(Collectors.toList());
+	}
+
+	public List<Menu> menusWithCategory(Category aCategory)
+	{
+		return this.currentMenu.stream().filter(menu -> menu.hasCategory(aCategory)).collect(Collectors.toList());
 	}
 
 }

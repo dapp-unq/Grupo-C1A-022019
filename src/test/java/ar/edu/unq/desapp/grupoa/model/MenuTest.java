@@ -829,4 +829,32 @@ public class MenuTest
 		menu = MenuBuilder.aMenu().withName("Pizza especial Liz").build();
 		assertFalse(menu.hasName("Pizza de mozzarella"));
 	}
+	
+	@Test
+	public void menuWithNameXYZAskIfHasNameMatchedWithXYThenReturnTrue() {
+		menu = MenuBuilder.aMenu().withName("Pizza especial Liz").build();
+		assertTrue(menu.hasNameMatchedWith("Especial"));
+	}
+	
+	@Test
+	public void menuWithNameXYZAskIfHasNameMatchedWithABCThenReturnFalse() {
+		menu = MenuBuilder.aMenu().withName("Pizza especial Liz").build();
+		assertFalse(menu.hasNameMatchedWith("Mozzarella"));
+	}
+	
+	@Test
+	public void menuWithCategoryPizzaAskIfHasCategoryPizzaThenReturnTrue() {
+		List<Category> categories = new ArrayList<Category>();
+		categories.add(Category.Pizza);
+		menu = MenuBuilder.aMenu().withCategory(categories).build();
+		assertTrue(menu.hasCategory(Category.Pizza));
+	}
+	
+	@Test
+	public void menuWithCategoryPizzaAskIfHasCategoryCerbezaThenReturnFalse() {
+		List<Category> categories = new ArrayList<Category>();
+		categories.add(Category.Pizza);
+		menu = MenuBuilder.aMenu().withCategory(categories).build();
+		assertFalse(menu.hasCategory(Category.Cerbeza));
+	}
 }

@@ -10,7 +10,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -466,5 +465,70 @@ public class ProviderTest {
 		Mockito.when(mockMenu.getName()).thenReturn("Pizza especial Liz");
 
 		provider.editMenu("Pizza especial Liz", mockMenu);
+	}
+	
+	@Test
+	public void providerWithCurrentMenusThenAskForMenusWithNameMatchedWithXThenReturnEmptyList() {
+		provider = ProviderBuilder.aProvider().build();
+		Menu mockMenu1 = mock(Menu.class);
+		Menu mockMenu2 = mock(Menu.class);
+		Mockito.when(mockMenu1.hasNameMatchedWith("Pizza")).thenReturn(false);
+		Mockito.when(mockMenu2.hasNameMatchedWith("Pizza")).thenReturn(false);
+		
+		provider.addMenu(mockMenu1);
+		provider.addMenu(mockMenu2);
+		
+		assertTrue(provider.menusWithNameMatchedWith("Pizza").isEmpty());
+	}
+	
+	@Test
+	public void providerWithoutCurrentMenusThenAskForMenusWithNameMatchedWithXThenReturnEmptyList() {
+		provider = ProviderBuilder.aProvider().build();
+		
+		assertTrue(provider.menusWithNameMatchedWith("Pizza").isEmpty());
+	}
+	
+	@Test
+	public void providerWithCurrentMenusThenAskForMenusWithNameMatchedWithXThenReturnAList() {
+		provider = ProviderBuilder.aProvider().build();
+		Menu mockMenu1 = mock(Menu.class);
+		Menu mockMenu2 = mock(Menu.class);
+		Mockito.when(mockMenu1.hasNameMatchedWith("Pizza")).thenReturn(true);
+		Mockito.when(mockMenu2.hasNameMatchedWith("Pizza")).thenReturn(false);
+		
+		provider.addMenu(mockMenu1);
+		provider.addMenu(mockMenu2);
+		
+		assertTrue(provider.menusWithNameMatchedWith("Pizza").contains(mockMenu1));
+		assertFalse(provider.menusWithNameMatchedWith("Pizza").contains(mockMenu2));
+	}
+	
+	@Test
+	public void providerWithCurrentMenusThenAskForMenusWithCategoryVeganoThenReturnEmptyList() {
+		provider = ProviderBuilder.aProvider().build();
+		Menu mockMenu1 = mock(Menu.class);
+		Menu mockMenu2 = mock(Menu.class);
+		Mockito.when(mockMenu1.hasCategory(Category.Vegano)).thenReturn(false);
+		Mockito.when(mockMenu2.hasCategory(Category.Vegano)).thenReturn(false);
+		
+		provider.addMenu(mockMenu1);
+		provider.addMenu(mockMenu2);
+		
+		assertTrue(provider.menusWithCategory(Category.Vegano).isEmpty());
+	}
+	
+	@Test
+	public void providerWithCurrentMenusThenAskForMenusWithCategoryPizzaThenReturnAList() {
+		provider = ProviderBuilder.aProvider().build();
+		Menu mockMenu1 = mock(Menu.class);
+		Menu mockMenu2 = mock(Menu.class);
+		Mockito.when(mockMenu1.hasCategory(Category.Pizza)).thenReturn(true);
+		Mockito.when(mockMenu2.hasCategory(Category.Pizza)).thenReturn(false);
+		
+		provider.addMenu(mockMenu1);
+		provider.addMenu(mockMenu2);
+		
+		assertTrue(provider.menusWithCategory(Category.Pizza).contains(mockMenu1));
+		assertFalse(provider.menusWithCategory(Category.Pizza).contains(mockMenu2));
 	}
 }
