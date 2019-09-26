@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.DataIncompleteException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyListException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankigException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
@@ -28,6 +30,7 @@ public class Menu {
 	private Integer dailyStock;
 	private Offer offer1;
 	private Offer offer2;
+	private List<Integer> ranking;
 
 	public Menu(String name, String description, List<Category> category, Integer deliveryPrice,
 			List<GregorianCalendar> efectiveDate, List<LocalTime> deliverySchedules,
@@ -43,6 +46,7 @@ public class Menu {
 		this.dailyStock = validateDailyStock(dailyStock);
 		this.offer1 = validationOffert1(offer1);
 		this.offer2 = validationOffert2(offer2); // Offer(0,0) = Optional
+		this.ranking = new ArrayList<Integer>();
 	}
 
 	private @NonNull Offer validationOffert2(Offer aOffer) {
@@ -229,4 +233,11 @@ public class Menu {
 		return this.category.contains(category);
 	}
 
+	public void rankIt(Integer ranking)
+	{
+		if (ranking > 5 || ranking <=0)
+			throw new InvalidRankigException("Puntuación inválida: La calificación del menú debe ser entre 0 y 5");
+		
+		this.ranking.add(ranking);
+	}
 }

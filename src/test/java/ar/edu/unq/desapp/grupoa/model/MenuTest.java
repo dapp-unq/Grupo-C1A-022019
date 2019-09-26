@@ -18,6 +18,7 @@ import ar.edu.unq.desapp.grupoa.model.Offer;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DataIncompleteException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyListException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankigException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
@@ -856,5 +857,24 @@ public class MenuTest
 		categories.add(Category.Pizza);
 		menu = MenuBuilder.aMenu().withCategory(categories).build();
 		assertFalse(menu.hasCategory(Category.Cerbeza));
+	}
+	
+	@Test
+	public void menuWithoutRankingThenAddRanking5() {
+		menu = MenuBuilder.aMenu().build();
+		menu.rankIt(5);
+		assertTrue(menu.getRanking().contains(5));
+	}
+	
+	@Test(expected = InvalidRankigException.class)
+	public void menuWithoutRankingThenAddRanking0ThrowException() {
+		menu = MenuBuilder.aMenu().build();
+		menu.rankIt(0);
+	}
+	
+	@Test(expected = InvalidRankigException.class)
+	public void menuWithoutRankingThenAddRanking10ThrowException() {
+		menu = MenuBuilder.aMenu().build();
+		menu.rankIt(10);
 	}
 }
