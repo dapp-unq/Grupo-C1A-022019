@@ -222,54 +222,48 @@ public class Menu {
 	public Boolean hasName(String menuName) {
 		return this.name.equals(menuName);
 	}
-	
-	public Boolean hasNameMatchedWith(String text)
-	{
+
+	public Boolean hasNameMatchedWith(String text) {
 		return this.name.toLowerCase().contains(text.toLowerCase());
 	}
-	
-	public Boolean hasCategory(Category category)
-	{
+
+	public Boolean hasCategory(Category category) {
 		return this.category.contains(category);
 	}
 
-	public void rankIt(Integer ranking)
-	{
-		if (ranking > 5 || ranking <=0)
+	public void rankIt(Integer ranking) {
+		if (ranking > 5 || ranking <= 0)
 			throw new InvalidRankigException("Puntuación inválida: La calificación del menú debe ser entre 0 y 5");
-		
+
 		this.ranking.add(ranking);
 	}
 
-	public void validationNumberMenuOrdered(Integer aQuantity) 
-	{
-		if(aQuantity > this.dailyStock)
-			throw new IrrationalAmountException("La cantidad de pedida supera la cantidad de ventas disponibles del menú.");
+	public void validationNumberMenuOrdered(Integer aQuantity) {
+		if (aQuantity > this.dailyStock)
+			throw new IrrationalAmountException(
+					"La cantidad de pedida supera la cantidad de ventas disponibles del menú.");
 	}
 
-	public void validationDateDeliveryMenuOrdered(GregorianCalendar todayDate, GregorianCalendar dateHoursDelivery) 
-	{
-		if(! this.has48HoursBetween(todayDate, dateHoursDelivery))
+	public void validationDateDeliveryMenuOrdered(GregorianCalendar dateHoursOrder,
+			GregorianCalendar dateHoursDelivery) {
+		if (!this.has48HoursBetween(dateHoursOrder, dateHoursDelivery))
 			throw new OrderDateException("El pedido debe hacerse al menos 48hs hábiles antes de la entrega del mismo.");
 	}
 
-	private Boolean has48HoursBetween(GregorianCalendar from, GregorianCalendar to) 
-	{
+	private Boolean has48HoursBetween(GregorianCalendar from, GregorianCalendar to) {
 		long milliFrom = from.getTimeInMillis();
 		long milliTo = to.getTimeInMillis();
 		long minutes = (milliTo - milliFrom) / 60000;
 		return minutes >= 2880; // 2880min = 48hs
 	}
 
-	// testear
-	public Integer valueForQuantity(Integer quantity) 
-	{
+	public Integer valueForQuantity(Integer quantity) {
 		Integer price = this.price;
-		if(quantity >= this.offer1.getQuantity())
+		if (quantity >= this.offer1.getQuantity())
 			price = this.offer1.getPrice();
-		if(this.offer2.isEffectiveOffer() && (quantity >= this.offer2.getQuantity()))
+		if (this.offer2.isEffectiveOffer() && (quantity >= this.offer2.getQuantity()))
 			price = this.offer2.getPrice();
 		return price;
 	}
-	
+
 }

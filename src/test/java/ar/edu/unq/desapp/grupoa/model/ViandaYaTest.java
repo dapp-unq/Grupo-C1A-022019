@@ -1,6 +1,8 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
@@ -13,10 +15,146 @@ import org.mockito.Mockito;
 
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.PurchaseException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 
 public class ViandaYaTest {
 
 	private ViandasYa viandasYa;
+	
+	@Test
+	public void testAddProviderSuccessfully()
+	{
+		viandasYa = new ViandasYa();
+		Provider mockProvider = mock(Provider.class);
+		Mockito.when(mockProvider.getName()).thenReturn("ViandaLiz");
+		viandasYa.addProvider(mockProvider);
+		
+		assertTrue(viandasYa.getProviders().contains(mockProvider));
+	}
+	
+	@Test
+	public void testAddUserSuccessfully()
+	{
+		viandasYa = new ViandasYa();
+		User mockUser = mock(User.class);
+		Mockito.when(mockUser.getName()).thenReturn("ViandaLiz");
+		viandasYa.addUser(mockUser);
+		
+		assertTrue(viandasYa.getClients().contains(mockUser));
+	}
+	
+	@Test(expected = RepeatedNameException.class)
+	public void testAddProviderWithRepeatedNameThenReturnThrowException()
+	{
+		viandasYa = new ViandasYa();
+		Provider mockProvider1 = mock(Provider.class);
+		Provider mockProvider2 = mock(Provider.class);
+		Mockito.when(mockProvider1.getName()).thenReturn("ViandaLiz");
+		Mockito.when(mockProvider1.hasName("ViandaLiz")).thenReturn(true);
+		Mockito.when(mockProvider2.getName()).thenReturn("ViandaLiz");
+		viandasYa.addProvider(mockProvider1);
+		viandasYa.addProvider(mockProvider2);
+		
+		assertEquals(1, viandasYa.getProviders().size());
+		assertTrue(viandasYa.getProviders().contains(mockProvider1));
+		assertFalse(viandasYa.getProviders().contains(mockProvider2));
+	}
+	
+	@Test(expected = RepeatedNameException.class)
+	public void testAddUserWithRepeatedNameThenReturnThrowException()
+	{
+		viandasYa = new ViandasYa();
+		User mockUser1 = mock(User.class);
+		User mockUser2 = mock(User.class);
+		Mockito.when(mockUser1.getName()).thenReturn("LizaChambi");
+		Mockito.when(mockUser1.hasName("LizaChambi")).thenReturn(true);
+		Mockito.when(mockUser2.getName()).thenReturn("LizaChambi");
+		viandasYa.addUser(mockUser1);
+		viandasYa.addUser(mockUser2);
+		
+		assertEquals(1, viandasYa.getClients().size());
+		assertTrue(viandasYa.getClients().contains(mockUser1));
+		assertFalse(viandasYa.getClients().contains(mockUser2));
+	}
+	
+	@Test
+	public void testHasInUseProviderNameViandaLizThenReturnTrue()
+	{
+		viandasYa = new ViandasYa();
+		Provider mockProvider1 = mock(Provider.class);
+		Provider mockProvider2 = mock(Provider.class);
+		Mockito.when(mockProvider1.getName()).thenReturn("ViandaLiz");
+		Mockito.when(mockProvider1.hasName("ViandaLiz")).thenReturn(true);
+		Mockito.when(mockProvider2.getName()).thenReturn("ViandaLiz");
+		viandasYa.addProvider(mockProvider1);
+		
+		assertTrue(viandasYa.hasInUseProviderName(mockProvider2.getName()));
+	}
+	
+	@Test
+	public void testHasInUseUserNameLizaChambiThenReturnTrue()
+	{
+		viandasYa = new ViandasYa();
+		User mockUser1 = mock(User.class);
+		User mockUser2 = mock(User.class);
+		Mockito.when(mockUser1.getName()).thenReturn("LizaChambi");
+		Mockito.when(mockUser1.hasName("LizaChambi")).thenReturn(true);
+		Mockito.when(mockUser2.getName()).thenReturn("LizaChambi");
+		viandasYa.addUser(mockUser1);
+		
+		assertTrue(viandasYa.hasInUseUserName(mockUser2.getName()));
+	}
+	
+	@Test
+	public void testHasInUseProviderNameViandaMelThenReturnFalse()
+	{
+		viandasYa = new ViandasYa();
+		Provider mockProvider1 = mock(Provider.class);
+		Provider mockProvider2 = mock(Provider.class);
+		Mockito.when(mockProvider1.getName()).thenReturn("ViandaLiz");
+		Mockito.when(mockProvider1.hasName("ViandaLiz")).thenReturn(false);
+		Mockito.when(mockProvider2.getName()).thenReturn("ViandaMel");
+		viandasYa.addProvider(mockProvider1);
+		
+		assertFalse(viandasYa.hasInUseProviderName(mockProvider1.getName()));
+	}
+	
+	@Test
+	public void testHasInUseUserNameMelOrellanaThenReturnFalse()
+	{
+		viandasYa = new ViandasYa();
+		User mockUser1 = mock(User.class);
+		User mockUser2 = mock(User.class);
+		Mockito.when(mockUser1.getName()).thenReturn("LizaChambi");
+		Mockito.when(mockUser1.hasName("LizaChambi")).thenReturn(false);
+		Mockito.when(mockUser2.getName()).thenReturn("MelOrellana");
+		viandasYa.addUser(mockUser1);
+		
+		assertFalse(viandasYa.hasInUseUserName(mockUser1.getName()));
+	}
+	
+	@Test
+	public void testHasInUseProviderNameViandaLizWithViandaYaEmptyProvidersThenReturnFalse()
+	{
+		viandasYa = new ViandasYa();
+		Provider mockProvider1 = mock(Provider.class);
+		Mockito.when(mockProvider1.getName()).thenReturn("ViandaLiz");
+		Mockito.when(mockProvider1.hasName("ViandaLiz")).thenReturn(true);
+		
+		assertFalse(viandasYa.hasInUseProviderName(mockProvider1.getName()));
+	}
+	
+	@Test
+	public void testHasInUseUserNameLizaChambiWithViandaYaEmptyClientsThenReturnFalse()
+	{
+		viandasYa = new ViandasYa();
+		User mockUser1 = mock(User.class);
+		Mockito.when(mockUser1.getName()).thenReturn("LizaChambi");
+		Mockito.when(mockUser1.hasName("LizaChambi")).thenReturn(true);
+		
+		assertFalse(viandasYa.hasInUseUserName(mockUser1.getName()));
+	}
 	
 	@Test
 	public void testSearchMenuNamesMatchedWithXWithoutMenusThenReturnEmptyList()
@@ -125,13 +263,7 @@ public class ViandaYaTest {
 		Mockito.verify(mockUser).addHistoryOrder(newOrder);
 		Mockito.verify(mockProvider).addOrder(mockUser, newOrder);
 		
-		assertEquals(mockMenu, newOrder.getMenu());
-		assertEquals(deliveryDay, newOrder.getDateHoursDelivery());
-		assertEquals(orderDay, newOrder.getDateHoursOrder());
-		assertEquals(new Integer(50), newOrder.getQuantity());
-		assertEquals(Status.In_Progress, newOrder.getStatus());
-		assertEquals(DeliveryType.Home_delivery, newOrder.getTypeDelivery());
-		assertEquals(new Integer(7530), newOrder.getValue());
+		assertNotNull(newOrder);
     }
     
     @Test (expected = IrrationalAmountException.class)
@@ -170,4 +302,73 @@ public class ViandaYaTest {
 		Mockito.verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay , deliveryDay);
     }
     
+	@Test (expected = PurchaseException.class)
+	public void testValidatedPendingRankingThrowException()
+	{
+		viandasYa = new ViandasYa();
+		User mockUser = mock(User.class);
+		Mockito.when(mockUser.hasPendingRanking()).thenReturn(true);
+		viandasYa.validatedPendingRanking(mockUser);
+	}
+	
+	@Test
+	public void testValidatedPendingRankingThenPasses()
+	{
+		viandasYa = new ViandasYa();
+		User mockUser = mock(User.class);
+		Mockito.when(mockUser.hasPendingRanking()).thenReturn(false);
+		viandasYa.validatedPendingRanking(mockUser);
+	}
+	
+	@Test
+	public void testMakeAOrderThenReturnAOrder()
+	{
+		viandasYa = new ViandasYa();
+		GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
+		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+		Menu mockMenu = mock(Menu.class);
+		Mockito.when(mockMenu.valueForQuantity(50)).thenReturn(150);
+		Mockito.when(mockMenu.getDeliveryPrice()).thenReturn(30);
+		
+		Order newOrder = viandasYa.makeOrder(mockMenu, deliveryDay, orderDay, 50, DeliveryType.Home_delivery);
+		
+		Mockito.verify(mockMenu).validationNumberMenuOrdered(50);
+		Mockito.verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay , deliveryDay);
+		assertEquals(mockMenu, newOrder.getMenu());
+		assertEquals(deliveryDay, newOrder.getDateHoursDelivery());
+		assertEquals(orderDay, newOrder.getDateHoursOrder());
+		assertEquals(new Integer(50), newOrder.getQuantity());
+		assertEquals(Status.In_Progress, newOrder.getStatus());
+		assertEquals(DeliveryType.Home_delivery, newOrder.getTypeDelivery());
+		assertEquals(new Integer(7530), newOrder.getValue());
+		assertEquals(new Integer(0), newOrder.getRanking());
+	}
+    
+	@Test (expected = IrrationalAmountException.class)
+	public void testMakeAOrderWithout100DailyStockThenThrowException()
+	{
+		viandasYa = new ViandasYa();
+		GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
+		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+		Menu mockMenu = mock(Menu.class);
+		Mockito.doThrow(IrrationalAmountException.class).when(mockMenu).validationNumberMenuOrdered(100);
+		
+		viandasYa.makeOrder(mockMenu, deliveryDay, orderDay, 100, DeliveryType.Home_delivery);
+		Mockito.verify(mockMenu).validationNumberMenuOrdered(100);
+	}
+	
+	@Test (expected = OrderDateException.class)
+	public void testMakeAOrderWithoutHas48HoursBetweenDatesThrowException()
+	{
+		viandasYa = new ViandasYa();
+		GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
+		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+		Menu mockMenu = mock(Menu.class);
+		Mockito.doThrow(OrderDateException.class).when(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
+		
+		viandasYa.makeOrder(mockMenu, deliveryDay, orderDay, 50, DeliveryType.Home_delivery);
+		Mockito.verify(mockMenu).validationNumberMenuOrdered(50);
+		Mockito.verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
+		
+	}
 }

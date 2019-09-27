@@ -905,4 +905,24 @@ public class MenuTest
 		menu.validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
 	}
 	
+	@Test
+	public void menuWith150PriceThenValueForQuantity50ThenReturn150() {
+		menu = MenuBuilder.aMenu().withDailyStock(200).withPrice(150).withOffer1(new Offer(60, 130)).build();
+		assertEquals(new Integer(150), menu.valueForQuantity(50));
+	}
+	
+	@Test
+	public void menuWith150PriceThenValueForQuantity65ThenReturn130() {
+		menu = MenuBuilder.aMenu().withDailyStock(200).withPrice(150).withOffer1(new Offer(60, 130)).build();
+		assertEquals(new Integer(130), menu.valueForQuantity(65));
+	}
+	
+	@Test
+	public void menuWith150PriceThenValueForQuantity100ThenReturn110() {
+		Offer offer1 = new Offer(60, 130);
+		Offer offer2 = new Offer(90, 110);
+		menu = MenuBuilder.aMenu().withDailyStock(200).withPrice(150).withOffer1(offer1).withOffer2(offer2).build();
+		assertEquals(new Integer(110), menu.valueForQuantity(100));
+	}
+	
 }

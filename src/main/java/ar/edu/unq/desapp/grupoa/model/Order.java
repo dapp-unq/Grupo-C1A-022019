@@ -1,9 +1,11 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import java.util.GregorianCalendar;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
+@NotNull
 public class Order {
 	private Menu menu;
 	private GregorianCalendar dateHoursDelivery;
@@ -13,7 +15,7 @@ public class Order {
 	private Status status;
 	private Integer ranking;
 	private Integer value;
-	
+
 	public Order(Menu menu, GregorianCalendar dateHoursDelivery, GregorianCalendar dateHoursOrder, Integer quantity,
 			DeliveryType typeDelivery, Status status) {
 		super();
@@ -27,15 +29,15 @@ public class Order {
 		this.value = this.calculateValue(quantity);
 	}
 
-	// falta testear
-	private Integer calculateValue(Integer quantity) 
-	{
+	public void setTypeDelivery(DeliveryType type) {
+		this.typeDelivery = type;
+	}
+
+	public Integer calculateValue(Integer quantity) {
 		return (this.menu.valueForQuantity(quantity) * quantity) + deliveryPrice();
 	}
-	
-	// falta testear
-	private Integer deliveryPrice()
-	{
+
+	public Integer deliveryPrice() {
 		Integer price = 0;
 		if (typeDelivery.equals(DeliveryType.Home_delivery))
 			price = this.menu.getDeliveryPrice();

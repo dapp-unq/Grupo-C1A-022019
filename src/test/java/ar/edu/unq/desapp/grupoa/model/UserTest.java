@@ -1,8 +1,10 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
@@ -107,6 +109,44 @@ public class UserTest {
     	assertTrue(aUser.getOrderHistory().contains(mockOrder2));
     	assertEquals(2, aUser.getOrderHistory().size());
     }
+    
+	@Test
+	public void userWithNameLizaChambiThenAskIfHasNameLizaChambiThenReturnTrue()
+	{
+		User aUser = anyUser();
+		aUser.setName("LizaChambi");
+		assertTrue(aUser.hasName("LizaChambi"));
+	}
+	
+	@Test
+	public void userWithNameLizaChambiThenAskIfHasNameMelOrellanaThenReturnFalse()
+	{		
+		User aUser = anyUser();
+		aUser.setName("LizaChambi");
+		assertFalse(aUser.hasName("MelOrellana"));
+	}
+	
+	@Test
+	public void userWithPendingRankingThenAskIfHasPendingRankingThenReturnTrue()
+	{
+		User aUser = anyUser();
+		Order mockOrder = mock(Order.class);
+		Mockito.when(mockOrder.getRanking()).thenReturn(0);
+		
+		aUser.addHistoryOrder(mockOrder);
+		assertTrue(aUser.hasPendingRanking());
+	}
+	
+	@Test
+	public void userWithoutPendingRankingThenAskIfHasPendingRankingThenReturnFalse()
+	{
+		User aUser = anyUser();
+		Order mockOrder = mock(Order.class);
+		Mockito.when(mockOrder.getRanking()).thenReturn(5);
+		
+		aUser.addHistoryOrder(mockOrder);
+		assertFalse(aUser.hasPendingRanking());
+	}
     
     private User anyUser(){
         return new User("Nahuel", "Benitez", "beniteznahueloscar@gmail.com", "+42112555005", "Condarco 1549");

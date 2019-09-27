@@ -20,7 +20,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.MenuNotFoundException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.MenuWithRepeatedNameException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 
 public class ProviderTest {
 
@@ -300,7 +300,7 @@ public class ProviderTest {
 		assertTrue(provider.getCurrentMenu().contains(mockMenu));
 	}
 
-	@Test(expected = MenuWithRepeatedNameException.class)
+	@Test(expected = RepeatedNameException.class)
 	public void providerWithMenuWithNameXAndAddMenuWithTheSameNameThrowsException() {
 		provider = ProviderBuilder.aProvider().build();
 		Menu mockMenu1 = mock(Menu.class);
@@ -583,4 +583,17 @@ public class ProviderTest {
 		assertTrue(provider.getOrders().get(0).getOrders().contains(mockOrder2));
 	}
 	
+	@Test
+	public void providerWithNameViandaLizThenAskIfHasNameViandaLizThenReturnTrue()
+	{
+		provider = ProviderBuilder.aProvider().withName("ViandaLiz").build();
+		assertTrue(provider.hasName("ViandaLiz"));
+	}
+	
+	@Test
+	public void providerWithNameViandaLizThenAskIfHasNameViandaMelThenReturnFalse()
+	{
+		provider = ProviderBuilder.aProvider().withName("ViandaLiz").build();
+		assertFalse(provider.hasName("ViandaMel"));
+	}
 }

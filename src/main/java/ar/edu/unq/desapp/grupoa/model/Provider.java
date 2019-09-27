@@ -14,7 +14,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.MenuNotFoundException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.MenuWithRepeatedNameException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -167,7 +167,7 @@ public class Provider {
 			throw new CurrentMenuQuantityException(
 					"No se puede agregar más menús: Solo se puede tener hasta 20 menús vigentes.");
 		if (this.anyCurrentMenuHasName(menuName))
-			throw new MenuWithRepeatedNameException(
+			throw new RepeatedNameException(
 					"Ya existe un menú con el nombre " + menuName + ". Entente con otro diferente.");
 	}
 
@@ -194,32 +194,32 @@ public class Provider {
 		this.removeMenuWithName(nameMenuEdit);
 		this.addMenu(newMenu);
 	}
-	
-	public List<Menu> menusWithNameMatchedWith(String text)
-	{
+
+	public List<Menu> menusWithNameMatchedWith(String text) {
 		return this.currentMenu.stream().filter(menu -> menu.hasNameMatchedWith(text)).collect(Collectors.toList());
 	}
 
-	public List<Menu> menusWithCategory(Category aCategory)
-	{
+	public List<Menu> menusWithCategory(Category aCategory) {
 		return this.currentMenu.stream().filter(menu -> menu.hasCategory(aCategory)).collect(Collectors.toList());
 	}
-	
-	public List<Menu> menusWithLocation(City aCity)
-	{
-		List<Menu> result =  new ArrayList<Menu>();
+
+	public List<Menu> menusWithLocation(City aCity) {
+		List<Menu> result = new ArrayList<Menu>();
 		if (this.deliveryCities.contains(aCity))
 			result = this.currentMenu;
 		return result;
 	}
 
-	public void addOrder(User user, Order newOrder) 
-	{
+	public void addOrder(User user, Order newOrder) {
 		Optional<CurrentOrder> result = this.orders.stream().filter(order -> order.hasUser(user)).findFirst();
-		if(result.isPresent())
+		if (result.isPresent())
 			result.get().addOrder(newOrder);
 		else
 			this.orders.add(new CurrentOrder(user, newOrder));
 	}
-	
+
+	public Boolean hasName(String provideName) {
+		return this.name.equals(provideName);
+	}
+
 }
