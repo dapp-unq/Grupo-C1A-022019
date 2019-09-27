@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import ar.edu.unq.desapp.grupoa.model.exceptions.CurrentMenuQuantityException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyServiceHoursDaysException;
@@ -12,7 +14,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.MenuNotFoundException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.MenuWithRepeatedNameException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -31,6 +33,7 @@ public class Provider {
 	private List<ServiceHours> openingHoursDays;
 	private List<City> deliveryCities;
 	private List<Menu> currentMenu;
+	private List<CurrentOrder> orders;
 
 	private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 			Pattern.CASE_INSENSITIVE);
@@ -49,14 +52,16 @@ public class Provider {
 		this.openingHoursDays = validateNotEmptyOpeningHoursDays(serviceHours, "horarios y días de atención");
 		this.deliveryCities = calculateDeliveryCities(km, location);
 		this.currentMenu = new ArrayList<Menu>();
+		this.orders = new ArrayList<CurrentOrder>();
 	}
 
 	private List<City> calculateDeliveryCities(Double km, String location) {
 		List<City> cities = new ArrayList<City>();
-
 		// TODO: FALTA COMUNICARSE EN GMAP PARA VER TODAS LAS LOCALIDADES DONDE HACE
 		// ENTREGAS DESDE LA CIUDAD DEL LOCAL.
-
+		cities.add(City.Quilmes);
+		cities.add(City.Bernal);
+		cities.add(City.Ezpeleta);
 		return cities;
 	}
 
@@ -162,7 +167,7 @@ public class Provider {
 			throw new CurrentMenuQuantityException(
 					"No se puede agregar más menús: Solo se puede tener hasta 20 menús vigentes.");
 		if (this.anyCurrentMenuHasName(menuName))
-			throw new MenuWithRepeatedNameException(
+			throw new RepeatedNameException(
 					"Ya existe un menú con el nombre " + menuName + ". Entente con otro diferente.");
 	}
 
@@ -188,6 +193,33 @@ public class Provider {
 	public void editMenu(String nameMenuEdit, Menu newMenu) {
 		this.removeMenuWithName(nameMenuEdit);
 		this.addMenu(newMenu);
+	}
+
+	public List<Menu> menusWithNameMatchedWith(String text) {
+		return this.currentMenu.stream().filter(menu -> menu.hasNameMatchedWith(text)).collect(Collectors.toList());
+	}
+
+	public List<Menu> menusWithCategory(Category aCategory) {
+		return this.currentMenu.stream().filter(menu -> menu.hasCategory(aCategory)).collect(Collectors.toList());
+	}
+
+	public List<Menu> menusWithLocation(City aCity) {
+		List<Menu> result = new ArrayList<Menu>();
+		if (this.deliveryCities.contains(aCity))
+			result = this.currentMenu;
+		return result;
+	}
+
+	public void addOrder(User user, Order newOrder) {
+		Optional<CurrentOrder> result = this.orders.stream().filter(order -> order.hasUser(user)).findFirst();
+		if (result.isPresent())
+			result.get().addOrder(newOrder);
+		else
+			this.orders.add(new CurrentOrder(user, newOrder));
+	}
+
+	public Boolean hasName(String provideName) {
+		return this.name.equals(provideName);
 	}
 
 }
