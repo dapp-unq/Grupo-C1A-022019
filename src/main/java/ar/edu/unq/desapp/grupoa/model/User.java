@@ -87,4 +87,9 @@ public class User {
 		return this.name.equals(userName);
 	}
 
+	public void rankIt(Order order, Integer rank) {
+		order.getMenu().rankIt(rank);
+		order.setRanking(rank);
+	}
+
 }

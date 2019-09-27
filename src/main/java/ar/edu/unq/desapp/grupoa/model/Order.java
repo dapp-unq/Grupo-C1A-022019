@@ -1,11 +1,11 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import java.util.GregorianCalendar;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NonNull;
 
 @Getter
-@NotNull
+@NonNull
 public class Order {
 	private Menu menu;
 	private GregorianCalendar dateHoursDelivery;
@@ -29,8 +29,12 @@ public class Order {
 		this.value = this.calculateValue(quantity);
 	}
 
-	public void setTypeDelivery(DeliveryType type) {
+	public void setTypeDelivery(@NonNull DeliveryType type) {
 		this.typeDelivery = type;
+	}
+
+	public void setRanking(@NonNull Integer ranking) {
+		this.ranking = ranking;
 	}
 
 	public Integer calculateValue(Integer quantity) {
