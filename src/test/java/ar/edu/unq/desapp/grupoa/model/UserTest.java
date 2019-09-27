@@ -1,17 +1,13 @@
 package ar.edu.unq.desapp.grupoa.model;
 
-import static org.mockito.Mockito.mock;
-
-import java.util.GregorianCalendar;
-
 import org.junit.Test;
-import org.mockito.Mockito;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
 
 public class UserTest {
 
@@ -86,32 +82,7 @@ public class UserTest {
         User aUser = anyUser();
         aUser.setPhoneNumber("1234");
     }
-    
-    @Test
-    public void testPurchaseMenuCorrectly(){
-        User aUser = anyUser();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
-        
-		Menu mockMenu = mock(Menu.class);
-		Provider mockProvider = mock(Provider.class);
-		Mockito.when(mockMenu.getName()).thenReturn("Pizza de mozzarella");
-		
-        aUser.purchase(mockProvider, mockMenu, 50, DeliveryType.Home_delivery, deliveryDay, orderDay);
-    }
-    
-    @Test (expected = IrrationalAmountException.class)
-    public void whenPurchaseMenuWithou100DailyStockThenThrowException(){
-        User aUser = anyUser();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
-        
-		Menu mockMenu = mock(Menu.class);
-		Provider mockProvider = mock(Provider.class);
-		Mockito.doThrow(IrrationalAmountException.class).when(mockMenu).validationNumberMenuOrdered(100);	
-
-        aUser.purchase(mockProvider, mockMenu, 100, DeliveryType.Home_delivery, deliveryDay, orderDay);
-    }
+    /*
     
     @Test (expected = OrderDateException.class)
     public void whenPurchaseMenuWithoutHas48HoursBetweenDatesThrowException(){
@@ -125,7 +96,33 @@ public class UserTest {
 
         aUser.purchase(mockProvider, mockMenu, 50, DeliveryType.Home_delivery, deliveryDay, orderDay);
     }
-
+*/
+    
+    @Test
+    public void userWithEmptyOrderHistoryAddANewOrderCorrectly()
+    {
+    	User aUser = anyUser();
+    	Order mockOrder = mock(Order.class);
+    	
+    	aUser.addHistoryOrder(mockOrder);
+    	assertTrue(aUser.getOrderHistory().contains(mockOrder));
+    	assertEquals(1, aUser.getOrderHistory().size());
+    }
+    
+    public void userWith1OrderHistoryAddANewOrderCorrectly()
+    {
+    	User aUser = anyUser();
+    	Order mockOrder1 = mock(Order.class);
+    	Order mockOrder2 = mock(Order.class);
+    	
+    	aUser.addHistoryOrder(mockOrder1);
+    	aUser.addHistoryOrder(mockOrder2);
+    	
+    	assertTrue(aUser.getOrderHistory().contains(mockOrder1));
+    	assertTrue(aUser.getOrderHistory().contains(mockOrder2));
+    	assertEquals(2, aUser.getOrderHistory().size());
+    }
+    
     private User anyUser(){
         return new User("Nahuel", "Benitez", "beniteznahueloscar@gmail.com", "+42112555005", "Condarco 1549");
     }

@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoa.model;
 
-import java.util.GregorianCalendar;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +20,7 @@ public class User {
     public String email;
     public String phoneNumber;
     public String location;
+    public List<Order> orderHistory;
 
     private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     private final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
@@ -29,6 +31,7 @@ public class User {
         this.email = isValidEmail(email);
         this.phoneNumber = isValidPhone(phoneNumber);
         this.location = validateNotEmpty(location, "dirección");
+        this.orderHistory = new ArrayList<Order>();
     }
 
     private String isValidEmail(String email) {
@@ -70,23 +73,10 @@ public class User {
     public void setLocation(String location) {
         this.location = validateNotEmpty(location, "dirección");
     }
-    
-    // El usuario selecciona todo menos el proveedor, ese se elige automáticamente al elegir el menú.
-    // si el usuario tienen puntuaciones pendientes, no puede hacer la compra
-    public void purchase (Provider provider, Menu aMenu, Integer aQuantity, DeliveryType typeDelivery, GregorianCalendar dateHoursDelivery, GregorianCalendar todayDate)
-    {
-    	CurrentOrder currentOrder = this.makeAOrder(aMenu, aQuantity, typeDelivery, dateHoursDelivery, todayDate);
-    	provider.addOrder(currentOrder);
-    	// Sent mail to Provider
-    	// Sent mail to User
-    	// Discount balances.
-    }
-    
-    public CurrentOrder makeAOrder(Menu aMenu, Integer aQuantity, DeliveryType typeDelivery, GregorianCalendar dateHoursDelivery, GregorianCalendar dateHoursOrder)   
-    {
-    	aMenu.validationNumberMenuOrdered(aQuantity);
-    	aMenu.validationDateDeliveryMenuOrdered(dateHoursOrder , dateHoursDelivery); // Falta considerar los días no hábiles de un servicio público.
-    	return new CurrentOrder(aMenu.getName(), aQuantity, typeDelivery, dateHoursDelivery, dateHoursOrder, this); 
-    }
+
+	public void addHistoryOrder(Order newOrder) 
+	{
+		this.orderHistory.add(newOrder);
+	}
 
 }

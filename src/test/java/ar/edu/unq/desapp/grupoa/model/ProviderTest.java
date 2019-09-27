@@ -561,10 +561,26 @@ public class ProviderTest {
 	@Test
 	public void providerWithEmptyOrdersThenAddOrderCorrectly() {
 		provider = ProviderBuilder.aProvider().build();
-		CurrentOrder mockOrder = mock(CurrentOrder.class);
+		Order mockOrder = mock(Order.class);
+		User mockUser = mock(User.class);
 		
-		provider.addOrder(mockOrder);
-		assertTrue(provider.getOrders().contains(mockOrder));
+		provider.addOrder(mockUser, mockOrder);
+		assertEquals(1, provider.getOrders().size());
+		assertTrue(provider.getOrders().get(0).hasUser(mockUser));
+	}
+	
+	@Test
+	public void providerWithXUserOrdersThenAddXUserOrderCorrectly() {
+		provider = ProviderBuilder.aProvider().build();
+		Order mockOrder1 = mock(Order.class);
+		Order mockOrder2 = mock(Order.class);
+		User mockUser = mock(User.class);
+		
+		provider.addOrder(mockUser, mockOrder1);
+		provider.addOrder(mockUser, mockOrder2);
+		
+		assertEquals(1, provider.getOrders().size());
+		assertTrue(provider.getOrders().get(0).getOrders().contains(mockOrder2));
 	}
 	
 }

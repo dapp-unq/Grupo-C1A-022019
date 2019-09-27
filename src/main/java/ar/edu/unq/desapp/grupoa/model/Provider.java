@@ -213,9 +213,13 @@ public class Provider {
 		return result;
 	}
 
-	public void addOrder(CurrentOrder aOrder) 
+	public void addOrder(User user, Order newOrder) 
 	{
-		this.orders.add(aOrder);
+		Optional<CurrentOrder> result = this.orders.stream().filter(order -> order.hasUser(user)).findFirst();
+		if(result.isPresent())
+			result.get().addOrder(newOrder);
+		else
+			this.orders.add(new CurrentOrder(user, newOrder));
 	}
-
+	
 }

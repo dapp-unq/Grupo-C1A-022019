@@ -260,5 +260,16 @@ public class Menu {
 		long minutes = (milliTo - milliFrom) / 60000;
 		return minutes >= 2880; // 2880min = 48hs
 	}
+
+	// testear
+	public Integer valueForQuantity(Integer quantity) 
+	{
+		Integer price = this.price;
+		if(quantity >= this.offer1.getQuantity())
+			price = this.offer1.getPrice();
+		if(this.offer2.isEffectiveOffer() && (quantity >= this.offer2.getQuantity()))
+			price = this.offer2.getPrice();
+		return price;
+	}
 	
 }
