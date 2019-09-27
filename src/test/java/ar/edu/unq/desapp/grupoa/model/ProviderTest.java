@@ -558,4 +558,13 @@ public class ProviderTest {
 		assertTrue(provider.menusWithLocation(City.Luis_Guillon).isEmpty());
 	}
 	
+	@Test
+	public void providerWithEmptyOrdersThenAddOrderCorrectly() {
+		provider = ProviderBuilder.aProvider().build();
+		CurrentOrder mockOrder = mock(CurrentOrder.class);
+		
+		provider.addOrder(mockOrder);
+		assertTrue(provider.getOrders().contains(mockOrder));
+	}
+	
 }

@@ -33,6 +33,7 @@ public class Provider {
 	private List<ServiceHours> openingHoursDays;
 	private List<City> deliveryCities;
 	private List<Menu> currentMenu;
+	private List<CurrentOrder> orders;
 
 	private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 			Pattern.CASE_INSENSITIVE);
@@ -51,6 +52,7 @@ public class Provider {
 		this.openingHoursDays = validateNotEmptyOpeningHoursDays(serviceHours, "horarios y días de atención");
 		this.deliveryCities = calculateDeliveryCities(km, location);
 		this.currentMenu = new ArrayList<Menu>();
+		this.orders = new ArrayList<CurrentOrder>();
 	}
 
 	private List<City> calculateDeliveryCities(Double km, String location) {
@@ -209,6 +211,11 @@ public class Provider {
 		if (this.deliveryCities.contains(aCity))
 			result = this.currentMenu;
 		return result;
+	}
+
+	public void addOrder(CurrentOrder aOrder) 
+	{
+		this.orders.add(aOrder);
 	}
 
 }

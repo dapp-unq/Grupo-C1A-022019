@@ -1,14 +1,14 @@
 package ar.edu.unq.desapp.grupoa.model;
 
-import lombok.Getter;
-import lombok.NonNull;
-
+import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
+import lombok.Getter;
+import lombok.NonNull;
 
 @Getter
 @NonNull
@@ -70,4 +70,23 @@ public class User {
     public void setLocation(String location) {
         this.location = validateNotEmpty(location, "dirección");
     }
+    
+    // El usuario selecciona todo menos el proveedor, ese se elige automáticamente al elegir el menú.
+    // si el usuario tienen puntuaciones pendientes, no puede hacer la compra
+    public void purchase (Provider provider, Menu aMenu, Integer aQuantity, DeliveryType typeDelivery, GregorianCalendar dateHoursDelivery, GregorianCalendar todayDate)
+    {
+    	CurrentOrder currentOrder = this.makeAOrder(aMenu, aQuantity, typeDelivery, dateHoursDelivery, todayDate);
+    	provider.addOrder(currentOrder);
+    	// Sent mail to Provider
+    	// Sent mail to User
+    	// Discount balances.
+    }
+    
+    public CurrentOrder makeAOrder(Menu aMenu, Integer aQuantity, DeliveryType typeDelivery, GregorianCalendar dateHoursDelivery, GregorianCalendar dateHoursOrder)   
+    {
+    	aMenu.validationNumberMenuOrdered(aQuantity);
+    	aMenu.validationDateDeliveryMenuOrdered(dateHoursOrder , dateHoursDelivery); // Falta considerar los días no hábiles de un servicio público.
+    	return new CurrentOrder(aMenu.getName(), aQuantity, typeDelivery, dateHoursDelivery, dateHoursOrder, this); 
+    }
+
 }

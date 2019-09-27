@@ -11,10 +11,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import ar.edu.unq.desapp.grupoa.model.Category;
-import ar.edu.unq.desapp.grupoa.model.Menu;
-import ar.edu.unq.desapp.grupoa.model.MenuBuilder;
-import ar.edu.unq.desapp.grupoa.model.Offer;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DataIncompleteException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyListException;
@@ -22,6 +18,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankigException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
 
 public class MenuTest 
 {
@@ -877,4 +874,35 @@ public class MenuTest
 		menu = MenuBuilder.aMenu().build();
 		menu.rankIt(10);
 	}
+	
+	@Test(expected = IrrationalAmountException.class)
+	public void menuWith100DailyStockThenAsFor101MenusOrderedThrowException() {
+		menu = MenuBuilder.aMenu().withDailyStock(100).build();
+		menu.validationNumberMenuOrdered(101);
+	}
+	
+	@Test (expected = OrderDateException.class)
+	public void menuWithOrderDayAfter48hsDeliveryDayThrowException() {
+		menu = MenuBuilder.aMenu().build();
+		GregorianCalendar orderDay = new GregorianCalendar(2019, 8, 30, 12, 00);
+		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 9, 2, 11, 30);
+		menu.validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
+	}
+	
+	@Test (expected = OrderDateException.class)
+	public void menuWithOrderDayAfter48hsDeliveryDay2ThrowException() {
+		menu = MenuBuilder.aMenu().build();
+		GregorianCalendar orderDay = new GregorianCalendar(2019, 10, 15, 12, 00);
+		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 10, 17, 11, 30);
+		menu.validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
+	}
+	
+	@Test
+	public void menuWithOrderDayBefore48hsDeliveryDay() {
+		menu = MenuBuilder.aMenu().build();
+		GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
+		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+		menu.validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
+	}
+	
 }

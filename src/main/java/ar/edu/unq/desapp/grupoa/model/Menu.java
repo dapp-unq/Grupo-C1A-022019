@@ -4,7 +4,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
-
 import ar.edu.unq.desapp.grupoa.model.exceptions.DataIncompleteException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyListException;
@@ -13,6 +12,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankigException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -240,4 +240,25 @@ public class Menu {
 		
 		this.ranking.add(ranking);
 	}
+
+	public void validationNumberMenuOrdered(Integer aQuantity) 
+	{
+		if(aQuantity > this.dailyStock)
+			throw new IrrationalAmountException("La cantidad de pedida supera la cantidad de ventas disponibles del menú.");
+	}
+
+	public void validationDateDeliveryMenuOrdered(GregorianCalendar todayDate, GregorianCalendar dateHoursDelivery) 
+	{
+		if(! this.has48HoursBetween(todayDate, dateHoursDelivery))
+			throw new OrderDateException("El pedido debe hacerse al menos 48hs hábiles antes de la entrega del mismo.");
+	}
+
+	private Boolean has48HoursBetween(GregorianCalendar from, GregorianCalendar to) 
+	{
+		long milliFrom = from.getTimeInMillis();
+		long milliTo = to.getTimeInMillis();
+		long minutes = (milliTo - milliFrom) / 60000;
+		return minutes >= 2880; // 2880min = 48hs
+	}
+	
 }
