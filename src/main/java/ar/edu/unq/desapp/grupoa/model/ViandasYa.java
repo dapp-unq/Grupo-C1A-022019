@@ -50,4 +50,24 @@ public class ViandasYa
     	return new Order(aMenu, dateHoursDelivery, dateHoursOrder, aQuantity, typeDelivery, status);
 	}
 	
+	public List<Menu> searchMenuNamesMatchedWith(String text)
+	{
+		List<Menu> result = new ArrayList<Menu>();
+		this.providers.forEach(provider -> result.addAll(provider.menusWithNameMatchedWith(text)));
+		return result;
+	}
+	
+	public List<Menu> searchMenusWithCategory(Category category)
+	{
+		List<Menu> result = new ArrayList<Menu>();
+		this.providers.forEach(provider -> result.addAll(provider.menusWithCategory(category)));
+		return result;
+	}
+	
+	public List<Menu> searchMenusWithLocation(City city)
+	{
+		List<Menu> result = new ArrayList<Menu>();
+		this.providers.forEach(provider -> result.addAll(provider.menusWithLocation(city)));
+		return result;
+	}
 }

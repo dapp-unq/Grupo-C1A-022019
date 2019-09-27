@@ -82,21 +82,6 @@ public class UserTest {
         User aUser = anyUser();
         aUser.setPhoneNumber("1234");
     }
-    /*
-    
-    @Test (expected = OrderDateException.class)
-    public void whenPurchaseMenuWithoutHas48HoursBetweenDatesThrowException(){
-        User aUser = anyUser();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 3, 11, 30);
-        
-		Menu mockMenu = mock(Menu.class);
-		Provider mockProvider = mock(Provider.class);
-		Mockito.doThrow(OrderDateException.class).when(mockMenu).validationDateDeliveryMenuOrdered(orderDay , deliveryDay);	
-
-        aUser.purchase(mockProvider, mockMenu, 50, DeliveryType.Home_delivery, deliveryDay, orderDay);
-    }
-*/
     
     @Test
     public void userWithEmptyOrderHistoryAddANewOrderCorrectly()

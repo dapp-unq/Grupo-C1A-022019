@@ -1,9 +1,13 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -13,6 +17,96 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
 public class ViandaYaTest {
 
 	private ViandasYa viandasYa;
+	
+	@Test
+	public void testSearchMenuNamesMatchedWithXWithoutMenusThenReturnEmptyList()
+	{
+		viandasYa = new ViandasYa();
+		assertTrue(viandasYa.searchMenuNamesMatchedWith("x").isEmpty());
+	}
+	
+	@Test
+	public void testSearchMenuNamesMatchedWithXThenReturn2Menus()
+	{
+		viandasYa = new ViandasYa();
+		Provider mockProvider1 = mock(Provider.class);
+		Provider mockProvider2 = mock(Provider.class);
+		Menu mockMenu1 = mock(Menu.class);
+		Menu mockMenu2 = mock(Menu.class);
+		List<Menu> result = new ArrayList<Menu>();
+		result.add(mockMenu1);
+		result.add(mockMenu2);
+		
+		Mockito.when(mockProvider1.menusWithNameMatchedWith("x")).thenReturn(new ArrayList<Menu>());
+		Mockito.when(mockProvider2.menusWithNameMatchedWith("x")).thenReturn(result);
+		viandasYa.addProvider(mockProvider1);
+		viandasYa.addProvider(mockProvider2);
+		List<Menu> menus = viandasYa.searchMenuNamesMatchedWith("x");
+		
+		assertTrue(menus.contains(mockMenu1));
+		assertTrue(menus.contains(mockMenu1));
+		assertEquals(2, menus.size());
+	}
+	
+	@Test
+	public void testSearchMenuWithCategoryCerbezaWithoutMenusThenReturnEmptyList()
+	{
+		viandasYa = new ViandasYa();
+		assertTrue(viandasYa.searchMenusWithCategory(Category.Cerbeza).isEmpty());
+	}
+	
+	@Test
+	public void testSearchMenuWithCategoryCerbezaThenReturn2Menus()
+	{
+		viandasYa = new ViandasYa();
+		Provider mockProvider1 = mock(Provider.class);
+		Provider mockProvider2 = mock(Provider.class);
+		Menu mockMenu1 = mock(Menu.class);
+		Menu mockMenu2 = mock(Menu.class);
+		List<Menu> result = new ArrayList<Menu>();
+		result.add(mockMenu1);
+		result.add(mockMenu2);
+		
+		Mockito.when(mockProvider1.menusWithCategory(Category.Cerbeza)).thenReturn(new ArrayList<Menu>());
+		Mockito.when(mockProvider2.menusWithCategory(Category.Cerbeza)).thenReturn(result);
+		viandasYa.addProvider(mockProvider1);
+		viandasYa.addProvider(mockProvider2);
+		List<Menu> menus = viandasYa.searchMenusWithCategory(Category.Cerbeza);
+		
+		assertTrue(menus.contains(mockMenu1));
+		assertTrue(menus.contains(mockMenu1));
+		assertEquals(2, menus.size());
+	}
+	
+	@Test
+	public void testSearchMenuWithLocationQuilmesThenReturn2Menus()
+	{
+		viandasYa = new ViandasYa();
+		Provider mockProvider1 = mock(Provider.class);
+		Provider mockProvider2 = mock(Provider.class);
+		Menu mockMenu1 = mock(Menu.class);
+		Menu mockMenu2 = mock(Menu.class);
+		List<Menu> result = new ArrayList<Menu>();
+		result.add(mockMenu1);
+		result.add(mockMenu2);
+		
+		Mockito.when(mockProvider1.menusWithLocation(City.Quilmes)).thenReturn(new ArrayList<Menu>());
+		Mockito.when(mockProvider2.menusWithLocation(City.Quilmes)).thenReturn(result);
+		viandasYa.addProvider(mockProvider1);
+		viandasYa.addProvider(mockProvider2);
+		List<Menu> menus = viandasYa.searchMenusWithLocation(City.Quilmes);
+		
+		assertTrue(menus.contains(mockMenu1));
+		assertTrue(menus.contains(mockMenu1));
+		assertEquals(2, menus.size());
+	}
+	
+	@Test
+	public void testSearchMenuWithLocationBernalWithoutMenusThenReturnEmptyList()
+	{
+		viandasYa = new ViandasYa();
+		assertTrue(viandasYa.searchMenusWithLocation(City.Bernal).isEmpty());
+	}
 	
     @Test
     public void testPurchaseMenuCorrectly(){
@@ -75,6 +169,5 @@ public class ViandaYaTest {
 		Mockito.verify(mockMenu).validationNumberMenuOrdered(50);
 		Mockito.verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay , deliveryDay);
     }
-    
     
 }
