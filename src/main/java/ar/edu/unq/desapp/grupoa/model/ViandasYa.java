@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import ar.edu.unq.desapp.grupoa.model.exceptions.PurchaseException;
 import lombok.Getter;
 
 @Getter
@@ -32,6 +33,7 @@ public class ViandasYa
 	
 	public Order purchase(User aUser, Provider aProvider, Menu aMenu, Integer aQuantity, DeliveryType typeDelivery, GregorianCalendar dateHoursDelivery, GregorianCalendar dateHoursOrder)
 	{
+		this.validatedPendingRanking(aUser);
 		Status status = Status.In_Progress;
 		Order newOrder = this.makeOrder(aMenu, dateHoursDelivery, dateHoursOrder, aQuantity, typeDelivery, status);
 		aProvider.addOrder(aUser, newOrder);
@@ -40,6 +42,14 @@ public class ViandasYa
     	// Sent mail to User
     	// Discount balances.
 		return newOrder;
+	}
+
+	// FALTA TESTEAR
+	private void validatedPendingRanking(User aUser) {
+		if (aUser.hasPendingRanking())
+		{
+			throw new PurchaseException("No se puede realizar la compra: Tiene pedidos sin calificar.");
+		}
 	}
 
 	// FALTA TESTEAR

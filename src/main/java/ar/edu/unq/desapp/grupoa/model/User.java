@@ -79,4 +79,10 @@ public class User {
 		this.orderHistory.add(newOrder);
 	}
 
+	// FALTA TESTEAR
+	public Boolean hasPendingRanking() 
+	{
+		return this.orderHistory.stream().anyMatch(order -> order.getRanking()==0);
+	}
+
 }

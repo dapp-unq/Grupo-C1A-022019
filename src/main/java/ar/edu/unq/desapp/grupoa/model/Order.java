@@ -11,6 +11,7 @@ public class Order {
 	private Integer quantity;
 	private DeliveryType typeDelivery;
 	private Status status;
+	private Integer ranking;
 	private Integer value;
 	
 	public Order(Menu menu, GregorianCalendar dateHoursDelivery, GregorianCalendar dateHoursOrder, Integer quantity,
@@ -22,6 +23,7 @@ public class Order {
 		this.quantity = quantity;
 		this.typeDelivery = typeDelivery;
 		this.status = status;
+		this.ranking = 0;
 		this.value = this.calculateValue(quantity);
 	}
 
