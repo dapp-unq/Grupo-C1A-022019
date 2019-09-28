@@ -14,7 +14,7 @@ import org.junit.Test;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DataIncompleteException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyListException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankigException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankingException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
@@ -737,13 +737,13 @@ public class MenuTest {
 		assertTrue(menu.getRanking().contains(5));
 	}
 
-	@Test(expected = InvalidRankigException.class)
+	@Test(expected = InvalidRankingException.class)
 	public void menuWithoutRankingThenAddRanking0ThrowException() {
 		menu = MenuBuilder.aMenu().build();
 		menu.rankIt(0);
 	}
 
-	@Test(expected = InvalidRankigException.class)
+	@Test(expected = InvalidRankingException.class)
 	public void menuWithoutRankingThenAddRanking10ThrowException() {
 		menu = MenuBuilder.aMenu().build();
 		menu.rankIt(10);

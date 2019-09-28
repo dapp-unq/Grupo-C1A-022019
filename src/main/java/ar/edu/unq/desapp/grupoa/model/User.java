@@ -1,11 +1,13 @@
 package ar.edu.unq.desapp.grupoa.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InsufficientCurrencyException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
 import lombok.Getter;
@@ -15,12 +17,13 @@ import lombok.NonNull;
 @NonNull
 public class User {
 
-	public String name;
-	public String surname;
-	public String email;
-	public String phoneNumber;
-	public String location;
-	public List<Order> orderHistory;
+	private String name;
+	private String surname;
+	private String email;
+	private String phoneNumber;
+	private String location;
+	private List<Order> orderHistory;
+	private BigDecimal balance;
 
 	private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 			Pattern.CASE_INSENSITIVE);
@@ -33,6 +36,7 @@ public class User {
 		this.phoneNumber = isValidPhone(phoneNumber);
 		this.location = validateNotEmpty(location, "dirección");
 		this.orderHistory = new ArrayList<Order>();
+		this.balance = BigDecimal.ZERO;
 	}
 
 	private String isValidEmail(String email) {
@@ -92,4 +96,19 @@ public class User {
 		order.setRanking(rank);
 	}
 
+	public void addMoney(BigDecimal currency){
+		this.balance = balance.add(currency);
+	}
+
+	public void discountMoney(BigDecimal currency) throws InsufficientCurrencyException {
+		BigDecimal result = this.balance.subtract(currency);
+		if(isBelowZero(result))
+			throw new InsufficientCurrencyException("Saldo insuficiente para efectuar la compra");
+		else
+			this.balance = result;
+	}
+
+	private boolean isBelowZero(BigDecimal aNumber){
+		return aNumber.compareTo(BigDecimal.ZERO) < 0;
+	}
 }

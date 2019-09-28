@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -595,5 +596,12 @@ public class ProviderTest {
 	{
 		provider = ProviderBuilder.aProvider().withName("ViandaLiz").build();
 		assertFalse(provider.hasName("ViandaMel"));
+	}
+
+	@Test
+	public void providerAddsMoneyCorrectly(){
+		provider = ProviderBuilder.aProvider().build();
+		provider.addMoney(BigDecimal.valueOf(100));
+		assertEquals(BigDecimal.valueOf(100), provider.getBalance());
 	}
 }

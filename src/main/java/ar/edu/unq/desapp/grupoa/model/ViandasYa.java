@@ -1,9 +1,11 @@
 package ar.edu.unq.desapp.grupoa.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import ar.edu.unq.desapp.grupoa.model.exceptions.InsufficientCurrencyException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.PurchaseException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 import lombok.Getter;
@@ -14,8 +16,8 @@ public class ViandasYa {
 	private List<User> clients;
 
 	public ViandasYa() {
-		this.providers = new ArrayList<Provider>();
-		this.clients = new ArrayList<User>();
+		this.providers = new ArrayList<>();
+		this.clients = new ArrayList<>();
 	}
 
 	public void addProvider(Provider aProvider) {
@@ -39,14 +41,16 @@ public class ViandasYa {
 	}
 
 	public Order purchase(User aUser, Provider aProvider, Menu aMenu, Integer aQuantity, DeliveryType typeDelivery,
-			GregorianCalendar dateHoursDelivery, GregorianCalendar dateHoursOrder) {
+			GregorianCalendar dateHoursDelivery, GregorianCalendar dateHoursOrder) throws InsufficientCurrencyException {
 		this.validatedPendingRanking(aUser);
 		Order newOrder = this.makeOrder(aMenu, dateHoursDelivery, dateHoursOrder, aQuantity, typeDelivery);
 		aProvider.addOrder(aUser, newOrder);
 		aUser.addHistoryOrder(newOrder);
 		// Sent mail to Provider
 		// Sent mail to User
-		// Discount balances.
+		BigDecimal newOrderPrice = BigDecimal.valueOf(newOrder.getValue());
+		aUser.discountMoney(newOrderPrice);
+		aProvider.addMoney(newOrderPrice);
 		return newOrder;
 	}
 

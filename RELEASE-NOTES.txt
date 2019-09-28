@@ -1,14 +1,18 @@
 ---------------------------------------------------------------------
-TAG XXXXXX
+TAG ENTREGA 1.0
 ---------------------------------------------------------------------
-NEW FEATURES (lo que están entregando y está funcionando):
-* xxx
-* xxx
+NEW FEATURES:
+* Model implementation
+* POC of maps implementation (Static file POCLeaflet.html)
+* Unit test with Coverage > 90% (JaCoCo as part of maven build + report in /target)
+* Travis integration with automatic build for every branch on every push
+* Heroku integration with automatic deployment when merging to master
+* Codacy integration
 
-NOTES (ej: funcionalidad que falta, alguna consideración especial):
-* xxx
-* xxx
+NOTES:
+* In the maps POC show distance and time between 2 points.
+* When purchasing send mail to User & Provider
+* Schedule purchases confirmation at 00:00
+* Maps API integration with backend
 
-KNOWN ISSUES (ej: funcionalidad que saben que están funcionando diferente, algún error conocido en la funcionalidad terminada, etc) :
-* xxx
-* xxx
+KNOWN ISSUES:

@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoa.model;
 
+import ar.edu.unq.desapp.grupoa.model.exceptions.*;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -7,10 +8,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankigException;
+
+import java.math.BigDecimal;
 
 public class UserTest {
 
@@ -96,6 +95,7 @@ public class UserTest {
 		assertEquals(1, aUser.getOrderHistory().size());
 	}
 
+	@Test
 	public void userWith1OrderHistoryAddANewOrderCorrectly() {
 		User aUser = anyUser();
 		Order mockOrder1 = mock(Order.class);
@@ -156,24 +156,46 @@ public class UserTest {
 		Mockito.verify(mockOrder).setRanking(5);
 	}
 
-	@Test(expected = InvalidRankigException.class)
+	@Test(expected = InvalidRankingException.class)
 	public void userWithoutOrderRankingThenRankIt0ThenReturnThrowException() {
 		User aUser = anyUser();
 		Menu mockMenu = mock(Menu.class);
 		Order mockOrder = mock(Order.class);
 		Mockito.when(mockOrder.getMenu()).thenReturn(mockMenu);
-		Mockito.doThrow(InvalidRankigException.class).when(mockMenu).rankIt(0);
+		Mockito.doThrow(InvalidRankingException.class).when(mockMenu).rankIt(0);
 		aUser.rankIt(mockOrder, 0);
 	}
 
-	@Test(expected = InvalidRankigException.class)
+	@Test(expected = InvalidRankingException.class)
 	public void userWithoutOrderRankingThenRankIt8ThenReturnThrowException() {
 		User aUser = anyUser();
 		Menu mockMenu = mock(Menu.class);
 		Order mockOrder = mock(Order.class);
 		Mockito.when(mockOrder.getMenu()).thenReturn(mockMenu);
-		Mockito.doThrow(InvalidRankigException.class).when(mockMenu).rankIt(8);
+		Mockito.doThrow(InvalidRankingException.class).when(mockMenu).rankIt(8);
 		aUser.rankIt(mockOrder, 8);
+	}
+
+	@Test
+	public void userAddsMoneyCorrectly(){
+		User aUser = anyUser();
+		aUser.addMoney(new BigDecimal(100));
+		assertEquals(new BigDecimal(100), aUser.getBalance());
+	}
+
+	@Test
+	public void userDiscountsMoneyCorrectly() throws InsufficientCurrencyException {
+		User aUser = anyUser();
+		aUser.addMoney(new BigDecimal(100));
+		aUser.discountMoney(new BigDecimal(30));
+		assertEquals(new BigDecimal(70), aUser.getBalance());
+	}
+
+	@Test(expected = InsufficientCurrencyException.class)
+	public void userDiscountsMoreMoneyThanBalanceAndThrowsException() throws InsufficientCurrencyException {
+		User aUser = anyUser();
+		aUser.addMoney(new BigDecimal(100));
+		aUser.discountMoney(new BigDecimal(150));
 	}
 
 	private User anyUser() {
