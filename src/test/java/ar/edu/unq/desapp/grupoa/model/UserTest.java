@@ -1,6 +1,10 @@
 package ar.edu.unq.desapp.grupoa.model;
 
-import ar.edu.unq.desapp.grupoa.model.exceptions.*;
+import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InsufficientCurrencyException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankingException;
 import org.junit.Test;
 import org.mockito.Mockito;
 
