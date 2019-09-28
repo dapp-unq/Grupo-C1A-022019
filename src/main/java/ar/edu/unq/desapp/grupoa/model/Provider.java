@@ -118,7 +118,7 @@ public class Provider {
 
     private City validateNotEmptyCity(City parameter, String parameterName) {
         if (parameter.toString().isEmpty())
-            throw new NullPointerException("El campo " + parameterName + " no puede ser vacío");
+            throw new EmptyStringException("El campo " + parameterName + " no puede ser vacío");
         return parameter;
     }
 
