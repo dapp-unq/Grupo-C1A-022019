@@ -3,7 +3,9 @@ package ar.edu.unq.desapp.grupoa.model;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Optional;
 
+import ar.edu.unq.desapp.grupoa.model.exceptions.ElementNotFoundException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.PurchaseException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 import lombok.Getter;
@@ -41,7 +43,8 @@ public class ViandasYa {
 	public Order purchase(User aUser, Provider aProvider, Menu aMenu, Integer aQuantity, DeliveryType typeDelivery,
 			GregorianCalendar dateHoursDelivery, GregorianCalendar dateHoursOrder) {
 		this.validatedPendingRanking(aUser);
-		Order newOrder = this.makeOrder(aMenu, dateHoursDelivery, dateHoursOrder, aQuantity, typeDelivery);
+		Order newOrder = this.makeOrder(aMenu, aProvider.getName(), dateHoursDelivery, dateHoursOrder, aQuantity,
+				typeDelivery);
 		aProvider.addOrder(aUser, newOrder);
 		aUser.addHistoryOrder(newOrder);
 		// Sent mail to Provider
@@ -56,12 +59,13 @@ public class ViandasYa {
 		}
 	}
 
-	public Order makeOrder(Menu aMenu, GregorianCalendar dateHoursDelivery, GregorianCalendar dateHoursOrder,
-			Integer aQuantity, DeliveryType typeDelivery) {
+	public Order makeOrder(Menu aMenu, String providerName, GregorianCalendar dateHoursDelivery,
+			GregorianCalendar dateHoursOrder, Integer aQuantity, DeliveryType typeDelivery) {
 		aMenu.validationNumberMenuOrdered(aQuantity);
 		aMenu.validationDateDeliveryMenuOrdered(dateHoursOrder, dateHoursDelivery); // Falta considerar los días no
 																					// hábiles de un servicio público.
-		return new Order(aMenu, dateHoursDelivery, dateHoursOrder, aQuantity, typeDelivery, Status.In_Progress);
+		return new Order(aMenu, providerName, dateHoursDelivery, dateHoursOrder, aQuantity, typeDelivery,
+				Status.In_Progress);
 	}
 
 	public List<Menu> searchMenuNamesMatchedWith(String text) {
@@ -81,4 +85,35 @@ public class ViandasYa {
 		this.providers.forEach(provider -> result.addAll(provider.menusWithLocation(city)));
 		return result;
 	}
+
+	public void rankIt(User aUser, Order order, Integer ranking) {
+		aUser.rankIt(order, ranking);
+		this.cancelMenu(order.getProviderName(), order.getMenu());
+	}
+
+	public void cancelMenu(String providerName, Menu menu) {
+		if (menu.hasLowQualityMenu()) {
+			Optional<Provider> result = this.providers.stream().filter(provider -> provider.hasName(providerName))
+					.findFirst();
+			if (result.isPresent()) {
+				result.get().cancelMenu(menu);
+				// Sent mail cancel menu
+				this.cancelProvider(result.get());
+			}
+		}
+	}
+
+	public void cancelProvider(Provider provider) {
+		if (provider.getMenusRemoved() >= 10) {
+			// Sent mail cancel provider
+			this.removeProvider(provider);
+		}
+	}
+
+	public void removeProvider(Provider provider) {
+		if (!this.hasInUseProviderName(provider.getName()))
+			throw new ElementNotFoundException("No existe un proveedor con el nombre " + provider.getName());
+		this.providers.remove(provider);
+	}
+
 }

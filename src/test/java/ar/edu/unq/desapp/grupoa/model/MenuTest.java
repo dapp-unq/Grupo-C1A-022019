@@ -791,4 +791,66 @@ public class MenuTest {
 		assertEquals(new Integer(110), menu.valueForQuantity(100));
 	}
 
+	@Test
+	public void menuWith20LowQualityAskIfHasLowQualityMenuThenReturnTrue() {
+
+		menu = MenuBuilder.aMenu().build();
+		menu.rankIt(2); menu.rankIt(2); menu.rankIt(2); menu.rankIt(2);
+		menu.rankIt(2); menu.rankIt(2); menu.rankIt(2); menu.rankIt(2); 
+		menu.rankIt(2); menu.rankIt(2); menu.rankIt(2); menu.rankIt(2);
+		menu.rankIt(2); menu.rankIt(2); menu.rankIt(2); menu.rankIt(2);
+		menu.rankIt(2); menu.rankIt(2); menu.rankIt(2); menu.rankIt(2);
+
+		assertTrue(menu.hasLowQualityMenu());
+	}
+
+	@Test
+	public void menuWithoutRankingAskIfHasLowQualityMenuThenReturnFalse() {
+
+		menu = MenuBuilder.aMenu().build();
+		assertFalse(menu.hasLowQualityMenu());
+	}
+
+	@Test
+	public void menuWith4LowQualityAskIfHasLowQualityMenuThenReturnFalse() {
+
+		menu = MenuBuilder.aMenu().build();
+		menu.rankIt(1);
+		menu.rankIt(1);
+		menu.rankIt(1);
+		menu.rankIt(2);
+
+		assertFalse(menu.hasLowQualityMenu());
+	}
+
+	@Test
+	public void menuWith20HightQualityAskIfHasLowQualityMenuThenReturnFalse() {
+
+		menu = MenuBuilder.aMenu().build();
+		menu.rankIt(5); menu.rankIt(4); menu.rankIt(3); menu.rankIt(5);
+		menu.rankIt(5); menu.rankIt(4); menu.rankIt(3); menu.rankIt(5);
+		menu.rankIt(5); menu.rankIt(4); menu.rankIt(3); menu.rankIt(5);
+		menu.rankIt(5); menu.rankIt(4); menu.rankIt(3); menu.rankIt(5);
+		menu.rankIt(5); menu.rankIt(4); menu.rankIt(3); menu.rankIt(5);
+		assertFalse(menu.hasLowQualityMenu());
+	}
+
+	@Test
+	public void menuWith4AverageRatingThenAverageRatingReturn4() {
+
+		menu = MenuBuilder.aMenu().build();
+		menu.rankIt(4);
+		menu.rankIt(3);
+		menu.rankIt(4);
+		menu.rankIt(5);
+		assertEquals(new Integer(4), menu.averageRating());
+	}
+
+	@Test
+	public void menuWithoutAverageRatingThenAverageRatingReturn0() {
+
+		menu = MenuBuilder.aMenu().build();
+		assertEquals(new Integer(0), menu.averageRating());
+	}
+
 }

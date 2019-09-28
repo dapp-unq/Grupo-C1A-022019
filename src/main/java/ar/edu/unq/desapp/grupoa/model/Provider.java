@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 
 import ar.edu.unq.desapp.grupoa.model.exceptions.CurrentMenuQuantityException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.ElementNotFoundException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyServiceHoursDaysException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.MenuNotFoundException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 import lombok.Getter;
 import lombok.NonNull;
@@ -34,6 +34,7 @@ public class Provider {
 	private List<City> deliveryCities;
 	private List<Menu> currentMenu;
 	private List<CurrentOrder> orders;
+	private Integer menusRemoved;
 
 	private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 			Pattern.CASE_INSENSITIVE);
@@ -53,6 +54,7 @@ public class Provider {
 		this.deliveryCities = calculateDeliveryCities(km, location);
 		this.currentMenu = new ArrayList<Menu>();
 		this.orders = new ArrayList<CurrentOrder>();
+		this.menusRemoved = 0;
 	}
 
 	private List<City> calculateDeliveryCities(Double km, String location) {
@@ -178,7 +180,7 @@ public class Provider {
 	public Menu searchMenu(String menuName) {
 		Optional<Menu> searchMenu = this.currentMenu.stream().filter(menu -> menu.hasName(menuName)).findFirst();
 		if (!searchMenu.isPresent())
-			throw new MenuNotFoundException("No se encontró un menú con el nombre: " + menuName);
+			throw new ElementNotFoundException("No se encontró un menú con el nombre: " + menuName);
 		return searchMenu.get();
 	}
 
@@ -222,4 +224,8 @@ public class Provider {
 		return this.name.equals(provideName);
 	}
 
+	public void cancelMenu(Menu menu) {
+		this.removeMenu(menu);
+		this.menusRemoved++;
+	}
 }
