@@ -317,7 +317,7 @@ public class ViandaYaTest {
         when(mockMenu.valueForQuantity(50)).thenReturn(150);
         when(mockMenu.getDeliveryPrice()).thenReturn(30);
 
-        Order newOrder = viandasYa.makeOrder(mockMenu, deliveryDay, orderDay, 50, DeliveryType.Home_delivery);
+		Order newOrder = viandasYa.makeOrder(mockMenu, "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.Home_delivery);
 
         verify(mockMenu).validationNumberMenuOrdered(50);
         verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
@@ -339,9 +339,9 @@ public class ViandaYaTest {
         Menu mockMenu = mock(Menu.class);
         Mockito.doThrow(IrrationalAmountException.class).when(mockMenu).validationNumberMenuOrdered(100);
 
-        viandasYa.makeOrder(mockMenu, deliveryDay, orderDay, 100, DeliveryType.Home_delivery);
-        verify(mockMenu).validationNumberMenuOrdered(100);
-    }
+		viandasYa.makeOrder(mockMenu, "ViandaLiz", deliveryDay, orderDay, 100, DeliveryType.Home_delivery);
+		Mockito.verify(mockMenu).validationNumberMenuOrdered(100);
+	}
 
     @Test(expected = OrderDateException.class)
     public void testMakeAOrderWithoutHas48HoursBetweenDatesThrowException() {
@@ -352,9 +352,110 @@ public class ViandaYaTest {
         Mockito.doThrow(OrderDateException.class).when(mockMenu).validationDateDeliveryMenuOrdered(orderDay,
                 deliveryDay);
 
-        viandasYa.makeOrder(mockMenu, deliveryDay, orderDay, 50, DeliveryType.Home_delivery);
+        viandasYa.makeOrder(mockMenu, "ViandaLiz",deliveryDay, orderDay, 50, DeliveryType.Home_delivery);
         verify(mockMenu).validationNumberMenuOrdered(50);
         verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
+	}
 
-    }
+    @Test
+	public void testRemoveProviderSuccessfully() {
+		viandasYa = new ViandasYa();
+		Provider mockProvider = mock(Provider.class);
+		Mockito.when(mockProvider.getName()).thenReturn("ViandaLiz");
+		Mockito.when(mockProvider.hasName("ViandaLiz")).thenReturn(true);
+		viandasYa.addProvider(mockProvider);
+
+		viandasYa.removeProvider(mockProvider);
+		assertTrue(viandasYa.getProviders().isEmpty());
+		assertFalse(viandasYa.getProviders().contains(mockProvider));
+	}
+
+	@Test (expected = ElementNotFoundException.class)
+	public void testRemoveProviderWhitoutProviderThenReturnThrowException() {
+		viandasYa = new ViandasYa();
+		Provider mockProvider = mock(Provider.class);
+		Mockito.when(mockProvider.getName()).thenReturn("ViandaLiz");
+
+		viandasYa.removeProvider(mockProvider);
+	}
+
+	@Test
+	public void testCancelProviderWithLowQualitySuccessfully() {
+		viandasYa = new ViandasYa();
+		Provider mockProvider = mock(Provider.class);
+		Mockito.when(mockProvider.getName()).thenReturn("ViandaLiz");
+		Mockito.when(mockProvider.hasName("ViandaLiz")).thenReturn(true);
+		Mockito.when(mockProvider.getMenusRemoved()).thenReturn(10);
+		viandasYa.addProvider(mockProvider);
+
+		viandasYa.cancelProvider(mockProvider);
+		assertTrue(viandasYa.getProviders().isEmpty());
+		assertFalse(viandasYa.getProviders().contains(mockProvider));
+	}
+
+	@Test
+	public void testCancelProviderWithHighQualityThenNotRemoved() {
+		viandasYa = new ViandasYa();
+		Provider mockProvider = mock(Provider.class);
+		Mockito.when(mockProvider.getName()).thenReturn("ViandaLiz");
+		Mockito.when(mockProvider.hasName("ViandaLiz")).thenReturn(true);
+		Mockito.when(mockProvider.getMenusRemoved()).thenReturn(9);
+		viandasYa.addProvider(mockProvider);
+
+		viandasYa.cancelProvider(mockProvider);
+		assertTrue(viandasYa.getProviders().contains(mockProvider));
+	}
+
+	@Test
+	public void testCancelMenuWihtoutCancelProviderSuccessfully() {
+		viandasYa = new ViandasYa();
+		Provider mockProvider = mock(Provider.class);
+		Menu mockMenu = mock(Menu.class);
+		Mockito.when(mockProvider.getName()).thenReturn("ViandaLiz");
+		Mockito.when(mockProvider.hasName("ViandaLiz")).thenReturn(true);
+		Mockito.when(mockProvider.getMenusRemoved()).thenReturn(9);
+		Mockito.when(mockProvider.getCurrentMenu()).thenReturn(new ArrayList<Menu>());
+		Mockito.when(mockMenu.hasLowQualityMenu()).thenReturn(true);
+		viandasYa.addProvider(mockProvider);
+
+		viandasYa.cancelMenu(mockProvider.getName(), mockMenu);
+		assertFalse(mockProvider.getCurrentMenu().contains(mockMenu));
+		assertEquals(new Integer(9), mockProvider.getMenusRemoved());
+		Mockito.verify(mockProvider).cancelMenu(mockMenu);
+	}
+
+	@Test
+	public void testCancelMenuAndCancelProviderSuccessfully() {
+		viandasYa = new ViandasYa();
+		Provider mockProvider = mock(Provider.class);
+		Menu mockMenu = mock(Menu.class);
+		Mockito.when(mockProvider.getName()).thenReturn("ViandaLiz");
+		Mockito.when(mockProvider.hasName("ViandaLiz")).thenReturn(true);
+		Mockito.when(mockProvider.getMenusRemoved()).thenReturn(10);
+		Mockito.when(mockProvider.getCurrentMenu()).thenReturn(new ArrayList<Menu>());
+		Mockito.when(mockMenu.hasLowQualityMenu()).thenReturn(true);
+		viandasYa.addProvider(mockProvider);
+
+		viandasYa.cancelMenu(mockProvider.getName(), mockMenu);
+		assertFalse(mockProvider.getCurrentMenu().contains(mockMenu));
+		assertFalse(viandasYa.getProviders().contains(mockProvider));
+		Mockito.verify(mockProvider).cancelMenu(mockMenu);
+	}
+
+	@Test
+	public void testRankItWith4Successfully() {
+		viandasYa = new ViandasYa();
+		User mockUser = mock(User.class);
+		Menu mockMenu = mock(Menu.class);
+		Order mockOrder = mock(Order.class);
+
+		Mockito.when(mockOrder.getProviderName()).thenReturn("ViandaLiz");
+		Mockito.when(mockOrder.getMenu()).thenReturn(mockMenu);
+		Mockito.when(mockOrder.getRanking()).thenReturn(4);
+		Mockito.when(mockMenu.hasLowQualityMenu()).thenReturn(false);
+
+		viandasYa.rankIt(mockUser, mockOrder, 4);
+		assertEquals(new Integer(4), mockOrder.getRanking());
+		Mockito.verify(mockUser).rankIt(mockOrder, 4);
+	}
 }

@@ -12,44 +12,57 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import ar.edu.unq.desapp.grupoa.model.exceptions.CurrentMenuQuantityException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.ElementNotFoundException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyServiceHoursDaysException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
+import lombok.Getter;
+import lombok.NonNull;
+
 @Getter
 @NonNull
 public class Provider {
 
-    private String name;
-    private String logo;
-    private City city;
-    private String location;
-    private String description;
-    private String website;
-    private String email;
-    private String phoneNumber;
-    private List<ServiceHours> openingHoursDays;
-    private List<City> deliveryCities;
-    private List<Menu> currentMenu;
-    private List<CurrentOrder> orders;
-    private BigDecimal balance;
+	private String name;
+	private String logo;
+	private City city;
+	private String location;
+	private String description;
+	private String website;
+	private String email;
+	private String phoneNumber;
+	private List<ServiceHours> openingHoursDays;
+	private List<City> deliveryCities;
+	private List<Menu> currentMenu;
+	private List<CurrentOrder> orders;
+	private BigDecimal balance;
+	private Integer menusRemoved;
 
     private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
             Pattern.CASE_INSENSITIVE);
     private final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
 
-    public Provider(String name, String logo, City city, String location, String description, @NonNull String website,
-                    String email, String phone, List<ServiceHours> serviceHours, double km) {
-        this.name = validateNotEmpty(name, "nombre");
-        this.logo = validateNotEmpty(logo, "logo");
-        this.city = validateNotEmptyCity(city, "localidad");
-        this.location = validateNotEmpty(location, "direccion");
-        this.description = validateDescriptionSize(description);
-        this.website = website;
-        this.email = validateEmail(email);
-        this.phoneNumber = validatePhoneNumber(phone);
-        this.openingHoursDays = validateNotEmptyOpeningHoursDays(serviceHours, "horarios y días de atención");
-        this.deliveryCities = calculateDeliveryCities(km, location);
-        this.currentMenu = new ArrayList<Menu>();
-        this.orders = new ArrayList<CurrentOrder>();
-        this.balance = BigDecimal.ZERO;
-    }
+	public Provider(String name, String logo, City city, String location, String description, @NonNull String website,
+			String email, String phone, List<ServiceHours> serviceHours, double km) {
+		this.name = validateNotEmpty(name, "nombre");
+		this.logo = validateNotEmpty(logo, "logo");
+		this.city = validateNotEmptyCity(city, "localidad");
+		this.location = validateNotEmpty(location, "direccion");
+		this.description = validateDescriptionSize(description);
+		this.website = website;
+		this.email = validateEmail(email);
+		this.phoneNumber = validatePhoneNumber(phone);
+		this.openingHoursDays = validateNotEmptyOpeningHoursDays(serviceHours, "horarios y días de atención");
+		this.deliveryCities = calculateDeliveryCities(km, location);
+		this.currentMenu = new ArrayList<Menu>();
+		this.orders = new ArrayList<CurrentOrder>();
+		this.balance = BigDecimal.ZERO;
+		this.menusRemoved = 0;
+	}
 
     private List<City> calculateDeliveryCities(Double km, String location) {
         List<City> cities = new ArrayList<City>();
@@ -171,12 +184,12 @@ public class Provider {
         return this.currentMenu.stream().anyMatch(menu -> menu.hasName(menuName));
     }
 
-    public Menu searchMenu(String menuName) {
-        Optional<Menu> searchMenu = this.currentMenu.stream().filter(menu -> menu.hasName(menuName)).findFirst();
-        if (!searchMenu.isPresent())
-            throw new MenuNotFoundException("No se encontró un menú con el nombre: " + menuName);
-        return searchMenu.get();
-    }
+	public Menu searchMenu(String menuName) {
+		Optional<Menu> searchMenu = this.currentMenu.stream().filter(menu -> menu.hasName(menuName)).findFirst();
+		if (!searchMenu.isPresent())
+			throw new ElementNotFoundException("No se encontró un menú con el nombre: " + menuName);
+		return searchMenu.get();
+	}
 
     public void removeMenuWithName(String menuName) {
         this.removeMenu(this.searchMenu(menuName));
@@ -222,4 +235,8 @@ public class Provider {
         this.balance = balance.add(aNumber);
     }
 
+	public void cancelMenu(Menu menu) {
+		this.removeMenu(menu);
+		this.menusRemoved++;
+	}
 }

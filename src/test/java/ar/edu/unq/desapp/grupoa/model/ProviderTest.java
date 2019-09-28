@@ -16,11 +16,11 @@ import org.mockito.Mockito;
 
 import ar.edu.unq.desapp.grupoa.model.exceptions.CurrentMenuQuantityException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.ElementNotFoundException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyServiceHoursDaysException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.MenuNotFoundException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 
 public class ProviderTest {
@@ -318,26 +318,16 @@ public class ProviderTest {
 		Menu mockMenu = mock(Menu.class);
 		Menu mockMenu21 = mock(Menu.class);
 
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
-		provider.addMenu(mockMenu);
+		provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+		provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+		provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+		provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+		provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+		provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+		provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+		provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+		provider.addMenu(mockMenu); provider.addMenu(mockMenu);
+		provider.addMenu(mockMenu); provider.addMenu(mockMenu);
 		provider.addMenu(mockMenu21);
 	}
 
@@ -351,7 +341,7 @@ public class ProviderTest {
 		assertEquals(mockMenu, provider.searchMenu("Pizza especial Liz"));
 	}
 
-	@Test(expected = MenuNotFoundException.class)
+	@Test(expected = ElementNotFoundException.class)
 	public void providerWithMenuWithNameXLooksForMenuWithNameYThrowsException() {
 		provider = ProviderBuilder.aProvider().build();
 		Menu mockMenu = mock(Menu.class);
@@ -372,7 +362,7 @@ public class ProviderTest {
 		assertFalse(provider.getCurrentMenu().contains(mockMenu));
 	}
 
-	@Test(expected = MenuNotFoundException.class)
+	@Test(expected = ElementNotFoundException.class)
 	public void providerWithMenuWithNameXThenRemoveMenuWithNameYThrowsException() {
 		provider = ProviderBuilder.aProvider().build();
 		Menu mockMenu = mock(Menu.class);
@@ -459,7 +449,7 @@ public class ProviderTest {
 		assertTrue(provider.anyCurrentMenuHasName("Pizza de mozza Liz"));
 	}
 
-	@Test(expected = MenuNotFoundException.class)
+	@Test(expected = ElementNotFoundException.class)
 	public void providerWithoutCurrentMenusEditMenuWithNameXThrowsException() {
 		provider = ProviderBuilder.aProvider().build();
 		Menu mockMenu = mock(Menu.class);
@@ -603,5 +593,17 @@ public class ProviderTest {
 		provider = ProviderBuilder.aProvider().build();
 		provider.addMoney(BigDecimal.valueOf(100));
 		assertEquals(BigDecimal.valueOf(100), provider.getBalance());
+	}
+
+	@Test
+	public void providerWith1MenuCancelMenuSuccessfully() {
+		provider = ProviderBuilder.aProvider().build();
+		Menu mockMenu = mock(Menu.class);
+		provider.addMenu(mockMenu);
+		provider.cancelMenu(mockMenu);
+
+		assertFalse(provider.getCurrentMenu().contains(mockMenu));
+		assertTrue(provider.getCurrentMenu().isEmpty());
+		assertEquals(new Integer(1), provider.getMenusRemoved());
 	}
 }

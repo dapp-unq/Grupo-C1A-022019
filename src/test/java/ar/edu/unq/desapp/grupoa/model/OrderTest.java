@@ -16,7 +16,7 @@ public class OrderTest {
 		GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
 		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
 		Menu mockMenu = mock(Menu.class);
-		return new Order(mockMenu, deliveryDay, orderDay, 50, DeliveryType.Home_delivery, Status.In_Progress);
+		return new Order(mockMenu, "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.Home_delivery, Status.In_Progress);
 	}
 
 	@Test

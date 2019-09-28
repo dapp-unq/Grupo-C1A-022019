@@ -266,4 +266,16 @@ public class Menu {
 		return price;
 	}
 
+	public boolean hasLowQualityMenu() {
+		return (this.ranking.size() == 20) && (this.averageRating() < 3);
+	}
+
+	public Integer averageRating() {
+		Integer average = 0;
+		if (!this.ranking.isEmpty()) {
+			Integer sumRanking = this.ranking.stream().reduce(0, (rank1, rank2) -> rank1 + rank2);
+			average = sumRanking / this.ranking.size();
+		}
+		return average;
+	}
 }
