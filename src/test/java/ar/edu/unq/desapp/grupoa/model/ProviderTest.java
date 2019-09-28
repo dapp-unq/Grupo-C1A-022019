@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoa.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
@@ -26,7 +27,6 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 public class ProviderTest {
 
 	private Provider provider;
-	private List<ServiceHours> openingHours;
 
 	@Test(expected = NullPointerException.class)
 	public void providerCreationWithNullNameThrowsException() {
@@ -229,6 +229,7 @@ public class ProviderTest {
 	@Test
 	public void createValidProvider() {
 		provider = ProviderBuilder.aProvider().build();
+		assertNotNull(provider);
 	}
 
 	@Test
@@ -285,7 +286,7 @@ public class ProviderTest {
 
 	@Test
 	public void providerCreationWithValidOpeningHoursDays() {
-		openingHours = new ArrayList<ServiceHours>();
+		List<ServiceHours> openingHours = new ArrayList<>();
 		openingHours.add(new ServiceHours(DayOfWeek.MONDAY, LocalTime.of(9, 00), LocalTime.of(21, 00)));
 		openingHours.add(new ServiceHours(DayOfWeek.WEDNESDAY, LocalTime.of(10, 00), LocalTime.of(22, 00)));
 		openingHours.add(new ServiceHours(DayOfWeek.FRIDAY, LocalTime.of(9, 00), LocalTime.of(21, 00)));
@@ -411,7 +412,6 @@ public class ProviderTest {
 	@Test
 	public void providerWithoutCurrentMenuThenAskIfAnyHasNameXThenReturnFalse() {
 		provider = ProviderBuilder.aProvider().build();
-
 		assertFalse(provider.anyCurrentMenuHasName("Pizza especial Liz"));
 	}
 
