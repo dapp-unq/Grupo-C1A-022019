@@ -7,7 +7,6 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.PurchaseException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
