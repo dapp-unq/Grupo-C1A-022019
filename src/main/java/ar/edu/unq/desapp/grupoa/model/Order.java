@@ -8,6 +8,7 @@ import lombok.NonNull;
 @NonNull
 public class Order {
 	private Menu menu;
+	private String providerName;
 	private GregorianCalendar dateHoursDelivery;
 	private GregorianCalendar dateHoursOrder;
 	private Integer quantity;
@@ -16,10 +17,10 @@ public class Order {
 	private Integer ranking;
 	private Integer value;
 
-	public Order(Menu menu, GregorianCalendar dateHoursDelivery, GregorianCalendar dateHoursOrder, Integer quantity,
+	public Order(Menu menu, String providerName, GregorianCalendar dateHoursDelivery, GregorianCalendar dateHoursOrder, Integer quantity,
 			DeliveryType typeDelivery, Status status) {
-		super();
 		this.menu = menu;
+		this.providerName = providerName;
 		this.dateHoursDelivery = dateHoursDelivery;
 		this.dateHoursOrder = dateHoursOrder;
 		this.quantity = quantity;
