@@ -8,7 +8,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.DataIncompleteException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyListException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankigException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankingException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
@@ -233,7 +233,7 @@ public class Menu {
 
 	public void rankIt(Integer ranking) {
 		if (ranking > 5 || ranking <= 0)
-			throw new InvalidRankigException("Puntuación inválida: La calificación del menú debe ser entre 0 y 5");
+			throw new InvalidRankingException("Puntuación inválida: La calificación del menú debe ser entre 0 y 5");
 
 		this.ranking.add(ranking);
 	}
