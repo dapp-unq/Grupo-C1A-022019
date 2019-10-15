@@ -4,22 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import ar.edu.unq.desapp.grupoa.model.enums.Category;
+import ar.edu.unq.desapp.grupoa.model.exceptions.*;
 import org.junit.Test;
-
-import ar.edu.unq.desapp.grupoa.model.exceptions.DataIncompleteException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyListException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankingException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
 
 public class MenuTest {
 	private Menu menu;
@@ -212,60 +205,45 @@ public class MenuTest {
 
 	@Test(expected = NullPointerException.class)
 	public void menuCreationWithNullEfectiveDatesThrowsException() {
-		menu = MenuBuilder.aMenu().withEfectiveDate(null).build();
+		menu = MenuBuilder.aMenu().withEffectivePeriod(null).build();
 	}
 
-	@Test(expected = EmptyListException.class)
+	@Test(expected = InvalidEffectivePeriodException.class)
 	public void menuCreationWithEmptyEfectiveDatesThrowsException() {
-		menu = MenuBuilder.aMenu().withEfectiveDate(new ArrayList<GregorianCalendar>()).build();
-	}
-
-	@Test(expected = DataIncompleteException.class)
-	public void menuCreationWithIncompleteEfectiveDatesThrowsException() {
-		List<GregorianCalendar> efectiveDates = new ArrayList<GregorianCalendar>();
-		efectiveDates.add(new GregorianCalendar(2019, 5, 10));
-		menu = MenuBuilder.aMenu().withEfectiveDate(efectiveDates).build();
+		LocalDate initialDate = LocalDate.of(2019,1,1);
+		LocalDate endDate = LocalDate.of(2019,12,30);
+		menu = MenuBuilder.aMenu().withEffectivePeriod(new EffectivePeriod(endDate, initialDate)).build();
 	}
 
 	@Test
-	public void menuCreationWithValidEfectiveDates() {
-		List<GregorianCalendar> efectiveDates = new ArrayList<GregorianCalendar>();
-		efectiveDates.add(new GregorianCalendar(2019, 5, 10));
-		efectiveDates.add(new GregorianCalendar(2019, 10, 10));
-		menu = MenuBuilder.aMenu().withEfectiveDate(efectiveDates).build();
-		assertEquals(efectiveDates, menu.getEfectiveDate());
+	public void menuCreationWithValidEffectiveDates() {
+		LocalDate initialDate = LocalDate.of(2019,1,1);
+		LocalDate endDate = LocalDate.of(2019,12,30);
+		EffectivePeriod effectivePeriod = new EffectivePeriod(initialDate, endDate);
+		menu = MenuBuilder.aMenu().withEffectivePeriod(effectivePeriod).build();
+		assertEquals(effectivePeriod, menu.getEffectivePeriod());
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void menuWithNullEfectiveDatesThrowsException() {
+	public void menuWithNullEffectiveDatesThrowsException() {
 		menu = MenuBuilder.aMenu().build();
-		menu.setEfectiveDate(null);
+		menu.setEffectivePeriod(null);
 	}
 
-	@Test(expected = EmptyListException.class)
+	@Test(expected = NullPointerException.class)
 	public void menuWithEmptyEfectiveDatesThrowsException() {
 		menu = MenuBuilder.aMenu().build();
-		menu.setEfectiveDate(new ArrayList<GregorianCalendar>());
-	}
-
-	@Test(expected = DataIncompleteException.class)
-	public void menuWithIncompleteEfectiveDatesThrowsException() {
-		List<GregorianCalendar> efectiveDates = new ArrayList<GregorianCalendar>();
-		efectiveDates.add(new GregorianCalendar(0, 0, 0));
-		efectiveDates.add(new GregorianCalendar(0, 0, 0));
-		efectiveDates.add(new GregorianCalendar(0, 0, 0));
-		menu = MenuBuilder.aMenu().build();
-		menu.setEfectiveDate(efectiveDates);
+		menu.setEffectivePeriod(new EffectivePeriod(null, null));
 	}
 
 	@Test
 	public void menuWithValidateEfectiveDates() {
-		List<GregorianCalendar> efectiveDates = new ArrayList<GregorianCalendar>();
-		efectiveDates.add(new GregorianCalendar(2019, 5, 10));
-		efectiveDates.add(new GregorianCalendar(2019, 10, 10));
+		LocalDate initialDate = LocalDate.of(2019,1,1);
+		LocalDate endDate = LocalDate.of(2019,12,30);
+		EffectivePeriod effectivePeriod = new EffectivePeriod(initialDate, endDate);
 		menu = MenuBuilder.aMenu().build();
-		menu.setEfectiveDate(efectiveDates);
-		assertEquals(efectiveDates, menu.getEfectiveDate());
+		menu.setEffectivePeriod(effectivePeriod);
+		assertEquals(effectivePeriod, menu.getEffectivePeriod());
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -306,16 +284,6 @@ public class MenuTest {
 		menu.setDeliverySchedules(new ArrayList<LocalTime>());
 	}
 
-	@Test(expected = DataIncompleteException.class)
-	public void menuWithIncompleteDeliverySchedulesThrowsException() {
-		List<GregorianCalendar> efectiveDates = new ArrayList<GregorianCalendar>();
-		efectiveDates.add(new GregorianCalendar(0, 0, 0));
-		efectiveDates.add(new GregorianCalendar(0, 0, 0));
-		efectiveDates.add(new GregorianCalendar(0, 0, 0));
-		menu = MenuBuilder.aMenu().build();
-		menu.setEfectiveDate(efectiveDates);
-	}
-
 	@Test
 	public void menuWithValidateDeliverySchedules() {
 		List<LocalTime> deliverySchedules = new ArrayList<LocalTime>();
@@ -328,26 +296,26 @@ public class MenuTest {
 
 	@Test(expected = NullPointerException.class)
 	public void menuCreationWithNullAverigeDeliveryTimeThrowsException() {
-		menu = MenuBuilder.aMenu().withAverigeDeliveryTime(null).build();
+		menu = MenuBuilder.aMenu().withAverageDeliveryTime(null).build();
 	}
 
 	@Test
 	public void menuCreationWithValidAverigeDeliveryTime() {
-		menu = MenuBuilder.aMenu().withAverigeDeliveryTime(LocalTime.of(0, 30)).build();
-		assertEquals(LocalTime.of(0, 30), menu.getAverigeDeliveryTime());
+		menu = MenuBuilder.aMenu().withAverageDeliveryTime(LocalTime.of(0, 30)).build();
+		assertEquals(LocalTime.of(0, 30), menu.getAverageDeliveryTime());
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void menuWithNullAverigeDeliveryTimeThrowsException() {
 		menu = MenuBuilder.aMenu().build();
-		menu.setAverigeDeliveryTime(null);
+		menu.setAverageDeliveryTime(null);
 	}
 
 	@Test
 	public void menuWithValidateAverigeDeliveryTime() {
 		menu = MenuBuilder.aMenu().build();
-		menu.setAverigeDeliveryTime(LocalTime.of(1, 10));
-		assertEquals(LocalTime.of(1, 10), menu.getAverigeDeliveryTime());
+		menu.setAverageDeliveryTime(LocalTime.of(1, 10));
+		assertEquals(LocalTime.of(1, 10), menu.getAverageDeliveryTime());
 	}
 
 	@Test(expected = NullPointerException.class)
