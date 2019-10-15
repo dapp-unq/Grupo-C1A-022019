@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.Getter;
@@ -9,12 +10,11 @@ import lombok.Getter;
 public class CurrentOrder {
 
 	private User client;
-	private List<Order> orders;
+	private List<Order> orders = new ArrayList<>();
 
 	public CurrentOrder(User client, Order newOrder) {
 		this.client = client;
-		this.orders = new ArrayList<Order>();
-		orders.add(newOrder);
+		addOrder(newOrder);
 	}
 
 	public Boolean hasUser(User aUser) {

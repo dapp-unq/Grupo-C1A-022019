@@ -1,6 +1,9 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import java.util.GregorianCalendar;
+
+import ar.edu.unq.desapp.grupoa.model.enums.DeliveryType;
+import ar.edu.unq.desapp.grupoa.model.enums.Status;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -44,7 +47,7 @@ public class Order {
 
 	public Integer deliveryPrice() {
 		Integer price = 0;
-		if (typeDelivery.equals(DeliveryType.Home_delivery))
+		if (typeDelivery.equals(DeliveryType.HOME_DELIVERY))
 			price = this.menu.getDeliveryPrice();
 		return price;
 	}

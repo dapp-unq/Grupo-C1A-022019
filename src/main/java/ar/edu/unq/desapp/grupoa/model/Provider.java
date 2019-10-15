@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoa.model;
 
+import ar.edu.unq.desapp.grupoa.model.enums.Category;
+import ar.edu.unq.desapp.grupoa.model.enums.City;
 import ar.edu.unq.desapp.grupoa.model.exceptions.CurrentMenuQuantityException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.ElementNotFoundException;
@@ -64,9 +66,9 @@ public class Provider {
         List<City> cities = new ArrayList<City>();
         // TODO: FALTA COMUNICARSE EN GMAP PARA VER TODAS LAS LOCALIDADES DONDE HACE
         // ENTREGAS DESDE LA CIUDAD DEL LOCAL.
-        cities.add(City.Quilmes);
-        cities.add(City.Bernal);
-        cities.add(City.Ezpeleta);
+        cities.add(City.QUILMES);
+        cities.add(City.BERNAL);
+        cities.add(City.EZPELETA);
         return cities;
     }
 

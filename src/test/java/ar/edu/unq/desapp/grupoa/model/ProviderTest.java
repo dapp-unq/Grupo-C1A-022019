@@ -12,6 +12,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unq.desapp.grupoa.model.enums.Category;
+import ar.edu.unq.desapp.grupoa.model.enums.City;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -246,8 +248,8 @@ public class ProviderTest {
 
 	@Test
 	public void providerCreationWithQuilmesCity() {
-		provider = ProviderBuilder.aProvider().withCity(City.Quilmes).build();
-		assertEquals(City.Quilmes, provider.getCity());
+		provider = ProviderBuilder.aProvider().withCity(City.QUILMES).build();
+		assertEquals(City.QUILMES, provider.getCity());
 	}
 
 	@Test
@@ -499,13 +501,13 @@ public class ProviderTest {
 		provider = ProviderBuilder.aProvider().build();
 		Menu mockMenu1 = mock(Menu.class);
 		Menu mockMenu2 = mock(Menu.class);
-		Mockito.when(mockMenu1.hasCategory(Category.Vegano)).thenReturn(false);
-		Mockito.when(mockMenu2.hasCategory(Category.Vegano)).thenReturn(false);
+		Mockito.when(mockMenu1.hasCategory(Category.VEGANO)).thenReturn(false);
+		Mockito.when(mockMenu2.hasCategory(Category.VEGANO)).thenReturn(false);
 		
 		provider.addMenu(mockMenu1);
 		provider.addMenu(mockMenu2);
 		
-		assertTrue(provider.menusWithCategory(Category.Vegano).isEmpty());
+		assertTrue(provider.menusWithCategory(Category.VEGANO).isEmpty());
 	}
 	
 	@Test
@@ -513,14 +515,14 @@ public class ProviderTest {
 		provider = ProviderBuilder.aProvider().build();
 		Menu mockMenu1 = mock(Menu.class);
 		Menu mockMenu2 = mock(Menu.class);
-		Mockito.when(mockMenu1.hasCategory(Category.Pizza)).thenReturn(true);
-		Mockito.when(mockMenu2.hasCategory(Category.Pizza)).thenReturn(false);
+		Mockito.when(mockMenu1.hasCategory(Category.PIZZA)).thenReturn(true);
+		Mockito.when(mockMenu2.hasCategory(Category.PIZZA)).thenReturn(false);
 		
 		provider.addMenu(mockMenu1);
 		provider.addMenu(mockMenu2);
 		
-		assertTrue(provider.menusWithCategory(Category.Pizza).contains(mockMenu1));
-		assertFalse(provider.menusWithCategory(Category.Pizza).contains(mockMenu2));
+		assertTrue(provider.menusWithCategory(Category.PIZZA).contains(mockMenu1));
+		assertFalse(provider.menusWithCategory(Category.PIZZA).contains(mockMenu2));
 	}
 	
 	@Test
@@ -532,9 +534,9 @@ public class ProviderTest {
 		provider.addMenu(mockMenu1);
 		provider.addMenu(mockMenu2);
 		
-		assertTrue(provider.menusWithLocation(City.Quilmes).contains(mockMenu1));
-		assertTrue(provider.menusWithLocation(City.Quilmes).contains(mockMenu2));
-		assertEquals(2, provider.menusWithLocation(City.Quilmes).size());
+		assertTrue(provider.menusWithLocation(City.QUILMES).contains(mockMenu1));
+		assertTrue(provider.menusWithLocation(City.QUILMES).contains(mockMenu2));
+		assertEquals(2, provider.menusWithLocation(City.QUILMES).size());
 	}
 	
 	@Test
@@ -546,7 +548,7 @@ public class ProviderTest {
 		provider.addMenu(mockMenu1);
 		provider.addMenu(mockMenu2);
 		
-		assertTrue(provider.menusWithLocation(City.Luis_Guillon).isEmpty());
+		assertTrue(provider.menusWithLocation(City.LUIS_GUILLON).isEmpty());
 	}
 	
 	@Test

@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoa.model;
 
+import ar.edu.unq.desapp.grupoa.model.enums.Category;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -20,7 +22,7 @@ public class MenuBuilder {
 
 	private List<Category> inicializeCategory() {
 		List<Category> categorias = new ArrayList<Category>();
-		categorias.add(Category.Green);
+		categorias.add(Category.GREEN);
 		return categorias;
 	}
 

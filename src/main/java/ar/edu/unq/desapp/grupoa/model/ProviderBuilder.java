@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoa.model;
 
+import ar.edu.unq.desapp.grupoa.model.enums.City;
+
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -8,7 +10,7 @@ import java.util.List;
 public class ProviderBuilder {
 	private String name = "no name i";
 	private String logo = "no logo";
-	private City city = City.Luis_Guillon;
+	private City city = City.LUIS_GUILLON;
 	private String location = "no location";
 	private String description = "description with at least 30 characters";
 	private String website = "no webside";

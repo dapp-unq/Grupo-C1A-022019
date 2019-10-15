@@ -4,6 +4,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import ar.edu.unq.desapp.grupoa.model.enums.Category;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DataIncompleteException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.DescriptionLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyListException;
@@ -143,7 +145,7 @@ public class Menu {
 	}
 
 	private @NonNull String validateDescription(String description) {
-		Integer size = description.length();
+		int size = description.length();
 		if (size < 20)
 			throw new DescriptionLengthException("La descripción del menú debe tener al menos 20 caracteres.");
 		if (size > 40)
@@ -152,7 +154,7 @@ public class Menu {
 	}
 
 	private @NonNull String validateName(String name) {
-		Integer size = name.length();
+		int size = name.length();
 		if (size < 4)
 			throw new NameLengthException("El nombre del menú debe tener al menos 4 caracteres.");
 		if (size > 30)

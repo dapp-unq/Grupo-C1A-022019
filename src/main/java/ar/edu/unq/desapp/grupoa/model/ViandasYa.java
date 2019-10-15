@@ -6,6 +6,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 
+import ar.edu.unq.desapp.grupoa.model.enums.Category;
+import ar.edu.unq.desapp.grupoa.model.enums.City;
+import ar.edu.unq.desapp.grupoa.model.enums.DeliveryType;
+import ar.edu.unq.desapp.grupoa.model.enums.Status;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InsufficientCurrencyException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.ElementNotFoundException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.PurchaseException;
@@ -68,7 +72,7 @@ public class ViandasYa {
 		aMenu.validationDateDeliveryMenuOrdered(dateHoursOrder, dateHoursDelivery); // Falta considerar los días no
 																					// hábiles de un servicio público.
 		return new Order(aMenu, providerName, dateHoursDelivery, dateHoursOrder, aQuantity, typeDelivery,
-				Status.In_Progress);
+				Status.IN_PROGRESS);
 	}
 
 	public List<Menu> searchMenuNamesMatchedWith(String text) {

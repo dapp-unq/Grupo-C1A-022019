@@ -1,5 +1,9 @@
 package ar.edu.unq.desapp.grupoa.model;
 
+import ar.edu.unq.desapp.grupoa.model.enums.Category;
+import ar.edu.unq.desapp.grupoa.model.enums.City;
+import ar.edu.unq.desapp.grupoa.model.enums.DeliveryType;
+import ar.edu.unq.desapp.grupoa.model.enums.Status;
 import ar.edu.unq.desapp.grupoa.model.exceptions.ElementNotFoundException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InsufficientCurrencyException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
@@ -183,7 +187,7 @@ public class ViandaYaTest {
     @Test
     public void testSearchMenuWithCategoryCerbezaWithoutMenusThenReturnEmptyList() {
         viandasYa = new ViandasYa();
-        assertTrue(viandasYa.searchMenusWithCategory(Category.Cerbeza).isEmpty());
+        assertTrue(viandasYa.searchMenusWithCategory(Category.CERVEZA).isEmpty());
     }
 
     @Test
@@ -197,11 +201,11 @@ public class ViandaYaTest {
         result.add(mockMenu1);
         result.add(mockMenu2);
 
-        when(mockProvider1.menusWithCategory(Category.Cerbeza)).thenReturn(new ArrayList<Menu>());
-        when(mockProvider2.menusWithCategory(Category.Cerbeza)).thenReturn(result);
+        when(mockProvider1.menusWithCategory(Category.CERVEZA)).thenReturn(new ArrayList<Menu>());
+        when(mockProvider2.menusWithCategory(Category.CERVEZA)).thenReturn(result);
         viandasYa.addProvider(mockProvider1);
         viandasYa.addProvider(mockProvider2);
-        List<Menu> menus = viandasYa.searchMenusWithCategory(Category.Cerbeza);
+        List<Menu> menus = viandasYa.searchMenusWithCategory(Category.CERVEZA);
 
         assertTrue(menus.contains(mockMenu1));
         assertTrue(menus.contains(mockMenu1));
@@ -219,11 +223,11 @@ public class ViandaYaTest {
         result.add(mockMenu1);
         result.add(mockMenu2);
 
-        when(mockProvider1.menusWithLocation(City.Quilmes)).thenReturn(new ArrayList<Menu>());
-        when(mockProvider2.menusWithLocation(City.Quilmes)).thenReturn(result);
+        when(mockProvider1.menusWithLocation(City.QUILMES)).thenReturn(new ArrayList<Menu>());
+        when(mockProvider2.menusWithLocation(City.QUILMES)).thenReturn(result);
         viandasYa.addProvider(mockProvider1);
         viandasYa.addProvider(mockProvider2);
-        List<Menu> menus = viandasYa.searchMenusWithLocation(City.Quilmes);
+        List<Menu> menus = viandasYa.searchMenusWithLocation(City.QUILMES);
 
         assertTrue(menus.contains(mockMenu1));
         assertTrue(menus.contains(mockMenu1));
@@ -233,7 +237,7 @@ public class ViandaYaTest {
     @Test
     public void testSearchMenuWithLocationBernalWithoutMenusThenReturnEmptyList() {
         viandasYa = new ViandasYa();
-        assertTrue(viandasYa.searchMenusWithLocation(City.Bernal).isEmpty());
+        assertTrue(viandasYa.searchMenusWithLocation(City.BERNAL).isEmpty());
     }
 
     @Test
@@ -249,7 +253,7 @@ public class ViandaYaTest {
         doNothing().when(mockUser).discountMoney(any(BigDecimal.class));
         doNothing().when(mockProvider).addMoney(any(BigDecimal.class));
 
-        Order newOrder = viandasYa.purchase(mockUser, mockProvider, mockMenu, 50, DeliveryType.Home_delivery,
+        Order newOrder = viandasYa.purchase(mockUser, mockProvider, mockMenu, 50, DeliveryType.HOME_DELIVERY,
                 deliveryDay, orderDay);
         verify(mockMenu).validationNumberMenuOrdered(50);
         verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
@@ -271,7 +275,7 @@ public class ViandaYaTest {
         when(mockMenu.getDeliveryPrice()).thenReturn(30);
         doThrow(InsufficientCurrencyException.class).when(mockUser).discountMoney(any(BigDecimal.class));
 
-        viandasYa.purchase(mockUser, mockProvider, mockMenu, 50, DeliveryType.Home_delivery,
+        viandasYa.purchase(mockUser, mockProvider, mockMenu, 50, DeliveryType.HOME_DELIVERY,
                 deliveryDay, orderDay);
     }
 
@@ -288,7 +292,7 @@ public class ViandaYaTest {
         when(mockMenu.getDeliveryPrice()).thenReturn(30);
         doThrow(IrrationalAmountException.class).when(mockMenu).validationNumberMenuOrdered(100);
 
-        viandasYa.purchase(mockUser, mockProvider, mockMenu, 100, DeliveryType.Home_delivery, deliveryDay, orderDay);
+        viandasYa.purchase(mockUser, mockProvider, mockMenu, 100, DeliveryType.HOME_DELIVERY, deliveryDay, orderDay);
         verify(mockMenu).validationNumberMenuOrdered(100);
         verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
     }
@@ -307,7 +311,7 @@ public class ViandaYaTest {
         doThrow(OrderDateException.class).when(mockMenu).validationDateDeliveryMenuOrdered(orderDay,
                 deliveryDay);
 
-        viandasYa.purchase(mockUser, mockProvider, mockMenu, 50, DeliveryType.Home_delivery, deliveryDay, orderDay);
+        viandasYa.purchase(mockUser, mockProvider, mockMenu, 50, DeliveryType.HOME_DELIVERY, deliveryDay, orderDay);
         verify(mockMenu).validationNumberMenuOrdered(50);
         verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
     }
@@ -329,7 +333,7 @@ public class ViandaYaTest {
         when(mockMenu.valueForQuantity(50)).thenReturn(150);
         when(mockMenu.getDeliveryPrice()).thenReturn(30);
 
-		Order newOrder = viandasYa.makeOrder(mockMenu, "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.Home_delivery);
+		Order newOrder = viandasYa.makeOrder(mockMenu, "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.HOME_DELIVERY);
 
         verify(mockMenu).validationNumberMenuOrdered(50);
         verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
@@ -337,8 +341,8 @@ public class ViandaYaTest {
         assertEquals(deliveryDay, newOrder.getDateHoursDelivery());
         assertEquals(orderDay, newOrder.getDateHoursOrder());
         assertEquals(new Integer(50), newOrder.getQuantity());
-        assertEquals(Status.In_Progress, newOrder.getStatus());
-        assertEquals(DeliveryType.Home_delivery, newOrder.getTypeDelivery());
+        assertEquals(Status.IN_PROGRESS, newOrder.getStatus());
+        assertEquals(DeliveryType.HOME_DELIVERY, newOrder.getTypeDelivery());
         assertEquals(new Integer(7530), newOrder.getValue());
         assertEquals(new Integer(0), newOrder.getRanking());
     }
@@ -351,7 +355,7 @@ public class ViandaYaTest {
         Menu mockMenu = mock(Menu.class);
         doThrow(IrrationalAmountException.class).when(mockMenu).validationNumberMenuOrdered(100);
 
-		viandasYa.makeOrder(mockMenu, "ViandaLiz", deliveryDay, orderDay, 100, DeliveryType.Home_delivery);
+		viandasYa.makeOrder(mockMenu, "ViandaLiz", deliveryDay, orderDay, 100, DeliveryType.HOME_DELIVERY);
 		verify(mockMenu).validationNumberMenuOrdered(100);
 	}
 
@@ -364,7 +368,7 @@ public class ViandaYaTest {
         doThrow(OrderDateException.class).when(mockMenu).validationDateDeliveryMenuOrdered(orderDay,
                 deliveryDay);
 
-        viandasYa.makeOrder(mockMenu, "ViandaLiz",deliveryDay, orderDay, 50, DeliveryType.Home_delivery);
+        viandasYa.makeOrder(mockMenu, "ViandaLiz",deliveryDay, orderDay, 50, DeliveryType.HOME_DELIVERY);
         verify(mockMenu).validationNumberMenuOrdered(50);
         verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
 	}

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import ar.edu.unq.desapp.grupoa.model.enums.Category;
 import org.junit.Test;
 
 import ar.edu.unq.desapp.grupoa.model.exceptions.DataIncompleteException;
@@ -128,7 +129,7 @@ public class MenuTest {
 	@Test
 	public void menuCreationWithValidCategory() {
 		List<Category> categories = new ArrayList<Category>();
-		categories.add(Category.Pizza);
+		categories.add(Category.PIZZA);
 		menu = MenuBuilder.aMenu().withCategory(categories).build();
 		assertEquals(categories, menu.getCategory());
 	}
@@ -148,7 +149,7 @@ public class MenuTest {
 	@Test
 	public void menuWithValidCategory() {
 		List<Category> categories = new ArrayList<Category>();
-		categories.add(Category.Pizza);
+		categories.add(Category.PIZZA);
 		menu = MenuBuilder.aMenu().build();
 		menu.setCategory(categories);
 		assertEquals(categories, menu.getCategory());
@@ -717,17 +718,17 @@ public class MenuTest {
 	@Test
 	public void menuWithCategoryPizzaAskIfHasCategoryPizzaThenReturnTrue() {
 		List<Category> categories = new ArrayList<Category>();
-		categories.add(Category.Pizza);
+		categories.add(Category.PIZZA);
 		menu = MenuBuilder.aMenu().withCategory(categories).build();
-		assertTrue(menu.hasCategory(Category.Pizza));
+		assertTrue(menu.hasCategory(Category.PIZZA));
 	}
 
 	@Test
 	public void menuWithCategoryPizzaAskIfHasCategoryCerbezaThenReturnFalse() {
 		List<Category> categories = new ArrayList<Category>();
-		categories.add(Category.Pizza);
+		categories.add(Category.PIZZA);
 		menu = MenuBuilder.aMenu().withCategory(categories).build();
-		assertFalse(menu.hasCategory(Category.Cerbeza));
+		assertFalse(menu.hasCategory(Category.CERVEZA));
 	}
 
 	@Test

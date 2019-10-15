@@ -1,5 +1,5 @@
-package ar.edu.unq.desapp.grupoa.model;
+package ar.edu.unq.desapp.grupoa.model.enums;
 
 public enum Status {
-	In_Progress, Completed,
+	IN_PROGRESS, COMPLETED
 }

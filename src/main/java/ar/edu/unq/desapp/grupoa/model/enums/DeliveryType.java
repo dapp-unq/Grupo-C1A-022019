@@ -1,6 +1,5 @@
-package ar.edu.unq.desapp.grupoa.model;
+package ar.edu.unq.desapp.grupoa.model.enums;
 
 public enum DeliveryType {
-	Home_delivery, Branch_office,
-
+	HOME_DELIVERY, BRANCH_OFFICE
 }
