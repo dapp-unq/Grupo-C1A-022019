@@ -5,6 +5,8 @@ import static org.mockito.Mockito.mock;
 
 import java.util.GregorianCalendar;
 
+import ar.edu.unq.desapp.grupoa.model.enums.DeliveryType;
+import ar.edu.unq.desapp.grupoa.model.enums.Status;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -16,7 +18,7 @@ public class OrderTest {
 		GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
 		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
 		Menu mockMenu = mock(Menu.class);
-		return new Order(mockMenu, "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.Home_delivery, Status.In_Progress);
+		return new Order(mockMenu, "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.HOME_DELIVERY, Status.IN_PROGRESS);
 	}
 
 	@Test
@@ -30,7 +32,7 @@ public class OrderTest {
 	@Test
 	public void testCalculateValueFor50MenuWith120PriceWithoutDeliveryThenReturn6000() {
 		this.order = this.anyOrder();
-		this.order.setTypeDelivery(DeliveryType.Branch_office);
+		this.order.setTypeDelivery(DeliveryType.BRANCH_OFFICE);
 		Mockito.when(order.getMenu().valueForQuantity(50)).thenReturn(120);
 		assertEquals(new Integer(6000), order.calculateValue(50));
 	}
@@ -46,7 +48,7 @@ public class OrderTest {
 	@Test
 	public void testDeliveryPriceWithoutHomeDeliveryThenReturn0() {
 		this.order = this.anyOrder();
-		this.order.setTypeDelivery(DeliveryType.Branch_office);
+		this.order.setTypeDelivery(DeliveryType.BRANCH_OFFICE);
 		assertEquals(new Integer(0), order.deliveryPrice());
 	}
 
@@ -60,15 +62,15 @@ public class OrderTest {
 	@Test
 	public void testSetTypeDeliveryBranchOfficeSuccessfully() {
 		this.order = this.anyOrder();
-		order.setTypeDelivery(DeliveryType.Branch_office);
-		assertEquals(DeliveryType.Branch_office, order.getTypeDelivery());
+		order.setTypeDelivery(DeliveryType.BRANCH_OFFICE);
+		assertEquals(DeliveryType.BRANCH_OFFICE, order.getTypeDelivery());
 	}
 
 	@Test
 	public void testSetTypeDeliveryHomeDeliverySuccessfully() {
 		this.order = this.anyOrder();
-		order.setTypeDelivery(DeliveryType.Home_delivery);
-		assertEquals(DeliveryType.Home_delivery, order.getTypeDelivery());
+		order.setTypeDelivery(DeliveryType.HOME_DELIVERY);
+		assertEquals(DeliveryType.HOME_DELIVERY, order.getTypeDelivery());
 	}
 
 	@Test(expected = NullPointerException.class)

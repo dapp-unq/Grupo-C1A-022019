@@ -1,6 +1,6 @@
-package ar.edu.unq.desapp.grupoa.model;
+package ar.edu.unq.desapp.grupoa.model.enums;
 
 public enum Category 
 {
-	Pizza, Cerbeza, Hamburguesa, Sushi, Empanadas, Green, Vegano
+	PIZZA, CERVEZA, HAMBURGUESA, SUSHI, EMPANADAS, GREEN, VEGANO
 }

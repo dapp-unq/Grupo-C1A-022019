@@ -1,6 +1,6 @@
-package ar.edu.unq.desapp.grupoa.model;
+package ar.edu.unq.desapp.grupoa.model.enums;
 
 public enum City 
 {
-	Bernal, Don_Bosco, Ezpeleta, Quilmes, San_Francisco_Solano, Villa_La_Florita, Luis_Guillon
+	BERNAL, DON_BOSCO, EZPELETA, QUILMES, SAN_FRANCISCO_SOLANO, VILLA_LA_FLORITA, LUIS_GUILLON
 }
