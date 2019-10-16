@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -47,7 +48,7 @@ public class ViandasYa {
 	}
 
 	public Order purchase(User aUser, Provider aProvider, Menu aMenu, Integer aQuantity, DeliveryType typeDelivery,
-			GregorianCalendar dateHoursDelivery, GregorianCalendar dateHoursOrder) throws InsufficientCurrencyException {
+						  LocalDateTime dateHoursDelivery, LocalDateTime dateHoursOrder) throws InsufficientCurrencyException {
 		this.validatedPendingRanking(aUser);
 		Order newOrder = this.makeOrder(aMenu, aProvider.getName(), dateHoursDelivery, dateHoursOrder, aQuantity, typeDelivery);
 		aProvider.addOrder(aUser, newOrder);
@@ -66,12 +67,12 @@ public class ViandasYa {
 		}
 	}
 
-	public Order makeOrder(Menu aMenu, String providerName, GregorianCalendar dateHoursDelivery,
-			GregorianCalendar dateHoursOrder, Integer aQuantity, DeliveryType typeDelivery) {
+	public Order makeOrder(Menu aMenu, String providerName, LocalDateTime deliveryDateAndHour,
+						   LocalDateTime orderDateAndHour, Integer aQuantity, DeliveryType typeDelivery) {
 		aMenu.validationNumberMenuOrdered(aQuantity);
-		aMenu.validationDateDeliveryMenuOrdered(dateHoursOrder, dateHoursDelivery); // Falta considerar los días no
+		aMenu.validationDateDeliveryMenuOrdered(orderDateAndHour, deliveryDateAndHour); // Falta considerar los días no
 																					// hábiles de un servicio público.
-		return new Order(aMenu, providerName, dateHoursDelivery, dateHoursOrder, aQuantity, typeDelivery,
+		return new Order(aMenu, providerName, deliveryDateAndHour, orderDateAndHour, aQuantity, typeDelivery,
 				Status.IN_PROGRESS);
 	}
 

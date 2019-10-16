@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoa.model;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
+import java.time.LocalDateTime;
 import java.util.GregorianCalendar;
 
 import ar.edu.unq.desapp.grupoa.model.enums.DeliveryType;
@@ -15,8 +16,8 @@ public class OrderTest {
 	private Order order;
 
 	private Order anyOrder() {
-		GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+		LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+		LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
 		Menu mockMenu = mock(Menu.class);
 		return new Order(mockMenu, "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.HOME_DELIVERY, Status.IN_PROGRESS);
 	}

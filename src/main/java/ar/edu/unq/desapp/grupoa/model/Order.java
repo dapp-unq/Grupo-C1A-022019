@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoa.model;
 
+import java.time.LocalDateTime;
 import java.util.GregorianCalendar;
 
 import ar.edu.unq.desapp.grupoa.model.enums.DeliveryType;
@@ -12,20 +13,20 @@ import lombok.NonNull;
 public class Order {
 	private Menu menu;
 	private String providerName;
-	private GregorianCalendar dateHoursDelivery;
-	private GregorianCalendar dateHoursOrder;
+	private LocalDateTime deliveryDateAndHour;
+	private LocalDateTime orderDateAndHour;
 	private Integer quantity;
 	private DeliveryType typeDelivery;
 	private Status status;
 	private Integer ranking;
 	private Integer value;
 
-	public Order(Menu menu, String providerName, GregorianCalendar dateHoursDelivery, GregorianCalendar dateHoursOrder, Integer quantity,
-			DeliveryType typeDelivery, Status status) {
+	public Order(Menu menu, String providerName, LocalDateTime deliveryDateAndHour, LocalDateTime orderDateAndHour, Integer quantity,
+				 DeliveryType typeDelivery, Status status) {
 		this.menu = menu;
 		this.providerName = providerName;
-		this.dateHoursDelivery = dateHoursDelivery;
-		this.dateHoursOrder = dateHoursOrder;
+		this.deliveryDateAndHour = deliveryDateAndHour;
+		this.orderDateAndHour = orderDateAndHour;
 		this.quantity = quantity;
 		this.typeDelivery = typeDelivery;
 		this.status = status;

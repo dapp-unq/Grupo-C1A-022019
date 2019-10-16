@@ -13,7 +13,9 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
 import lombok.Getter;
 import lombok.NonNull;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -238,17 +240,15 @@ public class Menu {
                     "La cantidad de pedida supera la cantidad de ventas disponibles del menú.");
     }
 
-    public void validationDateDeliveryMenuOrdered(GregorianCalendar dateHoursOrder,
-                                                  GregorianCalendar dateHoursDelivery) {
+    public void validationDateDeliveryMenuOrdered(LocalDateTime dateHoursOrder,
+                                                  LocalDateTime dateHoursDelivery) {
         if (!this.has48HoursBetween(dateHoursOrder, dateHoursDelivery))
             throw new OrderDateException("El pedido debe hacerse al menos 48hs hábiles antes de la entrega del mismo.");
     }
 
-    private Boolean has48HoursBetween(GregorianCalendar from, GregorianCalendar to) {
-        long milliFrom = from.getTimeInMillis();
-        long milliTo = to.getTimeInMillis();
-        long minutes = (milliTo - milliFrom) / 60000;
-        return minutes >= 2880; // 2880min = 48hs
+    private Boolean has48HoursBetween(LocalDateTime from, LocalDateTime to) {
+        LocalDateTime from2DaysAfter = from.plus(2, ChronoUnit.DAYS);
+        return to.isAfter(from2DaysAfter);
     }
 
     public Integer valueForQuantity(Integer quantity) {

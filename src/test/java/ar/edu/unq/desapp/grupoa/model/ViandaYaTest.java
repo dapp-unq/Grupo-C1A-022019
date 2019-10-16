@@ -13,6 +13,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -243,8 +244,8 @@ public class ViandaYaTest {
     @Test
     public void testPurchaseMenuCorrectly() throws InsufficientCurrencyException {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
         User mockUser = mock(User.class);
         Menu mockMenu = mock(Menu.class);
         Provider mockProvider = mock(Provider.class);
@@ -266,8 +267,8 @@ public class ViandaYaTest {
     @Test(expected = InsufficientCurrencyException.class)
     public void whenUserWithInsufficientMoneyMakeAPurchaseItThrowsException() throws InsufficientCurrencyException {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
         User mockUser = mock(User.class);
         Menu mockMenu = mock(Menu.class);
         Provider mockProvider = mock(Provider.class);
@@ -282,8 +283,8 @@ public class ViandaYaTest {
     @Test(expected = IrrationalAmountException.class)
     public void testPurchaseMenuWithout100DailyStockThenThrowException() throws InsufficientCurrencyException {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
 
         User mockUser = mock(User.class);
         Menu mockMenu = mock(Menu.class);
@@ -300,8 +301,8 @@ public class ViandaYaTest {
     @Test(expected = OrderDateException.class)
     public void testPurchaseMenuWithoutHas48HoursBetweenDatesThrowException() throws InsufficientCurrencyException {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
 
         User mockUser = mock(User.class);
         Menu mockMenu = mock(Menu.class);
@@ -327,8 +328,8 @@ public class ViandaYaTest {
     @Test
     public void testMakeAOrderThenReturnAOrder() {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
         Menu mockMenu = mock(Menu.class);
         when(mockMenu.valueForQuantity(50)).thenReturn(150);
         when(mockMenu.getDeliveryPrice()).thenReturn(30);
@@ -338,8 +339,8 @@ public class ViandaYaTest {
         verify(mockMenu).validationNumberMenuOrdered(50);
         verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
         assertEquals(mockMenu, newOrder.getMenu());
-        assertEquals(deliveryDay, newOrder.getDateHoursDelivery());
-        assertEquals(orderDay, newOrder.getDateHoursOrder());
+        assertEquals(deliveryDay, newOrder.getDeliveryDateAndHour());
+        assertEquals(orderDay, newOrder.getOrderDateAndHour());
         assertEquals(new Integer(50), newOrder.getQuantity());
         assertEquals(Status.IN_PROGRESS, newOrder.getStatus());
         assertEquals(DeliveryType.HOME_DELIVERY, newOrder.getTypeDelivery());
@@ -350,8 +351,8 @@ public class ViandaYaTest {
     @Test(expected = IrrationalAmountException.class)
     public void testMakeAOrderWithout100DailyStockThenThrowException() {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
         Menu mockMenu = mock(Menu.class);
         doThrow(IrrationalAmountException.class).when(mockMenu).validationNumberMenuOrdered(100);
 
@@ -362,8 +363,8 @@ public class ViandaYaTest {
     @Test(expected = OrderDateException.class)
     public void testMakeAOrderWithoutHas48HoursBetweenDatesThrowException() {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
         Menu mockMenu = mock(Menu.class);
         doThrow(OrderDateException.class).when(mockMenu).validationDateDeliveryMenuOrdered(orderDay,
                 deliveryDay);

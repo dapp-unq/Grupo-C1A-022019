@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -727,16 +728,16 @@ public class MenuTest {
 	@Test(expected = OrderDateException.class)
 	public void menuWithOrderDayAfter48hsDeliveryDayThrowException() {
 		menu = MenuBuilder.aMenu().build();
-		GregorianCalendar orderDay = new GregorianCalendar(2019, 8, 30, 12, 00);
-		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 9, 2, 11, 30);
+		LocalDateTime orderDay = LocalDateTime.of(2019, 8, 31, 12, 00);
+		LocalDateTime deliveryDay = LocalDateTime.of(2019, 9, 2, 11, 30);
 		menu.validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
 	}
 
 	@Test(expected = OrderDateException.class)
 	public void menuWithOrderDayAfter48hsDeliveryDay2ThrowException() {
 		menu = MenuBuilder.aMenu().build();
-		GregorianCalendar orderDay = new GregorianCalendar(2019, 10, 15, 12, 00);
-		GregorianCalendar deliveryDay = new GregorianCalendar(2019, 10, 17, 11, 30);
+		LocalDateTime orderDay = LocalDateTime.of(2019, 10, 15, 12, 00);
+		LocalDateTime deliveryDay = LocalDateTime.of(2019, 10, 17, 11, 30);
 		menu.validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
 	}
 
