@@ -21,20 +21,20 @@ public class BusinessDayCheckerService {
     private static final String REST_URI = "/api/v2/feriados/";
 
     @Autowired
-    public BusinessDayCheckerService(RestTemplate restTemplate) {
+    public BusinessDayCheckerService(final RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public boolean isBusinessDay(LocalDate date) {
-        BusinessDayCheckDTO[] response = restTemplate.getForObject(getUrl(String.valueOf(date.getYear())), BusinessDayCheckDTO[].class);
+    public boolean isBusinessDay(final LocalDate date) {
+        final BusinessDayCheckDTO[] response = restTemplate.getForObject(getUrl(String.valueOf(date.getYear())), BusinessDayCheckDTO[].class);
         return !checkIfDayIsNotBusinessDay(Arrays.asList(response), date.getMonthValue(), date.getDayOfMonth());
     }
 
-    private boolean checkIfDayIsNotBusinessDay(List<BusinessDayCheckDTO> businessDayCheckDtoList, int month, int day) {
+    private boolean checkIfDayIsNotBusinessDay(final List<BusinessDayCheckDTO> businessDayCheckDtoList, final int month, final int day) {
         return businessDayCheckDtoList.stream().anyMatch(dto -> month == dto.getMes() && day == dto.getDia());
     }
 
-    private String getUrl(String year) {
+    private String getUrl(final String year) {
         return new StringBuilder("http://")
                 .append(url)
                 .append(REST_URI)
