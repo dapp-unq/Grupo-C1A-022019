@@ -2,18 +2,9 @@ package ar.edu.unq.desapp.grupoa;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"ar.edu.unq.desapp.grupoa.*", "ar.edu.unq.desapp.grupoa"})
 public class Application {
-
-    @GetMapping
-    public String home(){
-        return "Hello World!";
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
