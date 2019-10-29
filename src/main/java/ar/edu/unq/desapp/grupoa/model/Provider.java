@@ -11,8 +11,19 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,25 +34,37 @@ import java.util.stream.Collectors;
 
 @Getter
 @NonNull
+@Entity
+@Table(name = "providers")
+@NoArgsConstructor
 public class Provider {
 
     private String name;
     private String logo;
+    @Enumerated(EnumType.STRING)
     private City city;
     private String location;
     private String description;
     private String website;
+    @Id
     private String email;
     private String phoneNumber;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn
     private List<ServiceHours> openingHoursDays;
+    @ElementCollection(targetClass = City.class)
     private List<City> deliveryCities;
-    private List<Menu> currentMenu;
+    @Transient
+    private List<Menu> currentMenus;
+    @Transient
     private List<CurrentOrder> orders;
     private BigDecimal balance;
     private Integer menusRemoved;
 
+    @Transient
     private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
             Pattern.CASE_INSENSITIVE);
+    @Transient
     private final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
 
     public Provider(String name, String logo, City city, String location, String description, @NonNull String website,
@@ -56,7 +79,7 @@ public class Provider {
         this.phoneNumber = validatePhoneNumber(phone);
         this.openingHoursDays = validateNotEmptyOpeningHoursDays(serviceHours, "horarios y días de atención");
         this.deliveryCities = calculateDeliveryCities(km, location);
-        this.currentMenu = new ArrayList<Menu>();
+        this.currentMenus = new ArrayList<Menu>();
         this.orders = new ArrayList<CurrentOrder>();
         this.balance = BigDecimal.ZERO;
         this.menusRemoved = 0;
@@ -166,11 +189,11 @@ public class Provider {
 
     public void addMenu(Menu aMenu) {
         this.validationCurrentMenuQuantity(aMenu.getName());
-        this.currentMenu.add(aMenu);
+        this.currentMenus.add(aMenu);
     }
 
     private void validationCurrentMenuQuantity(String menuName) {
-        if (this.currentMenu.size() == 20)
+        if (this.currentMenus.size() == 20)
             throw new CurrentMenuQuantityException(
                     "No se puede agregar más menús: Solo se puede tener hasta 20 menús vigentes.");
         if (this.anyCurrentMenuHasName(menuName))
@@ -179,11 +202,11 @@ public class Provider {
     }
 
     public boolean anyCurrentMenuHasName(String menuName) {
-        return this.currentMenu.stream().anyMatch(menu -> menu.hasName(menuName));
+        return this.currentMenus.stream().anyMatch(menu -> menu.hasName(menuName));
     }
 
     public Menu searchMenu(String menuName) {
-        Optional<Menu> searchMenu = this.currentMenu.stream().filter(menu -> menu.hasName(menuName)).findFirst();
+        Optional<Menu> searchMenu = this.currentMenus.stream().filter(menu -> menu.hasName(menuName)).findFirst();
         if (!searchMenu.isPresent())
             throw new ElementNotFoundException("No se encontró un menú con el nombre: " + menuName);
         return searchMenu.get();
@@ -194,7 +217,7 @@ public class Provider {
     }
 
     public void removeMenu(Menu aMenu) {
-        this.currentMenu.remove(aMenu);
+        this.currentMenus.remove(aMenu);
     }
 
     public void editMenu(String nameMenuEdit, Menu newMenu) {
@@ -203,17 +226,17 @@ public class Provider {
     }
 
     public List<Menu> menusWithNameMatchedWith(String text) {
-        return this.currentMenu.stream().filter(menu -> menu.hasNameMatchedWith(text)).collect(Collectors.toList());
+        return this.currentMenus.stream().filter(menu -> menu.hasNameMatchedWith(text)).collect(Collectors.toList());
     }
 
     public List<Menu> menusWithCategory(Category aCategory) {
-        return this.currentMenu.stream().filter(menu -> menu.hasCategory(aCategory)).collect(Collectors.toList());
+        return this.currentMenus.stream().filter(menu -> menu.hasCategory(aCategory)).collect(Collectors.toList());
     }
 
     public List<Menu> menusWithLocation(City aCity) {
         List<Menu> result = new ArrayList<Menu>();
         if (this.deliveryCities.contains(aCity))
-            result = this.currentMenu;
+            result = this.currentMenus;
         return result;
     }
 

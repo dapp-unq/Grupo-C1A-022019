@@ -15,7 +15,6 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -431,12 +430,12 @@ public class ViandaYaTest {
 		when(mockProvider.getName()).thenReturn("ViandaLiz");
 		when(mockProvider.hasName("ViandaLiz")).thenReturn(true);
 		when(mockProvider.getMenusRemoved()).thenReturn(9);
-		when(mockProvider.getCurrentMenu()).thenReturn(new ArrayList<Menu>());
+		when(mockProvider.getCurrentMenus()).thenReturn(new ArrayList<Menu>());
 		when(mockMenu.hasLowQualityMenu()).thenReturn(true);
 		viandasYa.addProvider(mockProvider);
 
 		viandasYa.cancelMenu(mockProvider.getName(), mockMenu);
-		assertFalse(mockProvider.getCurrentMenu().contains(mockMenu));
+		assertFalse(mockProvider.getCurrentMenus().contains(mockMenu));
 		assertEquals(new Integer(9), mockProvider.getMenusRemoved());
 		verify(mockProvider).cancelMenu(mockMenu);
 	}
@@ -449,12 +448,12 @@ public class ViandaYaTest {
 		when(mockProvider.getName()).thenReturn("ViandaLiz");
 		when(mockProvider.hasName("ViandaLiz")).thenReturn(true);
 		when(mockProvider.getMenusRemoved()).thenReturn(10);
-		when(mockProvider.getCurrentMenu()).thenReturn(new ArrayList<Menu>());
+		when(mockProvider.getCurrentMenus()).thenReturn(new ArrayList<Menu>());
 		when(mockMenu.hasLowQualityMenu()).thenReturn(true);
 		viandasYa.addProvider(mockProvider);
 
 		viandasYa.cancelMenu(mockProvider.getName(), mockMenu);
-		assertFalse(mockProvider.getCurrentMenu().contains(mockMenu));
+		assertFalse(mockProvider.getCurrentMenus().contains(mockMenu));
 		assertFalse(viandasYa.getProviders().contains(mockProvider));
 		verify(mockProvider).cancelMenu(mockMenu);
 	}

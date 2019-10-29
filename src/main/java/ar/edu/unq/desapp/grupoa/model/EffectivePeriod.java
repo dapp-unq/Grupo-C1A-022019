@@ -2,13 +2,25 @@ package ar.edu.unq.desapp.grupoa.model;
 
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEffectivePeriodException;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
 
 @Getter
 @NonNull
+@NoArgsConstructor
+@Entity
 public class EffectivePeriod {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private LocalDate initialDate;
     private LocalDate endDate;
 

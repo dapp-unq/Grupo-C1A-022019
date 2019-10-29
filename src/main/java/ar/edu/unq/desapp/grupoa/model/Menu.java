@@ -11,29 +11,59 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 @Getter
 @NonNull
+@Entity
+@NoArgsConstructor
 public class Menu {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String name;
     private String description;
+    @ElementCollection(targetClass = Category.class)
     private List<Category> category;
     private Integer deliveryPrice;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private EffectivePeriod effectivePeriod;
+    @ElementCollection
+    @CollectionTable(name = "menu_deliveries_schedules", joinColumns = @JoinColumn(name = "menu_id"))
+    @Column(name = "delivery_schedule")
     private List<LocalTime> deliverySchedules;
     private LocalTime averageDeliveryTime;
     private Integer price;
     private Integer dailyStock;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private Offer offer1;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private Offer offer2;
+    @ElementCollection
+    @CollectionTable(name = "menu_rankings", joinColumns = @JoinColumn(name = "menu_id"))
+    @Column(name = "menu_ranking")
     private List<Integer> ranking;
 
     public Menu(String name, String description, List<Category> category, Integer deliveryPrice,
