@@ -5,12 +5,13 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
 
 public class EffectivePeriodTest {
 
     @Test
-    public void whenCreatingAValidEffectivePeriodItSuccess(){
+    public void whenCreatingAValidEffectivePeriodItSuccess() {
         LocalDate initialDate = LocalDate.now();
         LocalDate endDate = initialDate.plusDays(7L);
 
@@ -20,7 +21,7 @@ public class EffectivePeriodTest {
     }
 
     @Test(expected = InvalidEffectivePeriodException.class)
-    public void whenCreatingAndInvalidEffectivePeriodItThrowsException(){
+    public void whenCreatingAndInvalidEffectivePeriodItThrowsException() {
         LocalDate initialDate = LocalDate.now();
         LocalDate endDate = initialDate.plusDays(7L);
 
