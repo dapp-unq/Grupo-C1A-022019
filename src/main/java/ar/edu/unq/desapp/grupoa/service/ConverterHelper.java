@@ -24,15 +24,15 @@ import java.util.stream.Collectors;
 @Component
 public class ConverterHelper {
 
-    User userDtoToUser(final UserDTO userDTO) {
+    public User userDtoToUser(final UserDTO userDTO) {
         return new User(userDTO.getName(), userDTO.getSurname(), userDTO.getEmail(), userDTO.getPhoneNumber(), userDTO.getLocation());
     }
 
-    UserDTO userToUserDTO(final User user) {
+    public UserDTO userToUserDTO(final User user) {
         return new UserDTO(user.getName(), user.getSurname(), user.getEmail(), user.getPhoneNumber(), user.getLocation(), user.getOrderHistory(), user.getBalance());
     }
 
-    ProviderDTO providerToProviderDTO(final Provider provider) {
+    public ProviderDTO providerToProviderDTO(final Provider provider) {
         ProviderDTO providerDTO = new ProviderDTO();
         providerDTO.setName(provider.getName());
         providerDTO.setLogo(provider.getLogo());
@@ -51,7 +51,7 @@ public class ConverterHelper {
         return providerDTO;
     }
 
-    Provider providerDtoToProvider(final ProviderDTO providerDTO) {
+    public Provider providerDtoToProvider(final ProviderDTO providerDTO) {
         Provider provider = new Provider(providerDTO.getName(), providerDTO.getLogo(), providerDTO.getCity(), providerDTO.getLocation(),
                 providerDTO.getDescription(), providerDTO.getWebsite(), providerDTO.getEmail(), providerDTO.getPhoneNumber(),
                 serviceHoursDtoListToServiceHoursList(providerDTO.getOpeningHoursDays()), 0L);
