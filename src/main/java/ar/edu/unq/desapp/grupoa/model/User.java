@@ -7,9 +7,13 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -26,11 +30,15 @@ import java.util.regex.Pattern;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
+@ToString
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String name;
     private String surname;
-    @Id
+    @Column(unique = true)
     private String email;
     private String phoneNumber;
     private String location;
@@ -45,7 +53,7 @@ public class User {
     @Transient
     private final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
 
-    public User(String name, String surname, String email, String phoneNumber, String location) {
+    public User(final String name, final String surname, final String email, final String phoneNumber, final String location) {
         this.name = validateNotEmpty(name, "nombre");
         this.surname = validateNotEmpty(surname, "apellido");
         this.email = isValidEmail(email);
@@ -55,47 +63,47 @@ public class User {
         this.balance = BigDecimal.ZERO;
     }
 
-    private String isValidEmail(String email) {
+    private String isValidEmail(final String email) {
         Matcher matcher = VALID_EMAIL_REGEX.matcher(email);
         if (!matcher.find())
             throw new InvalidEmailException("El email ingresado es inválido");
         return email;
     }
 
-    private String isValidPhone(String phone) {
+    private String isValidPhone(final String phone) {
         Matcher matcher = VALID_PHONE_REGEX.matcher(phone);
         if (!matcher.find())
             throw new InvalidPhoneNumberException("El telefono ingresado es invalido");
         return phone;
     }
 
-    private String validateNotEmpty(String parameter, String parameterName) {
+    private String validateNotEmpty(final String parameter, String parameterName) {
         if (parameter.isEmpty())
             throw new EmptyStringException("El campo " + parameterName + " no puede ser vacío");
         return parameter;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = validateNotEmpty(name, "nombre");
     }
 
-    public void setSurname(String surname) {
+    public void setSurname(final String surname) {
         this.surname = validateNotEmpty(surname, "apellido");
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = isValidEmail(email);
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(final String phoneNumber) {
         this.phoneNumber = isValidPhone(phoneNumber);
     }
 
-    public void setLocation(String location) {
+    public void setLocation(final String location) {
         this.location = validateNotEmpty(location, "dirección");
     }
 
-    public void addHistoryOrder(Order newOrder) {
+    public void addHistoryOrder(final Order newOrder) {
         this.orderHistory.add(newOrder);
     }
 
@@ -103,11 +111,11 @@ public class User {
         return this.orderHistory.stream().anyMatch(order -> order.getRanking() == 0);
     }
 
-    public Boolean hasName(String userName) {
+    public Boolean hasName(final String userName) {
         return this.name.equals(userName);
     }
 
-    public void rankIt(Order order, Integer rank) {
+    public void rankIt(final Order order, final Integer rank) {
         order.getMenu().rankIt(rank);
         order.setRanking(rank);
     }

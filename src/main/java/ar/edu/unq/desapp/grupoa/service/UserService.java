@@ -4,44 +4,49 @@ import ar.edu.unq.desapp.grupoa.model.User;
 import ar.edu.unq.desapp.grupoa.persistence.UserRepository;
 import ar.edu.unq.desapp.grupoa.service.dto.UserDTO;
 import ar.edu.unq.desapp.grupoa.service.exceptions.UserNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
+@Slf4j
 public class UserService {
 
     private UserRepository userRepository;
 
+    private ConverterHelper converterHelper;
+
     @Autowired
-    public UserService(final UserRepository userRepository) {
+    public UserService(final UserRepository userRepository, final ConverterHelper converterHelper) {
         this.userRepository = userRepository;
+        this.converterHelper = converterHelper;
     }
 
     public void createUser(final UserDTO userDTO) {
-        User newUser = userDtoToUser(userDTO);
+        final User newUser = converterHelper.userDtoToUser(userDTO);
         userRepository.save(newUser);
+        log.info("Created User: {}", newUser);
     }
 
-    private User userDtoToUser(final UserDTO userDTO) {
-        return new User(userDTO.getName(), userDTO.getSurname(), userDTO.getEmail(), userDTO.getPhoneNumber(), userDTO.getLocation());
+    public void deleteUser(final String email) {
+        userRepository.deleteByEmail(email);
+        log.info("Deleted User: {}", email);
     }
 
-    private UserDTO userToUserDTO(final User user) {
-        return new UserDTO(user.getName(), user.getSurname(), user.getEmail(), user.getPhoneNumber(), user.getLocation(), user.getOrderHistory(), user.getBalance());
+    public void updateUser(final UserDTO userDTO) {
+        userRepository.updateUser(userDTO.getEmail(), userDTO.getName(), userDTO.getSurname(), userDTO.getPhoneNumber(),
+                userDTO.getLocation(), userDTO.getBalance());
     }
 
-    public void modifyCurrency(final BigDecimal charge, final String email){
+    public void modifyCurrency(final BigDecimal charge, final String email) {
         userRepository.updateCurrency(charge, email);
     }
 
-    public UserDTO getUserByEmail(String email) {
-        User fetchedUser = userRepository.findById(email).orElseThrow(UserNotFoundException::new);
-        return userToUserDTO(fetchedUser);
+    public UserDTO getUserByEmail(final String email) {
+        final User fetchedUser = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        return converterHelper.userToUserDTO(fetchedUser);
     }
 
-    public void deleteUser(String email) {
-        userRepository.deleteById(email);
-    }
 }

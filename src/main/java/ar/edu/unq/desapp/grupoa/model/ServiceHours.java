@@ -24,7 +24,7 @@ public class ServiceHours {
     private LocalTime openingHours;
     private LocalTime closingHours;
 
-    public ServiceHours(DayOfWeek day, LocalTime opening, LocalTime closing) {
+    public ServiceHours(final DayOfWeek day, final LocalTime opening, final LocalTime closing) {
         this.day = day;
         this.openingHours = opening;
         this.closingHours = closing;

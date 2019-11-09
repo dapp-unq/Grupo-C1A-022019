@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 @Table(name = "orders")
 @NoArgsConstructor
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -39,8 +38,8 @@ public class Order {
     private Integer ranking;
     private Integer value;
 
-    public Order(Menu menu, String providerName, LocalDateTime deliveryDateAndHour, LocalDateTime orderDateAndHour, Integer quantity,
-                 DeliveryType typeDelivery, Status status) {
+    public Order(final Menu menu, final String providerName, final LocalDateTime deliveryDateAndHour, final LocalDateTime orderDateAndHour,
+                 final Integer quantity, final DeliveryType typeDelivery, final Status status) {
         this.menu = menu;
         this.providerName = providerName;
         this.deliveryDateAndHour = deliveryDateAndHour;
@@ -52,15 +51,15 @@ public class Order {
         this.value = this.calculateValue(quantity);
     }
 
-    public void setTypeDelivery(@NonNull DeliveryType type) {
+    public void setTypeDelivery(final @NonNull DeliveryType type) {
         this.typeDelivery = type;
     }
 
-    public void setRanking(@NonNull Integer ranking) {
+    public void setRanking(final @NonNull Integer ranking) {
         this.ranking = ranking;
     }
 
-    public Integer calculateValue(Integer quantity) {
+    public Integer calculateValue(final Integer quantity) {
         return (this.menu.valueForQuantity(quantity) * quantity) + deliveryPrice();
     }
 

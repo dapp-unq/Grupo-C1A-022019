@@ -19,16 +19,16 @@ public class Offer {
     private Integer quantity;
     private Integer price;
 
-    public Offer(Integer quantity, Integer price) {
+    public Offer(final Integer quantity, final Integer price) {
         this.quantity = quantity;
         this.price = price;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(final Integer quantity) {
         this.quantity = quantity;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(final Integer price) {
         this.price = price;
     }
 

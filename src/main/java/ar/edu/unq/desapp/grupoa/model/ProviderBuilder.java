@@ -33,52 +33,52 @@ public class ProviderBuilder {
 		return new Provider(name, logo, city, location, description, website, email, phoneNumber, openingHoursDays, km);
 	}
 
-	public ProviderBuilder withName(String aName) {
+	public ProviderBuilder withName(final String aName) {
 		this.name = aName;
 		return this;
 	}
 
-	public ProviderBuilder withLogo(String aDirlogo) {
+	public ProviderBuilder withLogo(final String aDirlogo) {
 		this.logo = aDirlogo;
 		return this;
 	}
 
-	public ProviderBuilder withCity(City aCity) {
+	public ProviderBuilder withCity(final City aCity) {
 		this.city = aCity;
 		return this;
 	}
 
-	public ProviderBuilder withLocation(String aLocation) {
+	public ProviderBuilder withLocation(final String aLocation) {
 		this.location = aLocation;
 		return this;
 	}
 
-	public ProviderBuilder withDescription(String aDescription) {
+	public ProviderBuilder withDescription(final String aDescription) {
 		this.description = aDescription;
 		return this;
 	}
 
-	public ProviderBuilder withWebsite(String aWebsite) {
+	public ProviderBuilder withWebsite(final String aWebsite) {
 		this.website = aWebsite;
 		return this;
 	}
 
-	public ProviderBuilder withEmail(String aEmail) {
+	public ProviderBuilder withEmail(final String aEmail) {
 		this.email = aEmail;
 		return this;
 	}
 
-	public ProviderBuilder withPhoneNumber(String aPhoneNumber) {
+	public ProviderBuilder withPhoneNumber(final String aPhoneNumber) {
 		this.phoneNumber = aPhoneNumber;
 		return this;
 	}
 
-	public ProviderBuilder withOpeningHoursDays(List<ServiceHours> aOpeningHoursDays) {
+	public ProviderBuilder withOpeningHoursDays(final List<ServiceHours> aOpeningHoursDays) {
 		this.openingHoursDays = aOpeningHoursDays;
 		return this;
 	}
 
-	public ProviderBuilder withMaxDeliveryDistance(double km) {
+	public ProviderBuilder withMaxDeliveryDistance(final double km) {
 		this.km = km;
 		return this;
 	}
