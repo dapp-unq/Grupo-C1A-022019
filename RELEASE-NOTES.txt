@@ -1,18 +1,17 @@
 ---------------------------------------------------------------------
-TAG ENTREGA 1.0
+TAG ENTREGA 2.0
 ---------------------------------------------------------------------
 NEW FEATURES:
-* Model implementation
-* POC of maps implementation (Static file POCLeaflet.html)
-* Unit test with Coverage > 90% (JaCoCo as part of maven build + report in /target)
-* Travis integration with automatic build for every branch on every push
-* Heroku integration with automatic deployment when merging to master
-* Codacy integration
+* CRUD for Provider
+* CRUD for User
+* Add & remove currency from User
+* Persistence layer for all entities
+* Spring-boot application starting up injecting controllers, services and repositories.
+* Independent React application
 
 NOTES:
-* In the maps POC show distance and time between 2 points.
-* When purchasing send mail to User & Provider
-* Schedule purchases confirmation at 00:00
+* Menu CRUD & search.
+* Purchase service with its logic (Confirmation at 00:00 + Sending email to user and provider)
 * Maps API integration with backend
 
 KNOWN ISSUES:

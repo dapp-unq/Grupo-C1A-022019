@@ -11,34 +11,64 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 @Getter
 @NonNull
+@Entity
+@NoArgsConstructor
 public class Menu {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String name;
     private String description;
+    @ElementCollection(targetClass = Category.class)
     private List<Category> category;
     private Integer deliveryPrice;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn
     private EffectivePeriod effectivePeriod;
+    @ElementCollection
+    @CollectionTable(name = "menu_deliveries_schedules", joinColumns = @JoinColumn(name = "menu_id"))
+    @Column(name = "delivery_schedule")
     private List<LocalTime> deliverySchedules;
     private LocalTime averageDeliveryTime;
     private Integer price;
     private Integer dailyStock;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn
     private Offer offer1;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn
     private Offer offer2;
+    @ElementCollection
+    @CollectionTable(name = "menu_rankings", joinColumns = @JoinColumn(name = "menu_id"))
+    @Column(name = "menu_ranking")
     private List<Integer> ranking;
 
-    public Menu(String name, String description, List<Category> category, Integer deliveryPrice,
-                @NonNull EffectivePeriod effectivePeriod, List<LocalTime> deliverySchedules,
-                @NonNull LocalTime averageDeliveryTime, Integer price, Integer dailyStock, Offer offer1, Offer offer2) {
+    public Menu(final String name, final String description, final List<Category> category, final Integer deliveryPrice,
+                final @NonNull EffectivePeriod effectivePeriod, final List<LocalTime> deliverySchedules,
+                final @NonNull LocalTime averageDeliveryTime, final Integer price, final Integer dailyStock, final Offer offer1,
+                final Offer offer2) {
         this.name = validateName(name);
         this.description = validateDescription(description);
         this.category = validateNotEmptyList(category, "categorías");
@@ -53,7 +83,7 @@ public class Menu {
         this.ranking = new ArrayList<>();
     }
 
-    private @NonNull Offer validationOffer2(Offer aOffer) {
+    private @NonNull Offer validationOffer2(final Offer aOffer) {
         if (aOffer.isEffectiveOffer()) {
             this.validationQuantityOffer(aOffer.getQuantity(), 40, 150);
             this.validationPriceOffer(aOffer.getPrice(), 0, 1000);
@@ -62,7 +92,7 @@ public class Menu {
         return aOffer;
     }
 
-    private void validationWithOffer1(Integer aQuantity, Integer aPrice) {
+    private void validationWithOffer1(final Integer aQuantity, final Integer aPrice) {
         if (aQuantity <= this.offer1.getQuantity())
             throw new IrrationalAmountException(
                     "La cantidad minima de la oferta 2 debe ser inferior a la cantidad mínima de la oferta 1.");
@@ -70,13 +100,13 @@ public class Menu {
             throw new IrrationalPriceException("El precio de la oferta 2 debe ser inferior al precio de la oferta 1");
     }
 
-    private @NonNull Offer validationOffer1(Offer aOffer) {
+    private @NonNull Offer validationOffer1(final Offer aOffer) {
         this.validationQuantityOffer(aOffer.getQuantity(), 10, 70);
         this.validationPriceOffer(aOffer.getPrice(), 0, 1000);
         return aOffer;
     }
 
-    private void validationWithOffer2(Integer aQuantity, Integer aPrice) {
+    private void validationWithOffer2(final Integer aQuantity, final Integer aPrice) {
         if (aQuantity >= this.offer2.getQuantity())
             throw new IrrationalAmountException(
                     "La cantidad mínima de la oferta 1 debe ser menor a la cantidad mínima de la oferta 2.");
@@ -84,7 +114,7 @@ public class Menu {
             throw new IrrationalPriceException("El precio de la oferta 1 debe ser mayor al precio de la oferta 2.");
     }
 
-    private void validationPriceOffer(Integer aPrice, Integer minPrice, Integer maxPrice) {
+    private void validationPriceOffer(final Integer aPrice, final Integer minPrice, final Integer maxPrice) {
         if (aPrice >= this.price)
             throw new IrrationalPriceException("El precio de la oferta debe ser menor al precio normal del menú");
         if (aPrice < minPrice)
@@ -93,7 +123,7 @@ public class Menu {
             throw new IrrationalPriceException("El precio de la oferta debe ser menor a " + maxPrice + ".");
     }
 
-    private void validationQuantityOffer(Integer aQuantity, Integer minQuantity, Integer maxQuantity) {
+    private void validationQuantityOffer(final Integer aQuantity, final Integer minQuantity, final Integer maxQuantity) {
         if (aQuantity > this.dailyStock)
             throw new IrrationalAmountException(
                     "La cantidad mínima de la oferta no puede ser mayor al del stock diario");
@@ -105,26 +135,26 @@ public class Menu {
                     "La cantidad mínima de la oferta no puede superar las " + maxQuantity + " unidades");
     }
 
-    private @NonNull Integer validateDailyStock(Integer dailyStock) {
+    private @NonNull Integer validateDailyStock(final Integer dailyStock) {
         if (dailyStock <= 0)
             throw new IrrationalAmountException("El menú debe tener al menos una unidad diaria disponible");
         return dailyStock;
     }
 
-    private @NonNull Integer validatePrice(Integer price) {
+    private @NonNull Integer validatePrice(final Integer price) {
         if (price <= 0)
             throw new IrrationalPriceException("El menú debe tener un valor mayor a 0");
         return price;
     }
 
-    private @NonNull List<LocalTime> validateDeliverySchedules(List<LocalTime> deliverySchedules) {
+    private @NonNull List<LocalTime> validateDeliverySchedules(final List<LocalTime> deliverySchedules) {
         validateNotEmptyList(deliverySchedules, "horarios de entrega");
         if (deliverySchedules.size() != 2)
             throw new DataIncompleteException("El menú debe tener un horario de entrega inicial y final");
         return deliverySchedules;
     }
 
-    private @NonNull Integer validateDeliveryPrice(Integer price) {
+    private @NonNull Integer validateDeliveryPrice(final Integer price) {
         if (price > 40)
             throw new IrrationalPriceException("El precio máximo de envío es de 40");
         if (price < 10 && price != 0)
@@ -132,13 +162,13 @@ public class Menu {
         return price;
     }
 
-    private <T> List<T> validateNotEmptyList(List<T> parameter, String parameterName) {
+    private <T> List<T> validateNotEmptyList(final List<T> parameter, final String parameterName) {
         if (parameter.isEmpty())
             throw new EmptyListException("El campo " + parameterName + " no puede ser vacío");
         return parameter;
     }
 
-    private @NonNull String validateDescription(String description) {
+    private @NonNull String validateDescription(final String description) {
         int size = description.length();
         if (size < 20)
             throw new DescriptionLengthException("La descripción del menú debe tener al menos 20 caracteres.");
@@ -147,7 +177,7 @@ public class Menu {
         return validateNotEmpty(description, "descripción");
     }
 
-    private @NonNull String validateName(String name) {
+    private @NonNull String validateName(final String name) {
         int size = name.length();
         if (size < 4)
             throw new NameLengthException("El nombre del menú debe tener al menos 4 caracteres.");
@@ -156,49 +186,49 @@ public class Menu {
         return validateNotEmpty(name, "nombre");
     }
 
-    private String validateNotEmpty(String parameter, String parameterName) {
+    private String validateNotEmpty(final String parameter, final String parameterName) {
         if (parameter.isEmpty())
             throw new EmptyStringException("El campo " + parameterName + " no puede ser vacío");
         return parameter;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = validateName(name);
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = validateDescription(description);
     }
 
-    public void setCategory(List<Category> category) {
+    public void setCategory(final List<Category> category) {
         this.category = validateNotEmptyList(category, "categorías");
     }
 
-    public void setDeliveryPrice(Integer deliveryPrice) {
+    public void setDeliveryPrice(final Integer deliveryPrice) {
         this.deliveryPrice = validateDeliveryPrice(deliveryPrice);
     }
 
-    public void setEffectivePeriod(@NonNull EffectivePeriod effectivePeriod) {
+    public void setEffectivePeriod(final @NonNull EffectivePeriod effectivePeriod) {
         this.effectivePeriod = effectivePeriod;
     }
 
-    public void setDeliverySchedules(List<LocalTime> deliverySchedules) {
+    public void setDeliverySchedules(final List<LocalTime> deliverySchedules) {
         this.deliverySchedules = validateDeliverySchedules(deliverySchedules);
     }
 
-    public void setAverageDeliveryTime(@NonNull LocalTime averageDeliveryTime) {
+    public void setAverageDeliveryTime(final @NonNull LocalTime averageDeliveryTime) {
         this.averageDeliveryTime = averageDeliveryTime;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(final Integer price) {
         this.price = validatePrice(price);
     }
 
-    public void setOffer1(Offer aOffer) {
+    public void setOffer1(final Offer aOffer) {
         this.offer1 = validationSetOffer1(aOffer);
     }
 
-    private @NonNull Offer validationSetOffer1(Offer aOffer) {
+    private @NonNull Offer validationSetOffer1(final Offer aOffer) {
         this.validationQuantityOffer(aOffer.getQuantity(), 10, 70);
         this.validationPriceOffer(aOffer.getPrice(), 0, 1000);
         if (this.offer2.isEffectiveOffer()) {
@@ -207,51 +237,51 @@ public class Menu {
         return aOffer;
     }
 
-    public void setOffer2(Offer aOffer) {
+    public void setOffer2(final Offer aOffer) {
         this.offer2 = validationOffer2(aOffer);
     }
 
-    public void setDailyStock(Integer dailyStock) {
+    public void setDailyStock(final Integer dailyStock) {
         this.dailyStock = validateDailyStock(dailyStock);
     }
 
-    public Boolean hasName(String menuName) {
+    public Boolean hasName(final String menuName) {
         return this.name.equals(menuName);
     }
 
-    public Boolean hasNameMatchedWith(String text) {
+    public Boolean hasNameMatchedWith(final String text) {
         return this.name.toLowerCase().contains(text.toLowerCase());
     }
 
-    public Boolean hasCategory(Category category) {
+    public Boolean hasCategory(final Category category) {
         return this.category.contains(category);
     }
 
-    public void rankIt(Integer ranking) {
+    public void rankIt(final Integer ranking) {
         if (ranking > 5 || ranking <= 0)
             throw new InvalidRankingException("Puntuación inválida: La calificación del menú debe ser entre 0 y 5");
 
         this.ranking.add(ranking);
     }
 
-    public void validationNumberMenuOrdered(Integer aQuantity) {
+    public void validationNumberMenuOrdered(final Integer aQuantity) {
         if (aQuantity > this.dailyStock)
             throw new IrrationalAmountException(
                     "La cantidad de pedida supera la cantidad de ventas disponibles del menú.");
     }
 
-    public void validationDateDeliveryMenuOrdered(LocalDateTime dateHoursOrder,
-                                                  LocalDateTime dateHoursDelivery) {
+    public void validationDateDeliveryMenuOrdered(final LocalDateTime dateHoursOrder,
+                                                  final LocalDateTime dateHoursDelivery) {
         if (!this.has48HoursBetween(dateHoursOrder, dateHoursDelivery))
             throw new OrderDateException("El pedido debe hacerse al menos 48hs hábiles antes de la entrega del mismo.");
     }
 
-    private Boolean has48HoursBetween(LocalDateTime from, LocalDateTime to) {
+    private Boolean has48HoursBetween(final LocalDateTime from, final LocalDateTime to) {
         LocalDateTime from2DaysAfter = from.plus(2, ChronoUnit.DAYS);
         return to.isAfter(from2DaysAfter);
     }
 
-    public Integer valueForQuantity(Integer quantity) {
+    public Integer valueForQuantity(final Integer quantity) {
         Integer price = this.price;
         if (quantity >= this.offer1.getQuantity())
             price = this.offer1.getPrice();

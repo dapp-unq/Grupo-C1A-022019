@@ -16,7 +16,7 @@ public class BusinessDayCheckerService {
     @Value("${business.day.checker.api.url}")
     private String url;
 
-    private final RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     private static final String REST_URI = "/api/v2/feriados/";
 

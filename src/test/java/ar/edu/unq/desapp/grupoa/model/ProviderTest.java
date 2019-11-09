@@ -301,7 +301,7 @@ public class ProviderTest {
 		provider = ProviderBuilder.aProvider().build();
 		Menu mockMenu = mock(Menu.class);
 		provider.addMenu(mockMenu);
-		assertTrue(provider.getCurrentMenu().contains(mockMenu));
+		assertTrue(provider.getCurrentMenus().contains(mockMenu));
 	}
 
 	@Test(expected = RepeatedNameException.class)
@@ -362,7 +362,7 @@ public class ProviderTest {
 
 		provider.addMenu(mockMenu);
 		provider.removeMenuWithName("Pizza especial Liz");
-		assertFalse(provider.getCurrentMenu().contains(mockMenu));
+		assertFalse(provider.getCurrentMenus().contains(mockMenu));
 	}
 
 	@Test(expected = ElementNotFoundException.class)
@@ -382,7 +382,7 @@ public class ProviderTest {
 
 		provider.addMenu(mockMenu);
 		provider.removeMenu(mockMenu);
-		assertFalse(provider.getCurrentMenu().contains(mockMenu));
+		assertFalse(provider.getCurrentMenus().contains(mockMenu));
 	}
 
 	@Test
@@ -392,13 +392,13 @@ public class ProviderTest {
 		Menu mockMenu2 = mock(Menu.class);
 		provider.addMenu(mockMenu1);
 
-		assertTrue(provider.getCurrentMenu().contains(mockMenu1));
-		assertEquals(1, provider.getCurrentMenu().size());
+		assertTrue(provider.getCurrentMenus().contains(mockMenu1));
+		assertEquals(1, provider.getCurrentMenus().size());
 
 		provider.removeMenu(mockMenu2);
 
-		assertTrue(provider.getCurrentMenu().contains(mockMenu1));
-		assertEquals(1, provider.getCurrentMenu().size());
+		assertTrue(provider.getCurrentMenus().contains(mockMenu1));
+		assertEquals(1, provider.getCurrentMenus().size());
 	}
 
 	@Test
@@ -406,9 +406,9 @@ public class ProviderTest {
 		provider = ProviderBuilder.aProvider().build();
 		Menu mockMenu = mock(Menu.class);
 
-		assertEquals(0, provider.getCurrentMenu().size());
+		assertEquals(0, provider.getCurrentMenus().size());
 		provider.removeMenu(mockMenu);
-		assertEquals(0, provider.getCurrentMenu().size());
+		assertEquals(0, provider.getCurrentMenus().size());
 	}
 
 	@Test
@@ -446,8 +446,8 @@ public class ProviderTest {
 		provider.addMenu(mockMenu1);
 
 		provider.editMenu("Pizza especial Liz", mockMenu2);
-		assertFalse(provider.getCurrentMenu().contains(mockMenu1));
-		assertTrue(provider.getCurrentMenu().contains(mockMenu2));
+		assertFalse(provider.getCurrentMenus().contains(mockMenu1));
+		assertTrue(provider.getCurrentMenus().contains(mockMenu2));
 		assertTrue(provider.anyCurrentMenuHasName("Pizza de mozza Liz"));
 	}
 
@@ -604,8 +604,8 @@ public class ProviderTest {
 		provider.addMenu(mockMenu);
 		provider.cancelMenu(mockMenu);
 
-		assertFalse(provider.getCurrentMenu().contains(mockMenu));
-		assertTrue(provider.getCurrentMenu().isEmpty());
+		assertFalse(provider.getCurrentMenus().contains(mockMenu));
+		assertTrue(provider.getCurrentMenus().isEmpty());
 		assertEquals(new Integer(1), provider.getMenusRemoved());
 	}
 }
