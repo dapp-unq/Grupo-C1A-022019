@@ -1,5 +1,9 @@
 package ar.edu.unq.desapp.grupoa.model;
 
+import ar.edu.unq.desapp.grupoa.model.enums.Category;
+import ar.edu.unq.desapp.grupoa.model.enums.City;
+import ar.edu.unq.desapp.grupoa.model.enums.DeliveryType;
+import ar.edu.unq.desapp.grupoa.model.enums.Status;
 import ar.edu.unq.desapp.grupoa.model.exceptions.ElementNotFoundException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InsufficientCurrencyException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
@@ -9,8 +13,8 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -183,7 +187,7 @@ public class ViandaYaTest {
     @Test
     public void testSearchMenuWithCategoryCerbezaWithoutMenusThenReturnEmptyList() {
         viandasYa = new ViandasYa();
-        assertTrue(viandasYa.searchMenusWithCategory(Category.Cerbeza).isEmpty());
+        assertTrue(viandasYa.searchMenusWithCategory(Category.CERVEZA).isEmpty());
     }
 
     @Test
@@ -197,11 +201,11 @@ public class ViandaYaTest {
         result.add(mockMenu1);
         result.add(mockMenu2);
 
-        when(mockProvider1.menusWithCategory(Category.Cerbeza)).thenReturn(new ArrayList<Menu>());
-        when(mockProvider2.menusWithCategory(Category.Cerbeza)).thenReturn(result);
+        when(mockProvider1.menusWithCategory(Category.CERVEZA)).thenReturn(new ArrayList<Menu>());
+        when(mockProvider2.menusWithCategory(Category.CERVEZA)).thenReturn(result);
         viandasYa.addProvider(mockProvider1);
         viandasYa.addProvider(mockProvider2);
-        List<Menu> menus = viandasYa.searchMenusWithCategory(Category.Cerbeza);
+        List<Menu> menus = viandasYa.searchMenusWithCategory(Category.CERVEZA);
 
         assertTrue(menus.contains(mockMenu1));
         assertTrue(menus.contains(mockMenu1));
@@ -219,11 +223,11 @@ public class ViandaYaTest {
         result.add(mockMenu1);
         result.add(mockMenu2);
 
-        when(mockProvider1.menusWithLocation(City.Quilmes)).thenReturn(new ArrayList<Menu>());
-        when(mockProvider2.menusWithLocation(City.Quilmes)).thenReturn(result);
+        when(mockProvider1.menusWithLocation(City.QUILMES)).thenReturn(new ArrayList<Menu>());
+        when(mockProvider2.menusWithLocation(City.QUILMES)).thenReturn(result);
         viandasYa.addProvider(mockProvider1);
         viandasYa.addProvider(mockProvider2);
-        List<Menu> menus = viandasYa.searchMenusWithLocation(City.Quilmes);
+        List<Menu> menus = viandasYa.searchMenusWithLocation(City.QUILMES);
 
         assertTrue(menus.contains(mockMenu1));
         assertTrue(menus.contains(mockMenu1));
@@ -233,14 +237,14 @@ public class ViandaYaTest {
     @Test
     public void testSearchMenuWithLocationBernalWithoutMenusThenReturnEmptyList() {
         viandasYa = new ViandasYa();
-        assertTrue(viandasYa.searchMenusWithLocation(City.Bernal).isEmpty());
+        assertTrue(viandasYa.searchMenusWithLocation(City.BERNAL).isEmpty());
     }
 
     @Test
     public void testPurchaseMenuCorrectly() throws InsufficientCurrencyException {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
         User mockUser = mock(User.class);
         Menu mockMenu = mock(Menu.class);
         Provider mockProvider = mock(Provider.class);
@@ -249,7 +253,7 @@ public class ViandaYaTest {
         doNothing().when(mockUser).discountMoney(any(BigDecimal.class));
         doNothing().when(mockProvider).addMoney(any(BigDecimal.class));
 
-        Order newOrder = viandasYa.purchase(mockUser, mockProvider, mockMenu, 50, DeliveryType.Home_delivery,
+        Order newOrder = viandasYa.purchase(mockUser, mockProvider, mockMenu, 50, DeliveryType.HOME_DELIVERY,
                 deliveryDay, orderDay);
         verify(mockMenu).validationNumberMenuOrdered(50);
         verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
@@ -262,8 +266,8 @@ public class ViandaYaTest {
     @Test(expected = InsufficientCurrencyException.class)
     public void whenUserWithInsufficientMoneyMakeAPurchaseItThrowsException() throws InsufficientCurrencyException {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
         User mockUser = mock(User.class);
         Menu mockMenu = mock(Menu.class);
         Provider mockProvider = mock(Provider.class);
@@ -271,15 +275,15 @@ public class ViandaYaTest {
         when(mockMenu.getDeliveryPrice()).thenReturn(30);
         doThrow(InsufficientCurrencyException.class).when(mockUser).discountMoney(any(BigDecimal.class));
 
-        viandasYa.purchase(mockUser, mockProvider, mockMenu, 50, DeliveryType.Home_delivery,
+        viandasYa.purchase(mockUser, mockProvider, mockMenu, 50, DeliveryType.HOME_DELIVERY,
                 deliveryDay, orderDay);
     }
 
     @Test(expected = IrrationalAmountException.class)
     public void testPurchaseMenuWithout100DailyStockThenThrowException() throws InsufficientCurrencyException {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
 
         User mockUser = mock(User.class);
         Menu mockMenu = mock(Menu.class);
@@ -288,7 +292,7 @@ public class ViandaYaTest {
         when(mockMenu.getDeliveryPrice()).thenReturn(30);
         doThrow(IrrationalAmountException.class).when(mockMenu).validationNumberMenuOrdered(100);
 
-        viandasYa.purchase(mockUser, mockProvider, mockMenu, 100, DeliveryType.Home_delivery, deliveryDay, orderDay);
+        viandasYa.purchase(mockUser, mockProvider, mockMenu, 100, DeliveryType.HOME_DELIVERY, deliveryDay, orderDay);
         verify(mockMenu).validationNumberMenuOrdered(100);
         verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
     }
@@ -296,8 +300,8 @@ public class ViandaYaTest {
     @Test(expected = OrderDateException.class)
     public void testPurchaseMenuWithoutHas48HoursBetweenDatesThrowException() throws InsufficientCurrencyException {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
 
         User mockUser = mock(User.class);
         Menu mockMenu = mock(Menu.class);
@@ -307,7 +311,7 @@ public class ViandaYaTest {
         doThrow(OrderDateException.class).when(mockMenu).validationDateDeliveryMenuOrdered(orderDay,
                 deliveryDay);
 
-        viandasYa.purchase(mockUser, mockProvider, mockMenu, 50, DeliveryType.Home_delivery, deliveryDay, orderDay);
+        viandasYa.purchase(mockUser, mockProvider, mockMenu, 50, DeliveryType.HOME_DELIVERY, deliveryDay, orderDay);
         verify(mockMenu).validationNumberMenuOrdered(50);
         verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
     }
@@ -323,22 +327,22 @@ public class ViandaYaTest {
     @Test
     public void testMakeAOrderThenReturnAOrder() {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
         Menu mockMenu = mock(Menu.class);
         when(mockMenu.valueForQuantity(50)).thenReturn(150);
         when(mockMenu.getDeliveryPrice()).thenReturn(30);
 
-		Order newOrder = viandasYa.makeOrder(mockMenu, "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.Home_delivery);
+		Order newOrder = viandasYa.makeOrder(mockMenu, "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.HOME_DELIVERY);
 
         verify(mockMenu).validationNumberMenuOrdered(50);
         verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
         assertEquals(mockMenu, newOrder.getMenu());
-        assertEquals(deliveryDay, newOrder.getDateHoursDelivery());
-        assertEquals(orderDay, newOrder.getDateHoursOrder());
+        assertEquals(deliveryDay, newOrder.getDeliveryDateAndHour());
+        assertEquals(orderDay, newOrder.getOrderDateAndHour());
         assertEquals(new Integer(50), newOrder.getQuantity());
-        assertEquals(Status.In_Progress, newOrder.getStatus());
-        assertEquals(DeliveryType.Home_delivery, newOrder.getTypeDelivery());
+        assertEquals(Status.IN_PROGRESS, newOrder.getStatus());
+        assertEquals(DeliveryType.HOME_DELIVERY, newOrder.getTypeDelivery());
         assertEquals(new Integer(7530), newOrder.getValue());
         assertEquals(new Integer(0), newOrder.getRanking());
     }
@@ -346,25 +350,25 @@ public class ViandaYaTest {
     @Test(expected = IrrationalAmountException.class)
     public void testMakeAOrderWithout100DailyStockThenThrowException() {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
         Menu mockMenu = mock(Menu.class);
         doThrow(IrrationalAmountException.class).when(mockMenu).validationNumberMenuOrdered(100);
 
-		viandasYa.makeOrder(mockMenu, "ViandaLiz", deliveryDay, orderDay, 100, DeliveryType.Home_delivery);
+		viandasYa.makeOrder(mockMenu, "ViandaLiz", deliveryDay, orderDay, 100, DeliveryType.HOME_DELIVERY);
 		verify(mockMenu).validationNumberMenuOrdered(100);
 	}
 
     @Test(expected = OrderDateException.class)
     public void testMakeAOrderWithoutHas48HoursBetweenDatesThrowException() {
         viandasYa = new ViandasYa();
-        GregorianCalendar orderDay = new GregorianCalendar(2019, 11, 2, 12, 00);
-        GregorianCalendar deliveryDay = new GregorianCalendar(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
         Menu mockMenu = mock(Menu.class);
         doThrow(OrderDateException.class).when(mockMenu).validationDateDeliveryMenuOrdered(orderDay,
                 deliveryDay);
 
-        viandasYa.makeOrder(mockMenu, "ViandaLiz",deliveryDay, orderDay, 50, DeliveryType.Home_delivery);
+        viandasYa.makeOrder(mockMenu, "ViandaLiz",deliveryDay, orderDay, 50, DeliveryType.HOME_DELIVERY);
         verify(mockMenu).validationNumberMenuOrdered(50);
         verify(mockMenu).validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
 	}
@@ -426,12 +430,12 @@ public class ViandaYaTest {
 		when(mockProvider.getName()).thenReturn("ViandaLiz");
 		when(mockProvider.hasName("ViandaLiz")).thenReturn(true);
 		when(mockProvider.getMenusRemoved()).thenReturn(9);
-		when(mockProvider.getCurrentMenu()).thenReturn(new ArrayList<Menu>());
+		when(mockProvider.getCurrentMenus()).thenReturn(new ArrayList<Menu>());
 		when(mockMenu.hasLowQualityMenu()).thenReturn(true);
 		viandasYa.addProvider(mockProvider);
 
 		viandasYa.cancelMenu(mockProvider.getName(), mockMenu);
-		assertFalse(mockProvider.getCurrentMenu().contains(mockMenu));
+		assertFalse(mockProvider.getCurrentMenus().contains(mockMenu));
 		assertEquals(new Integer(9), mockProvider.getMenusRemoved());
 		verify(mockProvider).cancelMenu(mockMenu);
 	}
@@ -444,12 +448,12 @@ public class ViandaYaTest {
 		when(mockProvider.getName()).thenReturn("ViandaLiz");
 		when(mockProvider.hasName("ViandaLiz")).thenReturn(true);
 		when(mockProvider.getMenusRemoved()).thenReturn(10);
-		when(mockProvider.getCurrentMenu()).thenReturn(new ArrayList<Menu>());
+		when(mockProvider.getCurrentMenus()).thenReturn(new ArrayList<Menu>());
 		when(mockMenu.hasLowQualityMenu()).thenReturn(true);
 		viandasYa.addProvider(mockProvider);
 
 		viandasYa.cancelMenu(mockProvider.getName(), mockMenu);
-		assertFalse(mockProvider.getCurrentMenu().contains(mockMenu));
+		assertFalse(mockProvider.getCurrentMenus().contains(mockMenu));
 		assertFalse(viandasYa.getProviders().contains(mockProvider));
 		verify(mockProvider).cancelMenu(mockMenu);
 	}

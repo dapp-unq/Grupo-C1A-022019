@@ -1,114 +1,138 @@
 package ar.edu.unq.desapp.grupoa.model;
 
+import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InsufficientCurrencyException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
+import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.ToString;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.InsufficientCurrencyException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
-import lombok.Getter;
-import lombok.NonNull;
-
 @Getter
 @NonNull
+@Entity
+@Table(name = "users")
+@NoArgsConstructor
+@ToString
 public class User {
 
-	private String name;
-	private String surname;
-	private String email;
-	private String phoneNumber;
-	private String location;
-	private List<Order> orderHistory;
-	private BigDecimal balance;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private String name;
+    private String surname;
+    @Column(unique = true)
+    private String email;
+    private String phoneNumber;
+    private String location;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn
+    private List<Order> orderHistory;
+    private BigDecimal balance;
 
-	private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
-			Pattern.CASE_INSENSITIVE);
-	private final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
+    @Transient
+    private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+            Pattern.CASE_INSENSITIVE);
+    @Transient
+    private final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
 
-	public User(String name, String surname, String email, String phoneNumber, String location) {
-		this.name = validateNotEmpty(name, "nombre");
-		this.surname = validateNotEmpty(surname, "apellido");
-		this.email = isValidEmail(email);
-		this.phoneNumber = isValidPhone(phoneNumber);
-		this.location = validateNotEmpty(location, "dirección");
-		this.orderHistory = new ArrayList<Order>();
-		this.balance = BigDecimal.ZERO;
-	}
+    public User(final String name, final String surname, final String email, final String phoneNumber, final String location) {
+        this.name = validateNotEmpty(name, "nombre");
+        this.surname = validateNotEmpty(surname, "apellido");
+        this.email = isValidEmail(email);
+        this.phoneNumber = isValidPhone(phoneNumber);
+        this.location = validateNotEmpty(location, "dirección");
+        this.orderHistory = new ArrayList<Order>();
+        this.balance = BigDecimal.ZERO;
+    }
 
-	private String isValidEmail(String email) {
-		Matcher matcher = VALID_EMAIL_REGEX.matcher(email);
-		if (!matcher.find())
-			throw new InvalidEmailException("El email ingresado es inválido");
-		return email;
-	}
+    private String isValidEmail(final String email) {
+        Matcher matcher = VALID_EMAIL_REGEX.matcher(email);
+        if (!matcher.find())
+            throw new InvalidEmailException("El email ingresado es inválido");
+        return email;
+    }
 
-	private String isValidPhone(String phone) {
-		Matcher matcher = VALID_PHONE_REGEX.matcher(phone);
-		if (!matcher.find())
-			throw new InvalidPhoneNumberException("El telefono ingresado es invalido");
-		return phone;
-	}
+    private String isValidPhone(final String phone) {
+        Matcher matcher = VALID_PHONE_REGEX.matcher(phone);
+        if (!matcher.find())
+            throw new InvalidPhoneNumberException("El telefono ingresado es invalido");
+        return phone;
+    }
 
-	private String validateNotEmpty(String parameter, String parameterName) {
-		if (parameter.isEmpty())
-			throw new EmptyStringException("El campo " + parameterName + " no puede ser vacío");
-		return parameter;
-	}
+    private String validateNotEmpty(final String parameter, String parameterName) {
+        if (parameter.isEmpty())
+            throw new EmptyStringException("El campo " + parameterName + " no puede ser vacío");
+        return parameter;
+    }
 
-	public void setName(String name) {
-		this.name = validateNotEmpty(name, "nombre");
-	}
+    public void setName(final String name) {
+        this.name = validateNotEmpty(name, "nombre");
+    }
 
-	public void setSurname(String surname) {
-		this.surname = validateNotEmpty(surname, "apellido");
-	}
+    public void setSurname(final String surname) {
+        this.surname = validateNotEmpty(surname, "apellido");
+    }
 
-	public void setEmail(String email) {
-		this.email = isValidEmail(email);
-	}
+    public void setEmail(final String email) {
+        this.email = isValidEmail(email);
+    }
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = isValidPhone(phoneNumber);
-	}
+    public void setPhoneNumber(final String phoneNumber) {
+        this.phoneNumber = isValidPhone(phoneNumber);
+    }
 
-	public void setLocation(String location) {
-		this.location = validateNotEmpty(location, "dirección");
-	}
+    public void setLocation(final String location) {
+        this.location = validateNotEmpty(location, "dirección");
+    }
 
-	public void addHistoryOrder(Order newOrder) {
-		this.orderHistory.add(newOrder);
-	}
+    public void addHistoryOrder(final Order newOrder) {
+        this.orderHistory.add(newOrder);
+    }
 
-	public Boolean hasPendingRanking() {
-		return this.orderHistory.stream().anyMatch(order -> order.getRanking() == 0);
-	}
+    public Boolean hasPendingRanking() {
+        return this.orderHistory.stream().anyMatch(order -> order.getRanking() == 0);
+    }
 
-	public Boolean hasName(String userName) {
-		return this.name.equals(userName);
-	}
+    public Boolean hasName(final String userName) {
+        return this.name.equals(userName);
+    }
 
-	public void rankIt(Order order, Integer rank) {
-		order.getMenu().rankIt(rank);
-		order.setRanking(rank);
-	}
+    public void rankIt(final Order order, final Integer rank) {
+        order.getMenu().rankIt(rank);
+        order.setRanking(rank);
+    }
 
-	public void addMoney(BigDecimal currency){
-		this.balance = balance.add(currency);
-	}
+    public void addMoney(BigDecimal currency) {
+        this.balance = balance.add(currency);
+    }
 
-	public void discountMoney(BigDecimal currency) throws InsufficientCurrencyException {
-		BigDecimal result = this.balance.subtract(currency);
-		if(isBelowZero(result))
-			throw new InsufficientCurrencyException("Saldo insuficiente para efectuar la compra");
-		else
-			this.balance = result;
-	}
+    public void discountMoney(BigDecimal currency) throws InsufficientCurrencyException {
+        BigDecimal result = this.balance.subtract(currency);
+        if (isBelowZero(result))
+            throw new InsufficientCurrencyException("Saldo insuficiente para efectuar la compra");
+        else
+            this.balance = result;
+    }
 
-	private boolean isBelowZero(BigDecimal aNumber){
-		return aNumber.compareTo(BigDecimal.ZERO) < 0;
-	}
+    private boolean isBelowZero(BigDecimal aNumber) {
+        return aNumber.compareTo(BigDecimal.ZERO) < 0;
+    }
 }
