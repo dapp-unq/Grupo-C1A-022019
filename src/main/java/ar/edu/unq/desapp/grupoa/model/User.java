@@ -4,10 +4,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InsufficientCurrencyException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,8 +41,8 @@ public class User {
     private String location;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn
-    private List<Order> orderHistory;
-    private BigDecimal balance;
+    @Setter private List<Order> orderHistory;
+    @Setter private BigDecimal balance;
 
     @Transient
     private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
