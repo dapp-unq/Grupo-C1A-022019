@@ -10,7 +10,11 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.EmptyStringException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEmailException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidPhoneNumberException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -59,15 +63,20 @@ public class Provider {
     @JoinColumn
     private List<ServiceHours> openingHoursDays;
     @ElementCollection(targetClass = City.class)
-    @Setter private List<City> deliveryCities;
+    @Setter
+    private List<City> deliveryCities;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn
-    @Setter private List<Menu> currentMenus;
+    @Setter
+    private List<Menu> currentMenus;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn
-    @Setter private List<CurrentOrder> orders;
-    @Setter private BigDecimal balance;
-    @Setter private Integer menusRemoved;
+    @Setter
+    private List<CurrentOrder> orders;
+    @Setter
+    private BigDecimal balance;
+    @Setter
+    private Integer menusRemoved;
 
     @Transient
     private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
