@@ -43,7 +43,7 @@ public class UserService {
         user.setLocation(userDTO.getLocation());
         user.setBalance(userDTO.getBalance());
         user.getOrderHistory().clear();
-        user.getOrderHistory().addAll(converterHelper.orderDtoListToOrderList(userDTO.getOrderHistory()))
+        user.getOrderHistory().addAll(converterHelper.orderDtoListToOrderList(userDTO.getOrderHistory()));
         userRepository.save(user);
         log.info("Updated user: {}", userDTO.getEmail());
     }
