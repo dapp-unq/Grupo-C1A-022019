@@ -44,7 +44,8 @@ public class ProviderService {
         provider.setPhoneNumber(providerDTO.getPhoneNumber());
         provider.setOpeningHoursDays(converterHelper.serviceHoursDtoListToServiceHoursList(providerDTO.getOpeningHoursDays()));
         provider.setDeliveryCities(providerDTO.getDeliveryCities());
-        provider.setCurrentMenus(converterHelper.menuDtoListToMenuList(providerDTO.getCurrentMenus()));
+        provider.getCurrentMenus().clear();
+        provider.getCurrentMenus().addAll(converterHelper.menuDtoListToMenuList(providerDTO.getCurrentMenus()));
         provider.setBalance(providerDTO.getBalance());
         providerRepository.save(provider);
         log.info("Updated provider: {}", providerDTO.getEmail());
