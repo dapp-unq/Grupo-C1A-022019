@@ -19,6 +19,6 @@ public class UserDTO {
     private String email;
     private String phoneNumber;
     private String location;
-    private List<Order> orderHistory;
+    private List<OrderDTO> orderHistory;
     private BigDecimal balance;
 }

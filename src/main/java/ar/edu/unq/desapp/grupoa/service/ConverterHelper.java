@@ -29,7 +29,7 @@ public class ConverterHelper {
     }
 
     public UserDTO userToUserDTO(final User user) {
-        return new UserDTO(user.getName(), user.getSurname(), user.getEmail(), user.getPhoneNumber(), user.getLocation(), user.getOrderHistory(), user.getBalance());
+        return new UserDTO(user.getName(), user.getSurname(), user.getEmail(), user.getPhoneNumber(), user.getLocation(), orderListToOrderDTOList(user.getOrderHistory()), user.getBalance());
     }
 
     public ProviderDTO providerToProviderDTO(final Provider provider) {
@@ -121,7 +121,7 @@ public class ConverterHelper {
         return orderDTO;
     }
 
-    private List<Order> orderDtoListToOrderList(final List<OrderDTO> orderDTOList) {
+    public List<Order> orderDtoListToOrderList(final List<OrderDTO> orderDTOList) {
         return orderDTOList.stream().map(this::orderDtoToOrder).collect(Collectors.toList());
     }
 

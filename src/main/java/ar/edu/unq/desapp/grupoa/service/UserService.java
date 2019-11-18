@@ -36,8 +36,14 @@ public class UserService {
     }
 
     public void updateUser(final UserDTO userDTO) {
-        userRepository.updateUser(userDTO.getEmail(), userDTO.getName(), userDTO.getSurname(), userDTO.getPhoneNumber(),
-                userDTO.getLocation(), userDTO.getBalance());
+        User user = findUser(userDTO.getEmail());
+        user.setName(userDTO.getName());
+        user.setSurname(userDTO.getSurname());
+        user.setPhoneNumber(userDTO.getPhoneNumber());
+        user.setLocation(userDTO.getLocation());
+        user.setBalance(userDTO.getBalance());
+        userRepository.save(user);
+        log.info("Updated user: {}", userDTO.getEmail());
     }
 
     public void modifyCurrency(final BigDecimal charge, final String email) {
@@ -45,8 +51,12 @@ public class UserService {
     }
 
     public UserDTO getUserByEmail(final String email) {
-        final User fetchedUser = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        final User fetchedUser = findUser(email);
         return converterHelper.userToUserDTO(fetchedUser);
+    }
+
+    private User findUser(String email) {
+        return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
     }
 
 }

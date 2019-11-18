@@ -34,14 +34,29 @@ public class ProviderService {
     }
 
     public void updateProvider(final ProviderDTO providerDTO) {
-        providerRepository.updateProvider(providerDTO.getEmail(), providerDTO.getName(), providerDTO.getLogo(), providerDTO.getCity(),
-                providerDTO.getLocation(), providerDTO.getDescription(), providerDTO.getWebsite(), providerDTO.getPhoneNumber(),
-                converterHelper.serviceHoursDtoListToServiceHoursList(providerDTO.getOpeningHoursDays()), providerDTO.getDeliveryCities(),
-                converterHelper.menuDtoListToMenuList(providerDTO.getCurrentMenus()), providerDTO.getBalance());
+        Provider provider = findProvider(providerDTO.getEmail());
+        provider.setName(providerDTO.getName());
+        provider.setLogo(providerDTO.getLogo());
+        provider.setCity(providerDTO.getCity());
+        provider.setLocation(providerDTO.getLocation());
+        provider.setDescription(providerDTO.getDescription());
+        provider.setWebsite(providerDTO.getWebsite());
+        provider.setPhoneNumber(providerDTO.getPhoneNumber());
+        provider.setOpeningHoursDays(converterHelper.serviceHoursDtoListToServiceHoursList(providerDTO.getOpeningHoursDays()));
+        provider.setDeliveryCities(providerDTO.getDeliveryCities());
+        provider.setBalance(providerDTO.getBalance());
+        providerRepository.save(provider);
+        log.info("Updated provider: {}", providerDTO.getEmail());
     }
 
     public ProviderDTO getProvider(final String email) {
-        Provider provider = providerRepository.findByEmail(email).orElseThrow(ProviderNotFoundException::new);
+        Provider provider = findProvider(email);
         return converterHelper.providerToProviderDTO(provider);
     }
+
+    private Provider findProvider(String email) {
+        return providerRepository.findByEmail(email).orElseThrow(ProviderNotFoundException::new);
+    }
+
+
 }
