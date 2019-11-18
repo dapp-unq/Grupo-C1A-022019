@@ -223,14 +223,12 @@ public class Provider {
     }
 
     public Menu searchMenu(final String menuName) {
-        Optional<Menu> searchMenu = this.currentMenus.stream().filter(menu -> menu.hasName(menuName)).findFirst();
-        if (!searchMenu.isPresent())
-            throw new ElementNotFoundException("No se encontró un menú con el nombre: " + menuName);
-        return searchMenu.get();
+        return currentMenus.stream().filter(menu -> menu.hasName(menuName))
+                .findFirst().orElseThrow(() -> new ElementNotFoundException("No se encontró un menú con el nombre: " + menuName));
     }
 
     public void removeMenuWithName(final String menuName) {
-        this.removeMenu(this.searchMenu(menuName));
+        this.cancelMenu(this.searchMenu(menuName));
     }
 
     public void removeMenu(final Menu aMenu) {
@@ -258,11 +256,11 @@ public class Provider {
     }
 
     public void addOrder(final User user, final Order newOrder) {
-        Optional<CurrentOrder> result = this.orders.stream().filter(order -> order.hasUser(user)).findFirst();
+        Optional<CurrentOrder> result = orders.stream().filter(order -> order.hasUser(user)).findFirst();
         if (result.isPresent())
             result.get().addOrder(newOrder);
         else
-            this.orders.add(new CurrentOrder(user, newOrder));
+            orders.add(new CurrentOrder(user, newOrder));
     }
 
     public Boolean hasName(final String provideName) {

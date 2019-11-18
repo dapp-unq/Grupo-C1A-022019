@@ -26,4 +26,5 @@ public class MenuDTO {
     private OfferDTO offer1;
     private OfferDTO offer2;
     private List<Integer> ranking;
+    private String providerEmail;
 }

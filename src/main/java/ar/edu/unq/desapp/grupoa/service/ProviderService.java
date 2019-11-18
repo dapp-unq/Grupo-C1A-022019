@@ -42,11 +42,18 @@ public class ProviderService {
         provider.setDescription(providerDTO.getDescription());
         provider.setWebsite(providerDTO.getWebsite());
         provider.setPhoneNumber(providerDTO.getPhoneNumber());
-        provider.setOpeningHoursDays(converterHelper.serviceHoursDtoListToServiceHoursList(providerDTO.getOpeningHoursDays()));
-        provider.setDeliveryCities(providerDTO.getDeliveryCities());
+        provider.getOpeningHoursDays().clear();
+        provider.getOpeningHoursDays().addAll(converterHelper.serviceHoursDtoListToServiceHoursList(providerDTO.getOpeningHoursDays()));
+        provider.getDeliveryCities().clear();
+        provider.getDeliveryCities().addAll(providerDTO.getDeliveryCities());
         provider.setBalance(providerDTO.getBalance());
         providerRepository.save(provider);
         log.info("Updated provider: {}", providerDTO.getEmail());
+    }
+
+    public void updateProviderMenus(final Provider provider) {
+        providerRepository.save(provider);
+        log.info("Updated menus for provider: {}", provider.getEmail());
     }
 
     public ProviderDTO getProvider(final String email) {
@@ -54,7 +61,7 @@ public class ProviderService {
         return converterHelper.providerToProviderDTO(provider);
     }
 
-    private Provider findProvider(String email) {
+    public Provider findProvider(final String email) {
         return providerRepository.findByEmail(email).orElseThrow(ProviderNotFoundException::new);
     }
 
