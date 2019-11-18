@@ -70,18 +70,18 @@ public class ConverterHelper {
         return menuDTOList.stream().map(this::menuDtoToMenu).collect(Collectors.toList());
     }
 
-    private Menu menuDtoToMenu(final MenuDTO menuDTO) {
+    public Menu menuDtoToMenu(final MenuDTO menuDTO) {
         return new Menu(menuDTO.getName(), menuDTO.getDescription(), menuDTO.getCategory(), menuDTO.getDeliveryPrice(),
                 effectivePeriodDtoToEffectivePeriod(menuDTO.getEffectivePeriod()), menuDTO.getDeliverySchedules(),
                 menuDTO.getAverageDeliveryTime(), menuDTO.getPrice(), menuDTO.getDailyStock(), offerDtoToOffer(menuDTO.getOffer1()),
                 offerDtoToOffer(menuDTO.getOffer2()));
     }
 
-    private Offer offerDtoToOffer(final OfferDTO offer) {
+    public Offer offerDtoToOffer(final OfferDTO offer) {
         return new Offer(offer.getQuantity(), offer.getPrice());
     }
 
-    private EffectivePeriod effectivePeriodDtoToEffectivePeriod(final EffectivePeriodDTO effectivePeriod) {
+    public EffectivePeriod effectivePeriodDtoToEffectivePeriod(final EffectivePeriodDTO effectivePeriod) {
         return new EffectivePeriod(effectivePeriod.getInitialDate(), effectivePeriod.getEndDate());
     }
 
