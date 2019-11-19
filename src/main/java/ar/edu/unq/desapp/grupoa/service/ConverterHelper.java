@@ -110,7 +110,6 @@ public class ConverterHelper {
 
     private OrderDTO orderToOrderDTO(final Order order) {
         OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setProviderName(order.getProviderName());
         orderDTO.setDeliveryDateAndHour(order.getDeliveryDateAndHour());
         orderDTO.setOrderDateAndHour(order.getOrderDateAndHour());
         orderDTO.setQuantity(order.getQuantity());
@@ -118,6 +117,7 @@ public class ConverterHelper {
         orderDTO.setStatus(order.getStatus());
         orderDTO.setRanking(order.getRanking());
         orderDTO.setValue(order.getValue());
+        orderDTO.setMenu(menuToMenuDTO(order.getMenu()));
         return orderDTO;
     }
 
@@ -125,8 +125,8 @@ public class ConverterHelper {
         return orderDTOList.stream().map(this::orderDtoToOrder).collect(Collectors.toList());
     }
 
-    private Order orderDtoToOrder(OrderDTO orderDTO) {
-        return new Order(menuDtoToMenu(orderDTO.getMenu()), orderDTO.getProviderName(), orderDTO.getDeliveryDateAndHour(),
+    public Order orderDtoToOrder(OrderDTO orderDTO) {
+        return new Order(menuDtoToMenu(orderDTO.getMenu()), orderDTO.getMenu().getProviderEmail(), orderDTO.getDeliveryDateAndHour(),
                 orderDTO.getOrderDateAndHour(), orderDTO.getQuantity(), orderDTO.getTypeDelivery(), orderDTO.getStatus());
     }
 
@@ -146,7 +146,7 @@ public class ConverterHelper {
         return menuList.stream().map(this::menuToMenuDTO).collect(Collectors.toList());
     }
 
-    private MenuDTO menuToMenuDTO(final Menu menu) {
+    public MenuDTO menuToMenuDTO(final Menu menu) {
         MenuDTO menuDTO = new MenuDTO();
         menuDTO.setName(menu.getName());
         menuDTO.setDescription(menu.getDescription());

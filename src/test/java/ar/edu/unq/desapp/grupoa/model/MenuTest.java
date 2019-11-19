@@ -732,22 +732,6 @@ public class MenuTest {
         menu.validationNumberMenuOrdered(101);
     }
 
-    @Test(expected = OrderDateException.class)
-    public void menuWithOrderDayAfter48hsDeliveryDayThrowException() {
-        menu = MenuBuilder.aMenu().build();
-        LocalDateTime orderDay = LocalDateTime.of(2019, 8, 31, 12, 00);
-        LocalDateTime deliveryDay = LocalDateTime.of(2019, 9, 2, 11, 30);
-        menu.validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
-    }
-
-    @Test(expected = OrderDateException.class)
-    public void menuWithOrderDayAfter48hsDeliveryDay2ThrowException() {
-        menu = MenuBuilder.aMenu().build();
-        LocalDateTime orderDay = LocalDateTime.of(2019, 10, 15, 12, 00);
-        LocalDateTime deliveryDay = LocalDateTime.of(2019, 10, 17, 11, 30);
-        menu.validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
-    }
-
     @Test
     public void menuWith150PriceThenValueForQuantity50ThenReturn150() {
         menu = MenuBuilder.aMenu().withDailyStock(200).withPrice(150).withOffer1(new Offer(60, 130)).build();

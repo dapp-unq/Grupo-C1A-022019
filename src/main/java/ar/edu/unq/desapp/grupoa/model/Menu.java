@@ -270,17 +270,6 @@ public class Menu {
                     "La cantidad de pedida supera la cantidad de ventas disponibles del menú.");
     }
 
-    public void validationDateDeliveryMenuOrdered(final LocalDateTime dateHoursOrder,
-                                                  final LocalDateTime dateHoursDelivery) {
-        if (!this.has48HoursBetween(dateHoursOrder, dateHoursDelivery))
-            throw new OrderDateException("El pedido debe hacerse al menos 48hs hábiles antes de la entrega del mismo.");
-    }
-
-    private Boolean has48HoursBetween(final LocalDateTime from, final LocalDateTime to) {
-        LocalDateTime from2DaysAfter = from.plus(2, ChronoUnit.DAYS);
-        return to.isAfter(from2DaysAfter);
-    }
-
     public Integer valueForQuantity(final Integer quantity) {
         Integer price = this.price;
         if (quantity >= this.offer1.getQuantity())

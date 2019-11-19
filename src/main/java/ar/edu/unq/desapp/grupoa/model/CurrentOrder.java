@@ -45,6 +45,7 @@ public class CurrentOrder {
 
     public void addOrder(final Order newOrder) {
         this.orders.add(newOrder);
+        client.addHistoryOrder(newOrder);
     }
 
 }

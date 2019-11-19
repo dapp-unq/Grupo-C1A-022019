@@ -46,6 +46,11 @@ public class UserService {
         log.info("Updated user: {}", userDTO.getEmail());
     }
 
+    public void updateUserOrders(final User user){
+        userRepository.save(user);
+        log.info("Updated orders for user: {}", user.getEmail());
+    }
+
     public void modifyCurrency(final BigDecimal charge, final String email) {
         userRepository.updateCurrency(charge, email);
     }
@@ -55,7 +60,7 @@ public class UserService {
         return converterHelper.userToUserDTO(fetchedUser);
     }
 
-    private User findUser(String email) {
+    public User findUser(String email) {
         return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
     }
 
