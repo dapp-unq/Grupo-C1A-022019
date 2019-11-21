@@ -3,14 +3,14 @@ package ar.edu.unq.desapp.grupoa.service;
 import ar.edu.unq.desapp.grupoa.service.dto.BusinessDayCheckDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+@Service
 public class BusinessDayCheckerService {
 
     @Value("${business.day.checker.api.url}")

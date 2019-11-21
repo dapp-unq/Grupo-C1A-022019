@@ -9,16 +9,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import java.time.LocalDate;
 
 @Getter
 @NonNull
 @NoArgsConstructor
 @Entity
+@SequenceGenerator(name="EffectivePeriodSeq", sequenceName="EFFECTIVEPERIODseq", allocationSize=1)
 public class EffectivePeriod {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EffectivePeriodSeq")
     private Long id;
     private LocalDate initialDate;
     private LocalDate endDate;

@@ -9,11 +9,9 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankingException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -730,22 +728,6 @@ public class MenuTest {
     public void menuWith100DailyStockThenAsFor101MenusOrderedThrowException() {
         menu = MenuBuilder.aMenu().withDailyStock(100).build();
         menu.validationNumberMenuOrdered(101);
-    }
-
-    @Test(expected = OrderDateException.class)
-    public void menuWithOrderDayAfter48hsDeliveryDayThrowException() {
-        menu = MenuBuilder.aMenu().build();
-        LocalDateTime orderDay = LocalDateTime.of(2019, 8, 31, 12, 00);
-        LocalDateTime deliveryDay = LocalDateTime.of(2019, 9, 2, 11, 30);
-        menu.validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
-    }
-
-    @Test(expected = OrderDateException.class)
-    public void menuWithOrderDayAfter48hsDeliveryDay2ThrowException() {
-        menu = MenuBuilder.aMenu().build();
-        LocalDateTime orderDay = LocalDateTime.of(2019, 10, 15, 12, 00);
-        LocalDateTime deliveryDay = LocalDateTime.of(2019, 10, 17, 11, 30);
-        menu.validationDateDeliveryMenuOrdered(orderDay, deliveryDay);
     }
 
     @Test

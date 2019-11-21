@@ -9,7 +9,6 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankingException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -25,19 +24,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import java.time.LocalDateTime;
+import javax.persistence.SequenceGenerator;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NonNull
 @Entity
+@SequenceGenerator(name="MenuSeq", sequenceName="MENUseq", allocationSize=1)
 @NoArgsConstructor
 public class Menu {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MenuSeq")
     private Long id;
     private String name;
     private String description;
@@ -268,17 +267,6 @@ public class Menu {
         if (aQuantity > this.dailyStock)
             throw new IrrationalAmountException(
                     "La cantidad de pedida supera la cantidad de ventas disponibles del menú.");
-    }
-
-    public void validationDateDeliveryMenuOrdered(final LocalDateTime dateHoursOrder,
-                                                  final LocalDateTime dateHoursDelivery) {
-        if (!this.has48HoursBetween(dateHoursOrder, dateHoursDelivery))
-            throw new OrderDateException("El pedido debe hacerse al menos 48hs hábiles antes de la entrega del mismo.");
-    }
-
-    private Boolean has48HoursBetween(final LocalDateTime from, final LocalDateTime to) {
-        LocalDateTime from2DaysAfter = from.plus(2, ChronoUnit.DAYS);
-        return to.isAfter(from2DaysAfter);
     }
 
     public Integer valueForQuantity(final Integer quantity) {

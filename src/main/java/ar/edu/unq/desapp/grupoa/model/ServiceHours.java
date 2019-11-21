@@ -9,15 +9,17 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 @Getter
 @Entity
+@SequenceGenerator(name="ServiceHoursSeq", sequenceName="SEVICEHOURSseq", allocationSize=1)
 @NoArgsConstructor
 public class ServiceHours {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ServiceHoursSeq")
     private Long id;
 	@Enumerated(EnumType.STRING)
     private DayOfWeek day;

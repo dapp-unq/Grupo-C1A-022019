@@ -28,6 +28,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
@@ -42,12 +43,13 @@ import java.util.stream.Collectors;
 @NonNull
 @Entity
 @Table(name = "providers")
+@SequenceGenerator(name="ProviderSeq", sequenceName="PROVIDERseq", allocationSize=1)
 @NoArgsConstructor
 @ToString
 public class Provider {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ProviderSeq")
     private Long id;
     private String name;
     private String logo;

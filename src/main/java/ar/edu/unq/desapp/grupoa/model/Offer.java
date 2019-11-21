@@ -7,14 +7,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 @Getter
 @Entity
+@SequenceGenerator(name="OfferSeq", sequenceName="OFFERseq", allocationSize=1)
 @NoArgsConstructor
 public class Offer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "OfferSeq")
     private Long id;
     private Integer quantity;
     private Integer price;

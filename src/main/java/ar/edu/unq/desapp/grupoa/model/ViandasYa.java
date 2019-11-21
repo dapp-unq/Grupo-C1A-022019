@@ -66,12 +66,10 @@ public class ViandasYa {
         }
     }
 
-    public Order makeOrder(Menu aMenu, String providerName, LocalDateTime deliveryDateAndHour,
+    public Order makeOrder(Menu aMenu, String providerEmail, LocalDateTime deliveryDateAndHour,
                            LocalDateTime orderDateAndHour, Integer aQuantity, DeliveryType typeDelivery) {
         aMenu.validationNumberMenuOrdered(aQuantity);
-        aMenu.validationDateDeliveryMenuOrdered(orderDateAndHour, deliveryDateAndHour); // Falta considerar los días no
-        // hábiles de un servicio público.
-        return new Order(aMenu, providerName, deliveryDateAndHour, orderDateAndHour, aQuantity, typeDelivery,
+        return new Order(aMenu, providerEmail, deliveryDateAndHour, orderDateAndHour, aQuantity, typeDelivery,
                 Status.IN_PROGRESS);
     }
 
@@ -95,7 +93,7 @@ public class ViandasYa {
 
     public void rankIt(User aUser, Order order, Integer ranking) {
         aUser.rankIt(order, ranking);
-        this.cancelMenu(order.getProviderName(), order.getMenu());
+        this.cancelMenu(order.getProviderEmail(), order.getMenu());
     }
 
     public void cancelMenu(String providerName, Menu menu) {
