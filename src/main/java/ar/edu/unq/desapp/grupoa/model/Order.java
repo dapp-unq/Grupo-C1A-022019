@@ -21,7 +21,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 @Getter
 @NonNull
@@ -35,7 +34,8 @@ public class Order {
     private Long id;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn
-    @Setter private Menu menu;
+    @Setter
+    private Menu menu;
     private String providerEmail;
     private LocalDateTime deliveryDateAndHour;
     private LocalDateTime orderDateAndHour;
