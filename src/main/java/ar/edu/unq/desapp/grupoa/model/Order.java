@@ -19,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
@@ -26,11 +27,12 @@ import java.time.LocalDateTime;
 @NonNull
 @Entity
 @Table(name = "orders")
+@SequenceGenerator(name="OrderSeq", sequenceName="ORDERseq", allocationSize=1)
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "OrderSeq")
     private Long id;
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn

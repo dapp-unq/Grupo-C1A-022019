@@ -12,16 +12,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
+@SequenceGenerator(name="CurrentOrderSeq", sequenceName="CURRENTORDERseq", allocationSize=1)
 @NoArgsConstructor
 public class CurrentOrder {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CurrentOrderSeq")
     private Long id;
     @OneToOne
     private User client;

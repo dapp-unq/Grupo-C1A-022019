@@ -19,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
@@ -31,12 +32,13 @@ import java.util.regex.Pattern;
 @NonNull
 @Entity
 @Table(name = "users")
+@SequenceGenerator(name="UserSeq", sequenceName="USERseq", allocationSize=1)
 @NoArgsConstructor
 @ToString
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "UserSeq")
     private Long id;
     private String name;
     private String surname;

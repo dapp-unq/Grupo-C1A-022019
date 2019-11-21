@@ -24,6 +24,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +32,11 @@ import java.util.List;
 @Getter
 @NonNull
 @Entity
+@SequenceGenerator(name="MenuSeq", sequenceName="MENUseq", allocationSize=1)
 @NoArgsConstructor
 public class Menu {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MenuSeq")
     private Long id;
     private String name;
     private String description;
