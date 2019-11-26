@@ -46,7 +46,7 @@ public class UserService {
         log.info("Updated user: {}", userDTO.getEmail());
     }
 
-    public void updateUserOrders(final User user){
+    public void updateUserOrders(final User user) {
         userRepository.save(user);
         log.info("Updated orders for user: {}", user.getEmail());
     }
