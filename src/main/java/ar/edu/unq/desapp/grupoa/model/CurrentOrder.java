@@ -18,7 +18,7 @@ import java.util.List;
 
 @Getter
 @Entity
-@SequenceGenerator(name="CurrentOrderSeq", sequenceName="CURRENTORDERseq", allocationSize=1)
+@SequenceGenerator(name = "CurrentOrderSeq", sequenceName = "CURRENTORDERseq", allocationSize = 1)
 @NoArgsConstructor
 public class CurrentOrder {
 
@@ -38,7 +38,7 @@ public class CurrentOrder {
 
     public CurrentOrder(final User client, final List<Order> orders) {
         this.client = client;
-        this.orders = orders;
+        orders.addAll(orders);
     }
 
     public Boolean hasUser(final User aUser) {

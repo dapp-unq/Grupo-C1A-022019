@@ -11,13 +11,18 @@ import ar.edu.unq.desapp.grupoa.service.dto.PurchaseDTO;
 import ar.edu.unq.desapp.grupoa.service.exceptions.InssuficientStockException;
 import ar.edu.unq.desapp.grupoa.service.exceptions.NotBusinessDayException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@EnableScheduling
 public class PurchaseService {
 
     private ProviderService providerService;
@@ -63,7 +68,7 @@ public class PurchaseService {
                 .flatMap(Collection::stream)
                 .filter(order -> order.getMenu().equals(menu))
                 .mapToInt(Order::getQuantity).sum();
-        if(menu.getDailyStock() < (totalQuantity + quantity))
+        if (menu.getDailyStock() < (totalQuantity + quantity))
             throw new InssuficientStockException("Stock diario superado para este menu. Sólo puede comprar " +
                     (menu.getDailyStock() - totalQuantity));
     }
@@ -81,5 +86,16 @@ public class PurchaseService {
                 throw new NotBusinessDayException("La fecha de delivery es un día feriado");
         } else
             throw new NotBusinessDayException("La fecha de orden es un día feriado");
+    }
+
+    @Scheduled(cron = "0 0 0 ? * * *")
+    private void processOrders() {
+        List<Provider> providersWithOrders = providerService.getAll().stream()
+                .filter(p -> p.getCurrentMenus().isEmpty())
+                .collect(Collectors.toList());
+
+        /*List<List<CurrentOrder>> currentOrders = providersWithOrders.stream()
+                .flatMap(Provider::getOrders)
+                .collect(Collectors.toList())*/
     }
 }
