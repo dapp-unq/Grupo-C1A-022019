@@ -6,19 +6,19 @@
         </encoder>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>viandasYa.log</file>
-        <append>false</append>
+    <appender name="STDOUTRequest" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%msg%n</pattern>
+            <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %logger{36}.%M - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <logger name="ar.edu.unq.desapp.grupoa.LoggingAspect" level="info">
-        <appender-ref ref="FILE" />
+    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="debug">
+        <appender-ref ref="STDOUTRequest" />
     </logger>
 
-    <root level="info">
+    <root level="INFO">
         <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUTRequest" />
     </root>
+
 </configuration>
