@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoa.model.Menu;
 import ar.edu.unq.desapp.grupoa.model.Order;
 import ar.edu.unq.desapp.grupoa.model.Provider;
 import ar.edu.unq.desapp.grupoa.model.User;
+import ar.edu.unq.desapp.grupoa.persistence.PurchaseRepository;
 import ar.edu.unq.desapp.grupoa.service.dto.MenuDTO;
 import ar.edu.unq.desapp.grupoa.service.dto.OrderDTO;
 import ar.edu.unq.desapp.grupoa.service.dto.PurchaseDTO;
@@ -19,6 +20,8 @@ import java.util.Collection;
 
 @Service
 public class PurchaseService {
+
+    private PurchaseRepository purchaseRepository;
 
     private ProviderService providerService;
 

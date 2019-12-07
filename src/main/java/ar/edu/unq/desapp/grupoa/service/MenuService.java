@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoa.service;
 
 import ar.edu.unq.desapp.grupoa.model.Menu;
 import ar.edu.unq.desapp.grupoa.model.Provider;
+import ar.edu.unq.desapp.grupoa.persistence.MenuRepository;
 import ar.edu.unq.desapp.grupoa.service.dto.MenuDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,16 +10,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class MenuService {
 
-    //private MenuRepository menuRepository;
+    private MenuRepository menuRepository;
 
     private ProviderService providerService;
 
     private ConverterHelper converterHelper;
 
     @Autowired
-    public MenuService(/*final MenuRepository menuRepository, */final ProviderService providerService,
-                                                                final ConverterHelper converterHelper) {
-        //this.menuRepository = menuRepository;
+    public MenuService(final MenuRepository menuRepository, final ProviderService providerService,
+                       final ConverterHelper converterHelper) {
+        this.menuRepository = menuRepository;
         this.providerService = providerService;
         this.converterHelper = converterHelper;
     }
