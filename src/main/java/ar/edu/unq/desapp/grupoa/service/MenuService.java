@@ -18,7 +18,7 @@ public class MenuService {
 
     @Autowired
     public MenuService(final MenuRepository menuRepository, final ProviderService providerService,
-                                                                final ConverterHelper converterHelper) {
+                       final ConverterHelper converterHelper) {
         this.menuRepository = menuRepository;
         this.providerService = providerService;
         this.converterHelper = converterHelper;
