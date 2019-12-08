@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class Config implements WebMvcConfigurer {
+public class Config/* implements WebMvcConfigurer*/ {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
@@ -24,8 +24,8 @@ public class Config implements WebMvcConfigurer {
         return loggingFilter;
     }
 
-    @Override
+/*    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/rest/**");
-    }
+    }*/
 }
