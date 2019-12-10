@@ -58,6 +58,11 @@ public class ProviderService {
         log.info("Updated menus for provider: {}", provider.getEmail());
     }
 
+    public void updateProviderOrders(final Provider provider) {
+        providerRepository.save(provider);
+        log.info("Updated orders for provider: {}", provider.getEmail());
+    }
+
     public ProviderDTO getProvider(final String email) {
         Provider provider = findProvider(email);
         return converterHelper.providerToProviderDTO(provider);

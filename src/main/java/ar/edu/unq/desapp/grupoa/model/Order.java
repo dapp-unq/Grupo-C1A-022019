@@ -45,7 +45,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private DeliveryType typeDelivery;
     @Enumerated(EnumType.STRING)
-    private Status status;
+    @Setter private Status status;
     private Integer ranking;
     private Integer value;
 

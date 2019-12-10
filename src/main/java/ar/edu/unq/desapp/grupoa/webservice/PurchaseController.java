@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoa.service.dto.PurchaseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,5 +27,11 @@ public class PurchaseController {
     public ResponseEntity createPurchase(final @RequestBody PurchaseDTO purchaseDTO) {
         purchaseService.createPurchase(purchaseDTO);
         return ResponseEntity.ok("Purchase created successfully");
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity triggerProcessPurchases(){
+        purchaseService.processOrders();
+        return ResponseEntity.ok("Orders processed");
     }
 }
