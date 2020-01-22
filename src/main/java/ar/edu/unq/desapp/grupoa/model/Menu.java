@@ -13,37 +13,36 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Getter
 @NonNull
 @Entity
-@SequenceGenerator(name="MenuSeq", sequenceName="MENUseq", allocationSize=1)
 @NoArgsConstructor
 public class Menu {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MenuSeq")
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String name;
     private String description;
     @ElementCollection(targetClass = Category.class)
     private List<Category> category;
     private Integer deliveryPrice;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn
     private EffectivePeriod effectivePeriod;
     @ElementCollection
@@ -53,10 +52,10 @@ public class Menu {
     private LocalTime averageDeliveryTime;
     private Integer price;
     private Integer dailyStock;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn
     private Offer offer1;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn
     private Offer offer2;
     @ElementCollection

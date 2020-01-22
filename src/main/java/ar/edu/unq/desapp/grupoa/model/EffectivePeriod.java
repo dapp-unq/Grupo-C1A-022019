@@ -7,20 +7,19 @@ import lombok.NonNull;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import java.time.LocalDate;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Getter
 @NonNull
 @NoArgsConstructor
 @Entity
-@SequenceGenerator(name="EffectivePeriodSeq", sequenceName="EFFECTIVEPERIODseq", allocationSize=1)
 public class EffectivePeriod {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EffectivePeriodSeq")
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private LocalDate initialDate;
     private LocalDate endDate;

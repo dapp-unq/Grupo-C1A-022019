@@ -5,18 +5,17 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Entity
-@SequenceGenerator(name="OfferSeq", sequenceName="OFFERseq", allocationSize=1)
 @NoArgsConstructor
 public class Offer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "OfferSeq")
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private Integer quantity;
     private Integer price;
