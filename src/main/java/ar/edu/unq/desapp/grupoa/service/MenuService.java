@@ -2,10 +2,14 @@ package ar.edu.unq.desapp.grupoa.service;
 
 import ar.edu.unq.desapp.grupoa.model.Menu;
 import ar.edu.unq.desapp.grupoa.model.Provider;
+import ar.edu.unq.desapp.grupoa.model.enums.Category;
 import ar.edu.unq.desapp.grupoa.persistence.MenuRepository;
 import ar.edu.unq.desapp.grupoa.service.dto.MenuDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
@@ -59,4 +63,22 @@ public class MenuService {
         menuToUpdate.setOffer2(converterHelper.offerDtoToOffer(menuDTO.getOffer2()));
         providerService.updateProviderMenus(provider);
     }
+
+    public List<Menu> getBetweenMinPriceAndMaxPrice(final Integer minPrice, final Integer maxPrice) {
+        return menuRepository.findByPriceIsGreaterThanEqualAndPriceIsLessThanEqual(minPrice, maxPrice);
+    }
+
+    public List<Menu> getBetweenMinRankAndMaxRank(final Integer minRank, final Integer maxRank) {
+        List<Menu> menus = menuRepository.findAll();
+        return menus.stream().filter(menu -> {
+            Integer averageRank = menu.averageRating();
+            return averageRank >= minRank && averageRank <= maxRank;
+        }).collect(Collectors.toList());
+    }
+
+    public List<Menu> getByCategory(final Category category){
+        return menuRepository.findByCategoryEquals(category);
+    }
+
+
 }
