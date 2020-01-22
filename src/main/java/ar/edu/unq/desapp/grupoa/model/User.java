@@ -15,11 +15,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
@@ -28,17 +26,18 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Getter
 @NonNull
 @Entity
 @Table(name = "users")
-@SequenceGenerator(name="UserSeq", sequenceName="USERseq", allocationSize=1)
 @NoArgsConstructor
 @ToString
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "UserSeq")
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String name;
     private String surname;

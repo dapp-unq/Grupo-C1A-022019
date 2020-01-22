@@ -1,0 +1,1 @@
+INSERT INTO users (id, balance, email, location, name, phone_number, surname) VALUES (1, 0.00, 'beniteznahueloscar@gmail.com', 'Quilmes Oeste', 'Nahuel', '+42112555005', 'Benitez');
