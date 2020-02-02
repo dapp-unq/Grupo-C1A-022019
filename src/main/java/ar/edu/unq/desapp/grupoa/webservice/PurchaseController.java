@@ -23,7 +23,7 @@ public class PurchaseController {
     }
 
     @PostMapping
-    public ResponseEntity createPurchase(final @RequestBody PurchaseDTO purchaseDTO) {
+    public ResponseEntity<String> createPurchase(final @RequestBody PurchaseDTO purchaseDTO) {
         purchaseService.createPurchase(purchaseDTO);
         return ResponseEntity.ok("Purchase created successfully");
     }

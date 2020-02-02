@@ -44,8 +44,13 @@ public class ConverterHelper {
         providerDTO.setPhoneNumber(provider.getPhoneNumber());
         providerDTO.setOpeningHoursDays(serviceHoursListToServiceHoursDTOList(provider.getOpeningHoursDays()));
         providerDTO.setDeliveryCities(provider.getDeliveryCities());
-        providerDTO.setCurrentMenus(menuListToMenuDTOList(provider.getCurrentMenus()));
-        providerDTO.setOrders(currentOrderListToCurrentOrderDTOList(provider.getOrders()));
+        List<MenuDTO> menuDTOList = menuListToMenuDTOList(provider.getCurrentMenus());
+        List<CurrentOrderDTO> currentOrderDTOList = currentOrderListToCurrentOrderDTOList(provider.getOrders());
+        String providerMail = provider.getEmail();
+        menuDTOList.forEach(dto -> dto.setProviderEmail(providerMail));
+        currentOrderDTOList.forEach(dto -> dto.setProviderEmailToOrders(providerMail));
+        providerDTO.setCurrentMenus(menuDTOList);
+        providerDTO.setOrders(currentOrderDTOList);
         providerDTO.setBalance(provider.getBalance());
         providerDTO.setMenusRemoved(provider.getMenusRemoved());
         return providerDTO;

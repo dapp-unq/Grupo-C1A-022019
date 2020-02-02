@@ -27,19 +27,19 @@ public class MenuController {
     }
 
     @PostMapping
-    public ResponseEntity createMenu(final @RequestBody MenuDTO menuDTO) {
+    public ResponseEntity<String> createMenu(final @RequestBody MenuDTO menuDTO) {
         menuService.createMenu(menuDTO);
         return new ResponseEntity<>("Menu created successfully", HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{providerEmail}/{menuName}")
-    public ResponseEntity deleteMenu(@PathVariable final String providerEmail, final @PathVariable String menuName) {
+    public ResponseEntity<String> deleteMenu(@PathVariable final String providerEmail, final @PathVariable String menuName) {
         menuService.deleteMenu(providerEmail, menuName);
         return new ResponseEntity<>("Menu deleted successfully", HttpStatus.valueOf(204));
     }
 
     @PutMapping
-    public ResponseEntity modifyMenu(final @RequestBody MenuDTO menuDTO) {
+    public ResponseEntity<String> modifyMenu(final @RequestBody MenuDTO menuDTO) {
         menuService.updateMenu(menuDTO);
         return new ResponseEntity<>("Menu updated successfully", HttpStatus.valueOf(204));
     }
