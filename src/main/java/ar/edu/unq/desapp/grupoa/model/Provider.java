@@ -13,17 +13,14 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.RepeatedNameException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -37,6 +34,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Getter
 @NonNull
 @Entity
@@ -46,11 +48,11 @@ import java.util.stream.Collectors;
 public class Provider {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String name;
     private String logo;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private City city;
     private String location;
     private String description;
@@ -58,18 +60,23 @@ public class Provider {
     @Column(unique = true)
     private String email;
     private String phoneNumber;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = LAZY, cascade = ALL)
     @JoinColumn
     private List<ServiceHours> openingHoursDays;
     @ElementCollection(targetClass = City.class)
+    @Setter
     private List<City> deliveryCities;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = LAZY, cascade = ALL)
     @JoinColumn
+    @Setter
     private List<Menu> currentMenus;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = LAZY, cascade = ALL)
     @JoinColumn
+    @Setter
     private List<CurrentOrder> orders;
+    @Setter
     private BigDecimal balance;
+    @Setter
     private Integer menusRemoved;
 
     @Transient
@@ -217,14 +224,12 @@ public class Provider {
     }
 
     public Menu searchMenu(final String menuName) {
-        Optional<Menu> searchMenu = this.currentMenus.stream().filter(menu -> menu.hasName(menuName)).findFirst();
-        if (!searchMenu.isPresent())
-            throw new ElementNotFoundException("No se encontró un menú con el nombre: " + menuName);
-        return searchMenu.get();
+        return currentMenus.stream().filter(menu -> menu.hasName(menuName))
+                .findFirst().orElseThrow(() -> new ElementNotFoundException("No se encontró un menú con el nombre: " + menuName));
     }
 
     public void removeMenuWithName(final String menuName) {
-        this.removeMenu(this.searchMenu(menuName));
+        this.cancelMenu(this.searchMenu(menuName));
     }
 
     public void removeMenu(final Menu aMenu) {
@@ -252,11 +257,11 @@ public class Provider {
     }
 
     public void addOrder(final User user, final Order newOrder) {
-        Optional<CurrentOrder> result = this.orders.stream().filter(order -> order.hasUser(user)).findFirst();
+        Optional<CurrentOrder> result = orders.stream().filter(order -> order.hasUser(user)).findFirst();
         if (result.isPresent())
             result.get().addOrder(newOrder);
         else
-            this.orders.add(new CurrentOrder(user, newOrder));
+            orders.add(new CurrentOrder(user, newOrder));
     }
 
     public Boolean hasName(final String provideName) {

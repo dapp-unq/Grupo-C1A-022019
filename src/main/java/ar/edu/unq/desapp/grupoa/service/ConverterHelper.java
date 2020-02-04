@@ -29,7 +29,7 @@ public class ConverterHelper {
     }
 
     public UserDTO userToUserDTO(final User user) {
-        return new UserDTO(user.getName(), user.getSurname(), user.getEmail(), user.getPhoneNumber(), user.getLocation(), user.getOrderHistory(), user.getBalance());
+        return new UserDTO(user.getName(), user.getSurname(), user.getEmail(), user.getPhoneNumber(), user.getLocation(), orderListToOrderDTOList(user.getOrderHistory()), user.getBalance());
     }
 
     public ProviderDTO providerToProviderDTO(final Provider provider) {
@@ -44,8 +44,13 @@ public class ConverterHelper {
         providerDTO.setPhoneNumber(provider.getPhoneNumber());
         providerDTO.setOpeningHoursDays(serviceHoursListToServiceHoursDTOList(provider.getOpeningHoursDays()));
         providerDTO.setDeliveryCities(provider.getDeliveryCities());
-        providerDTO.setCurrentMenus(menuListToMenuDTOList(provider.getCurrentMenus()));
-        providerDTO.setOrders(currentOrderListToCurrentOrderDTOList(provider.getOrders()));
+        List<MenuDTO> menuDTOList = menuListToMenuDTOList(provider.getCurrentMenus());
+        List<CurrentOrderDTO> currentOrderDTOList = currentOrderListToCurrentOrderDTOList(provider.getOrders());
+        String providerMail = provider.getEmail();
+        menuDTOList.forEach(dto -> dto.setProviderEmail(providerMail));
+        currentOrderDTOList.forEach(dto -> dto.setProviderEmailToOrders(providerMail));
+        providerDTO.setCurrentMenus(menuDTOList);
+        providerDTO.setOrders(currentOrderDTOList);
         providerDTO.setBalance(provider.getBalance());
         providerDTO.setMenusRemoved(provider.getMenusRemoved());
         return providerDTO;
@@ -70,18 +75,18 @@ public class ConverterHelper {
         return menuDTOList.stream().map(this::menuDtoToMenu).collect(Collectors.toList());
     }
 
-    private Menu menuDtoToMenu(final MenuDTO menuDTO) {
+    public Menu menuDtoToMenu(final MenuDTO menuDTO) {
         return new Menu(menuDTO.getName(), menuDTO.getDescription(), menuDTO.getCategory(), menuDTO.getDeliveryPrice(),
                 effectivePeriodDtoToEffectivePeriod(menuDTO.getEffectivePeriod()), menuDTO.getDeliverySchedules(),
                 menuDTO.getAverageDeliveryTime(), menuDTO.getPrice(), menuDTO.getDailyStock(), offerDtoToOffer(menuDTO.getOffer1()),
                 offerDtoToOffer(menuDTO.getOffer2()));
     }
 
-    private Offer offerDtoToOffer(final OfferDTO offer) {
+    public Offer offerDtoToOffer(final OfferDTO offer) {
         return new Offer(offer.getQuantity(), offer.getPrice());
     }
 
-    private EffectivePeriod effectivePeriodDtoToEffectivePeriod(final EffectivePeriodDTO effectivePeriod) {
+    public EffectivePeriod effectivePeriodDtoToEffectivePeriod(final EffectivePeriodDTO effectivePeriod) {
         return new EffectivePeriod(effectivePeriod.getInitialDate(), effectivePeriod.getEndDate());
     }
 
@@ -110,7 +115,6 @@ public class ConverterHelper {
 
     private OrderDTO orderToOrderDTO(final Order order) {
         OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setProviderName(order.getProviderName());
         orderDTO.setDeliveryDateAndHour(order.getDeliveryDateAndHour());
         orderDTO.setOrderDateAndHour(order.getOrderDateAndHour());
         orderDTO.setQuantity(order.getQuantity());
@@ -118,15 +122,16 @@ public class ConverterHelper {
         orderDTO.setStatus(order.getStatus());
         orderDTO.setRanking(order.getRanking());
         orderDTO.setValue(order.getValue());
+        orderDTO.setMenu(menuToMenuDTO(order.getMenu()));
         return orderDTO;
     }
 
-    private List<Order> orderDtoListToOrderList(final List<OrderDTO> orderDTOList) {
+    public List<Order> orderDtoListToOrderList(final List<OrderDTO> orderDTOList) {
         return orderDTOList.stream().map(this::orderDtoToOrder).collect(Collectors.toList());
     }
 
-    private Order orderDtoToOrder(OrderDTO orderDTO) {
-        return new Order(menuDtoToMenu(orderDTO.getMenu()), orderDTO.getProviderName(), orderDTO.getDeliveryDateAndHour(),
+    public Order orderDtoToOrder(OrderDTO orderDTO) {
+        return new Order(menuDtoToMenu(orderDTO.getMenu()), orderDTO.getMenu().getProviderEmail(), orderDTO.getDeliveryDateAndHour(),
                 orderDTO.getOrderDateAndHour(), orderDTO.getQuantity(), orderDTO.getTypeDelivery(), orderDTO.getStatus());
     }
 
@@ -146,7 +151,7 @@ public class ConverterHelper {
         return menuList.stream().map(this::menuToMenuDTO).collect(Collectors.toList());
     }
 
-    private MenuDTO menuToMenuDTO(final Menu menu) {
+    public MenuDTO menuToMenuDTO(final Menu menu) {
         MenuDTO menuDTO = new MenuDTO();
         menuDTO.setName(menu.getName());
         menuDTO.setDescription(menu.getDescription());

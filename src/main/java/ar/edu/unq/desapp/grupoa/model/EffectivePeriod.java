@@ -7,9 +7,10 @@ import lombok.NonNull;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Getter
 @NonNull
@@ -18,7 +19,7 @@ import java.time.LocalDate;
 public class EffectivePeriod {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private LocalDate initialDate;
     private LocalDate endDate;

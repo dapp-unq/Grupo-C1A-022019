@@ -20,14 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void updateCurrency(final @Param("currency") BigDecimal currency, final @Param("email") String email);
 
     @Transactional
-    @Modifying
-    @Query("update User u set u.balance = :balance, u.name = :name, u.surname = :surname, u.phoneNumber = :phoneNumber, " +
-            "u.location = :location where u.email = :email")
-    void updateUser(final @Param("email") String email, final @Param("name") String name, final @Param("surname") String surname,
-                    final @Param("phoneNumber") String phoneNumber, final @Param("location") String location,
-                    final @Param("balance") BigDecimal balance);
-
-    @Transactional
     void deleteByEmail(final String email);
 
     Optional<User> findByEmail(final String email);

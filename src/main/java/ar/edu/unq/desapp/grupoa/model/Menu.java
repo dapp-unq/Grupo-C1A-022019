@@ -9,27 +9,25 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankingException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
-import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Getter
 @NonNull
@@ -37,14 +35,14 @@ import java.util.List;
 @NoArgsConstructor
 public class Menu {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String name;
     private String description;
     @ElementCollection(targetClass = Category.class)
     private List<Category> category;
     private Integer deliveryPrice;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn
     private EffectivePeriod effectivePeriod;
     @ElementCollection
@@ -54,10 +52,10 @@ public class Menu {
     private LocalTime averageDeliveryTime;
     private Integer price;
     private Integer dailyStock;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn
     private Offer offer1;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn
     private Offer offer2;
     @ElementCollection
@@ -268,17 +266,6 @@ public class Menu {
         if (aQuantity > this.dailyStock)
             throw new IrrationalAmountException(
                     "La cantidad de pedida supera la cantidad de ventas disponibles del menú.");
-    }
-
-    public void validationDateDeliveryMenuOrdered(final LocalDateTime dateHoursOrder,
-                                                  final LocalDateTime dateHoursDelivery) {
-        if (!this.has48HoursBetween(dateHoursOrder, dateHoursDelivery))
-            throw new OrderDateException("El pedido debe hacerse al menos 48hs hábiles antes de la entrega del mismo.");
-    }
-
-    private Boolean has48HoursBetween(final LocalDateTime from, final LocalDateTime to) {
-        LocalDateTime from2DaysAfter = from.plus(2, ChronoUnit.DAYS);
-        return to.isAfter(from2DaysAfter);
     }
 
     public Integer valueForQuantity(final Integer quantity) {
