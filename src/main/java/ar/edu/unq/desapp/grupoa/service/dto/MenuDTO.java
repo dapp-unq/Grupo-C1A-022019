@@ -14,10 +14,10 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class MenuDTO {
     private String name;
     private String description;
+    private String image;
     private List<Category> category;
     private Integer deliveryPrice;
     private EffectivePeriodDTO effectivePeriod;

@@ -76,7 +76,7 @@ public class ConverterHelper {
     }
 
     public Menu menuDtoToMenu(final MenuDTO menuDTO) {
-        return new Menu(menuDTO.getName(), menuDTO.getDescription(), menuDTO.getCategory(), menuDTO.getDeliveryPrice(),
+        return new Menu(menuDTO.getName(), menuDTO.getDescription(), menuDTO.getImage(),menuDTO.getCategory(), menuDTO.getDeliveryPrice(),
                 effectivePeriodDtoToEffectivePeriod(menuDTO.getEffectivePeriod()), menuDTO.getDeliverySchedules(),
                 menuDTO.getAverageDeliveryTime(), menuDTO.getPrice(), menuDTO.getDailyStock(), offerDtoToOffer(menuDTO.getOffer1()),
                 offerDtoToOffer(menuDTO.getOffer2()));
@@ -155,6 +155,7 @@ public class ConverterHelper {
         MenuDTO menuDTO = new MenuDTO();
         menuDTO.setName(menu.getName());
         menuDTO.setDescription(menu.getDescription());
+        menuDTO.setImage(menu.getImage());
         menuDTO.setCategory(menu.getCategory());
         menuDTO.setDeliveryPrice(menu.getDeliveryPrice());
         menuDTO.setEffectivePeriod(effectivePeriodToEffectivePeriodDTO(menu.getEffectivePeriod()));

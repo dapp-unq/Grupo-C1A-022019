@@ -8,11 +8,10 @@
 
 ## HOW TO RUN CONNECTING TO MARIADB
 
-1. Build the application with mariadb profile `mvn clean install -Pmariadb`
+1.  Build the application with mariadb profile `mvn clean install -Pmariadb`
 
-2. Run the application giving the following JVM arguments: `-Dspring.profiles.active=mariadb`
+2.  Run the application giving the following JVM arguments: `-Dspring.profiles.active=mariadb`
 
 The application also can be started via console connecting to MariaDB database with the following command:
 
-`mvn spring-boot:run -Dspring.profiles.active=mariadb` 
-
+`mvn spring-boot:run -Dspring.profiles.active=mariadb`
