@@ -12,6 +12,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -39,6 +40,8 @@ public class Menu {
     private Long id;
     private String name;
     private String description;
+    @Setter
+    private String image;
     @ElementCollection(targetClass = Category.class)
     private List<Category> category;
     private Integer deliveryPrice;
@@ -63,12 +66,13 @@ public class Menu {
     @Column(name = "menu_ranking")
     private List<Integer> ranking;
 
-    public Menu(final String name, final String description, final List<Category> category, final Integer deliveryPrice,
+    public Menu(final String name, final String description, final String image, final List<Category> category, final Integer deliveryPrice,
                 final @NonNull EffectivePeriod effectivePeriod, final List<LocalTime> deliverySchedules,
                 final @NonNull LocalTime averageDeliveryTime, final Integer price, final Integer dailyStock, final Offer offer1,
                 final Offer offer2) {
         this.name = validateName(name);
         this.description = validateDescription(description);
+        this.image = image;
         this.category = validateNotEmptyList(category, "categorías");
         this.deliveryPrice = validateDeliveryPrice(deliveryPrice);
         this.effectivePeriod = effectivePeriod;
