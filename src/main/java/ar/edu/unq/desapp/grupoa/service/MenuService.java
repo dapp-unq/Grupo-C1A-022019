@@ -50,6 +50,7 @@ public class MenuService {
         Menu menuToUpdate = provider.searchMenu(menuDTO.getName());
         menuToUpdate.setName(menuDTO.getName());
         menuToUpdate.setDescription(menuDTO.getDescription());
+        menuToUpdate.setImage(menuDTO.getImage());
         menuToUpdate.getCategory().clear();
         menuToUpdate.getCategory().addAll(menuDTO.getCategory());
         menuToUpdate.setDeliveryPrice(menuDTO.getDeliveryPrice());

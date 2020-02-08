@@ -14,4 +14,8 @@ import java.util.List;
 public class CurrentOrderDTO {
     private UserDTO user;
     private List<OrderDTO> orders;
+
+    public void setProviderEmailToOrders(String email){
+        orders.forEach(orderDto -> orderDto.getMenu().setProviderEmail(email));
+    }
 }
