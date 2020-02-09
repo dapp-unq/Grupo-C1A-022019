@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.grupoa.service.dto;
 
-import ar.edu.unq.desapp.grupoa.model.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
