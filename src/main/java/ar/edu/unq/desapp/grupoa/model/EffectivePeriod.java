@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidEffectivePeriodException;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -16,6 +17,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @NonNull
 @NoArgsConstructor
 @Entity
+@JsonIgnoreProperties("hibernateLazyInitializer")
 public class EffectivePeriod {
 
     @Id
