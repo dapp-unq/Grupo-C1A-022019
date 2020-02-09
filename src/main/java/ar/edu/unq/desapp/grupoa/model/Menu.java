@@ -9,6 +9,7 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankingException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
