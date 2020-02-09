@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -45,6 +46,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "providers")
 @NoArgsConstructor
 @ToString
+@Slf4j
 public class Provider {
 
     @Id
@@ -105,6 +107,7 @@ public class Provider {
 
     private List<City> calculateDeliveryCities(final Double km, final String location) {
         List<City> cities = new ArrayList<City>();
+        log.debug("km:{}, location:{}", km, location);
         // TODO: FALTA COMUNICARSE EN GMAP PARA VER TODAS LAS LOCALIDADES DONDE HACE
         // ENTREGAS DESDE LA CIUDAD DEL LOCAL.
         cities.add(City.QUILMES);
