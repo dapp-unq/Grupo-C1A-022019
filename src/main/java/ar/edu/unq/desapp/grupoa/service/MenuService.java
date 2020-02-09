@@ -6,6 +6,8 @@ import ar.edu.unq.desapp.grupoa.model.enums.Category;
 import ar.edu.unq.desapp.grupoa.persistence.MenuRepository;
 import ar.edu.unq.desapp.grupoa.service.dto.MenuDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -65,8 +67,8 @@ public class MenuService {
         providerService.updateProviderMenus(provider);
     }
 
-    public List<Menu> getBetweenMinPriceAndMaxPrice(final Integer minPrice, final Integer maxPrice) {
-        return menuRepository.findByPriceIsGreaterThanEqualAndPriceIsLessThanEqual(minPrice, maxPrice);
+    public Page<Menu> getBetweenMinPriceAndMaxPrice(final Integer minPrice, final Integer maxPrice, final int page, final int itemsPerPage) {
+        return menuRepository.findAllByPriceIsGreaterThanEqualAndPriceIsLessThanEqual(minPrice, maxPrice, PageRequest.of(page, itemsPerPage));
     }
 
     public List<Menu> getBetweenMinRankAndMaxRank(final Integer minRank, final Integer maxRank) {
@@ -77,8 +79,8 @@ public class MenuService {
         }).collect(Collectors.toList());
     }
 
-    public List<Menu> getByCategory(final Category category){
-        return menuRepository.findByCategoryEquals(category);
+    public Page<Menu> getByCategory(final Category category, int page, int itemsPerPage) {
+        return menuRepository.findAllByCategoryEquals(category, PageRequest.of(page, itemsPerPage));
     }
 
 

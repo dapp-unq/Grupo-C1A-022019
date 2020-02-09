@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoa.model.enums.Category;
 import ar.edu.unq.desapp.grupoa.service.MenuService;
 import ar.edu.unq.desapp.grupoa.service.dto.MenuDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -50,21 +51,21 @@ public class MenuController {
         return new ResponseEntity<>("Menu updated successfully", HttpStatus.valueOf(204));
     }
 
-    @GetMapping
-    public ResponseEntity<List<Menu>> getBetweenMinPriceAndMaxPrice(final @RequestParam Integer minPrice, final @RequestParam Integer maxPrice) {
-        List<Menu> menus = menuService.getBetweenMinPriceAndMaxPrice(minPrice, maxPrice);
+    @GetMapping("/price")
+    public ResponseEntity<Page<Menu>> getBetweenMinPriceAndMaxPrice(@RequestParam final int minPrice, @RequestParam final int maxPrice, @RequestParam final int page, @RequestParam final int itemsPerPage) {
+        Page<Menu> menus = menuService.getBetweenMinPriceAndMaxPrice(minPrice, maxPrice, page, itemsPerPage);
         return ResponseEntity.ok(menus);
     }
 
-    @GetMapping
+    @GetMapping("/rank")
     public ResponseEntity<List<Menu>> getBetweenMinRankAndMaxRank(final @RequestParam Integer minRank, final @RequestParam Integer maxRank) {
         List<Menu> menus = menuService.getBetweenMinRankAndMaxRank(minRank, maxRank);
         return ResponseEntity.ok(menus);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Menu>> getBetweenMinRankAndMaxRank(final @RequestParam Category category) {
-        List<Menu> menus = menuService.getByCategory(category);
+    @GetMapping("/category")
+    public ResponseEntity<Page<Menu>> getByCategory(final @RequestParam Category category, final @RequestParam int page, final @RequestParam int itemsPerPage) {
+        Page<Menu> menus = menuService.getByCategory(category, page, itemsPerPage);
         return ResponseEntity.ok(menus);
     }
 
