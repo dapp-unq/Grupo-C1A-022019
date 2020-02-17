@@ -115,6 +115,7 @@ public class ConverterHelper {
 
     private OrderDTO orderToOrderDTO(final Order order) {
         OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setProviderEmail(order.getProviderEmail());
         orderDTO.setDeliveryDateAndHour(order.getDeliveryDateAndHour());
         orderDTO.setOrderDateAndHour(order.getOrderDateAndHour());
         orderDTO.setQuantity(order.getQuantity());
