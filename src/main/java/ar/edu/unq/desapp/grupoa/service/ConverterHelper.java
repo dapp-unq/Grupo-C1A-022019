@@ -44,8 +44,13 @@ public class ConverterHelper {
         providerDTO.setPhoneNumber(provider.getPhoneNumber());
         providerDTO.setOpeningHoursDays(serviceHoursListToServiceHoursDTOList(provider.getOpeningHoursDays()));
         providerDTO.setDeliveryCities(provider.getDeliveryCities());
-        providerDTO.setCurrentMenus(menuListToMenuDTOList(provider.getCurrentMenus()));
-        providerDTO.setOrders(currentOrderListToCurrentOrderDTOList(provider.getOrders()));
+        List<MenuDTO> menuDTOList = menuListToMenuDTOList(provider.getCurrentMenus());
+        List<CurrentOrderDTO> currentOrderDTOList = currentOrderListToCurrentOrderDTOList(provider.getOrders());
+        String providerMail = provider.getEmail();
+        menuDTOList.forEach(dto -> dto.setProviderEmail(providerMail));
+        currentOrderDTOList.forEach(dto -> dto.setProviderEmailToOrders(providerMail));
+        providerDTO.setCurrentMenus(menuDTOList);
+        providerDTO.setOrders(currentOrderDTOList);
         providerDTO.setBalance(provider.getBalance());
         providerDTO.setMenusRemoved(provider.getMenusRemoved());
         return providerDTO;
@@ -71,7 +76,7 @@ public class ConverterHelper {
     }
 
     public Menu menuDtoToMenu(final MenuDTO menuDTO) {
-        return new Menu(menuDTO.getName(), menuDTO.getDescription(), menuDTO.getCategory(), menuDTO.getDeliveryPrice(),
+        return new Menu(menuDTO.getName(), menuDTO.getDescription(), menuDTO.getImage(),menuDTO.getCategory(), menuDTO.getDeliveryPrice(),
                 effectivePeriodDtoToEffectivePeriod(menuDTO.getEffectivePeriod()), menuDTO.getDeliverySchedules(),
                 menuDTO.getAverageDeliveryTime(), menuDTO.getPrice(), menuDTO.getDailyStock(), offerDtoToOffer(menuDTO.getOffer1()),
                 offerDtoToOffer(menuDTO.getOffer2()));
@@ -127,7 +132,7 @@ public class ConverterHelper {
 
     public Order orderDtoToOrder(OrderDTO orderDTO) {
         return new Order(menuDtoToMenu(orderDTO.getMenu()), orderDTO.getMenu().getProviderEmail(), orderDTO.getDeliveryDateAndHour(),
-                orderDTO.getOrderDateAndHour(), orderDTO.getQuantity(), orderDTO.getTypeDelivery(), orderDTO.getStatus());
+                orderDTO.getOrderDateAndHour(), orderDTO.getQuantity(), orderDTO.getTypeDelivery());
     }
 
     private List<ServiceHoursDTO> serviceHoursListToServiceHoursDTOList(final List<ServiceHours> serviceHours) {
@@ -150,6 +155,7 @@ public class ConverterHelper {
         MenuDTO menuDTO = new MenuDTO();
         menuDTO.setName(menu.getName());
         menuDTO.setDescription(menu.getDescription());
+        menuDTO.setImage(menu.getImage());
         menuDTO.setCategory(menu.getCategory());
         menuDTO.setDeliveryPrice(menu.getDeliveryPrice());
         menuDTO.setEffectivePeriod(effectivePeriodToEffectivePeriodDTO(menu.getEffectivePeriod()));

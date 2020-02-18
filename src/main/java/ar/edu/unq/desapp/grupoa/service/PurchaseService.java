@@ -24,8 +24,14 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ar.edu.unq.desapp.grupoa.model.enums.Status.COMPLETED;
+import static ar.edu.unq.desapp.grupoa.model.enums.Status.CREATED;
+import static ar.edu.unq.desapp.grupoa.model.enums.Status.IN_PROGRESS;
+import static java.math.BigDecimal.valueOf;
 
 @Service
 @EnableScheduling
@@ -72,8 +78,10 @@ public class PurchaseService {
 
         provider.addOrder(user, newOrder);
 
-        providerService.updateProviderMenus(provider);
-        userService.updateUserOrders(user);
+        purchaseRepository.save(newOrder);
+
+        /*providerService.updateProviderMenus(provider);
+        userService.updateUserOrders(user)*/;
     }
 
     private void validateStockOfMenu(Menu menu, Provider provider, Integer quantity) {
@@ -104,63 +112,85 @@ public class PurchaseService {
 
     @Scheduled(cron = "0 0 0 ? * * ")
     public void processOrders() throws InexistentCurrentOrderException {
-        List<Order> ordersInProgress = purchaseRepository.findByStatus(Status.IN_PROGRESS);
+        processCreatedForToday();
+        processInProgressOfYesterday();
+    }
 
-        List<Order> ordersFromToday = getTodayOrders(ordersInProgress);
+    private void processInProgressOfYesterday() {
+        List<Order> ordersInProgress = getOrdersByStatus(IN_PROGRESS);
+        List<Order> ordersYesterday = getYesterdayOrders(ordersInProgress);
 
-        while (!ordersFromToday.isEmpty()) {
-            Order order = ordersFromToday.get(0);
+        ordersYesterday.forEach(order -> order.setStatus(COMPLETED));
+
+        purchaseRepository.saveAll(ordersYesterday);
+    }
+
+    private void processCreatedForToday() {
+        HashMap<Menu, BigDecimal> map = new HashMap<>();
+        List<Order> ordersCreated = getOrdersByStatus(CREATED);
+        List<Order> ordersFromToday = getTodayOrders(ordersCreated);
+
+        ordersFromToday.forEach(order -> {
             Menu menu = order.getMenu();
             String providerMail = order.getProviderEmail();
             Provider provider = providerService.findProvider(providerMail);
+            CurrentOrder actualCurrentOrder = provider.getOrders().stream().filter(currentOrder -> currentOrder.getOrders().contains(order)).findFirst().orElse(null);
 
-            List<Order> sameOrdersForToday = ordersFromToday.stream()
-                    .filter(o -> o.getMenu().equals(menu) && o.getProviderEmail().equals(providerMail))
-                    .collect(Collectors.toList());
-
-            Integer totalQuantity = getTotalQuantity(sameOrdersForToday);
-
-            Integer price = menu.valueForQuantity(totalQuantity);
-
-            sameOrdersForToday.forEach(todayOrder -> {
-                CurrentOrder currentOrder = provider.getOrders().stream()
-                        .filter(co -> co.getOrders().contains(todayOrder))
-                        .findFirst().orElseThrow(() -> new InexistentCurrentOrderException("No se puede procesar la orden"));
-
-                User user = currentOrder.getClient();
-
-                String userEmail = user.getEmail();
-
-                List<Order> userOrder = currentOrder.getOrders().stream()
-                        .filter(o -> o.getMenu().equals(menu))
-                        .collect(Collectors.toList());
-
-                userOrder.forEach(o -> {
-                    BigDecimal finalPrice = BigDecimal.valueOf(o.getQuantity() * price);
-                    try {
-                        user.discountMoney(finalPrice);
-                    } catch (InsufficientCurrencyException e) {
-                        log.info(e.getMessage() + " para el usuario " + userEmail + "para el menu " + menu.getName());
-                    }
-                    provider.addMoney(finalPrice);
-                    o.setStatus(Status.COMPLETED);
-                    emailService.sendSimpleMessage(userEmail, "[ViandasYa] Compra procesada", "La orden del menu: + " + menu.getName() +
-                            " del proveedor " + provider.getName() + " ha sido procesada exitosamente. Precio final: " + finalPrice);
-                    emailService.sendSimpleMessage(providerMail, "[ViandasYa] Venta procesada", "La orden del menu: + " + menu.getName() +
-                            " del usuario " + userEmail + " ha sido procesada exitosamente. Precio final: " + finalPrice);
-                    providerService.updateProviderOrders(provider);
-                    userService.updateUserOrders(user);
-                });
-
-                ordersFromToday.removeAll(sameOrdersForToday);
-
-            });
-
-
-        }
+            User user = actualCurrentOrder.getClient();
+            if(map.containsKey(menu)){
+                BigDecimal finalPrice = map.get(menu);
+                order.setStatus(IN_PROGRESS);
+                processOrder(order, menu, provider, user, finalPrice);
+            } else {
+                List<Order> currentDayOrdersWithSameMenu = purchaseRepository.findAllByMenuIdAndStatus(menu.getId(), CREATED).stream().filter(actualOrder -> LocalDate.now().equals(actualOrder.getOrderDateAndHour().toLocalDate())).collect(Collectors.toList());
+                int totalPurchasesOfSameMenu = currentDayOrdersWithSameMenu.stream().mapToInt(Order::getQuantity).sum();
+                BigDecimal finalPrice = BigDecimal.valueOf(menu.valueForQuantity(totalPurchasesOfSameMenu));
+                map.put(menu, finalPrice);
+                order.setStatus(IN_PROGRESS);
+                processOrder(order, menu, provider, user, finalPrice);
+            }
+        });
     }
 
-    private List<Order> getTodayOrders(List<Order> ordersInProgress) {
+    private void processOrder(Order order, Menu menu, Provider provider, User user, BigDecimal finalPrice) {
+        BigDecimal priceOffset = valueOf(menu.getPrice()).subtract(finalPrice);
+        provider.addMoney(priceOffset.multiply(valueOf(order.getQuantity())).negate());
+        user.addMoney(priceOffset.multiply(valueOf(order.getQuantity())));
+        purchaseRepository.save(order);
+        /*userService.updateUserOrders(user);
+        providerService.updateProviderOrders(provider);*/
+        sendNotifications(menu, provider, /*user.getEmail()*/ "beniteznahueloscar@gmail.com", finalPrice);
+    }
+
+    private void sendNotifications(final Menu menu, final Provider provider, final String userEmail, final BigDecimal finalPrice) {
+        emailService.sendSimpleMessage(userEmail, "[ViandasYa] Compra procesada", "La orden del menu: " + menu.getName() +
+                " del proveedor " + provider.getName() + " ha sido procesada exitosamente. Precio final: " + finalPrice + ". Se reintegraron: $" + valueOf(menu.getPrice()).subtract(finalPrice));
+        emailService.sendSimpleMessage("beniteznahueloscar@gmail.com", "[ViandasYa] Venta procesada", "La orden del menu: " + menu.getName() +
+                " del usuario " + userEmail + " ha sido procesada exitosamente. Precio final: " + finalPrice + ". Se descontó: $" + valueOf(menu.getPrice()).subtract(finalPrice));
+    }
+
+    private BigDecimal getFinalPrice(final Menu menu, List<Order> sameOrdersForToday) {
+        Integer totalOfMenusBought = getTotalQuantity(sameOrdersForToday);
+        return valueOf(menu.valueForQuantity(totalOfMenusBought));
+    }
+
+    private List<Order> getOrdersWithSameMenu(final List<Order> ordersFromToday, final Menu menu, final String providerMail) {
+        return ordersFromToday.stream()
+                        .filter(o -> o.getMenu().equals(menu) && o.getProviderEmail().equals(providerMail))
+                        .collect(Collectors.toList());
+    }
+
+    private List<Order> getOrdersByStatus(Status status) {
+        return purchaseRepository.findAllByStatus(status);
+    }
+
+    private List<Order> getTodayOrders(final List<Order> ordersCreated) {
+        return ordersCreated.stream()
+                .filter(this::orderHasTodayDate)
+                .collect(Collectors.toList());
+    }
+
+    private List<Order> getYesterdayOrders(final List<Order> ordersInProgress) {
         return ordersInProgress.stream()
                 .filter(this::orderHasTodayDate)
                 .collect(Collectors.toList());
@@ -174,6 +204,10 @@ public class PurchaseService {
 
     private boolean orderHasTodayDate(Order order) {
         return order.getOrderDateAndHour().toLocalDate().equals(LocalDate.now());
+    }
+
+    private boolean orderHasYesterdayDate(Order order) {
+        return order.getDeliveryDateAndHour().toLocalDate().equals(LocalDate.now().minusDays(1));
     }
 
 }

@@ -9,41 +9,45 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.InvalidRankingException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalAmountException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.IrrationalPriceException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.NameLengthException;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Getter
 @NonNull
 @Entity
-@SequenceGenerator(name="MenuSeq", sequenceName="MENUseq", allocationSize=1)
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Menu {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MenuSeq")
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String name;
     private String description;
+    @Setter
+    private String image;
     @ElementCollection(targetClass = Category.class)
     private List<Category> category;
     private Integer deliveryPrice;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn
     private EffectivePeriod effectivePeriod;
     @ElementCollection
@@ -53,10 +57,10 @@ public class Menu {
     private LocalTime averageDeliveryTime;
     private Integer price;
     private Integer dailyStock;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn
     private Offer offer1;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn
     private Offer offer2;
     @ElementCollection
@@ -64,12 +68,13 @@ public class Menu {
     @Column(name = "menu_ranking")
     private List<Integer> ranking;
 
-    public Menu(final String name, final String description, final List<Category> category, final Integer deliveryPrice,
+    public Menu(final String name, final String description, final String image, final List<Category> category, final Integer deliveryPrice,
                 final @NonNull EffectivePeriod effectivePeriod, final List<LocalTime> deliverySchedules,
                 final @NonNull LocalTime averageDeliveryTime, final Integer price, final Integer dailyStock, final Offer offer1,
                 final Offer offer2) {
         this.name = validateName(name);
         this.description = validateDescription(description);
+        this.image = image;
         this.category = validateNotEmptyList(category, "categorías");
         this.deliveryPrice = validateDeliveryPrice(deliveryPrice);
         this.effectivePeriod = effectivePeriod;

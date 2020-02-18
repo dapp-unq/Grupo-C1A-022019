@@ -3,7 +3,6 @@ package ar.edu.unq.desapp.grupoa.model;
 import ar.edu.unq.desapp.grupoa.model.enums.Category;
 import ar.edu.unq.desapp.grupoa.model.enums.City;
 import ar.edu.unq.desapp.grupoa.model.enums.DeliveryType;
-import ar.edu.unq.desapp.grupoa.model.enums.Status;
 import ar.edu.unq.desapp.grupoa.model.exceptions.ElementNotFoundException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.InsufficientCurrencyException;
 import ar.edu.unq.desapp.grupoa.model.exceptions.PurchaseException;
@@ -69,8 +68,8 @@ public class ViandasYa {
     public Order makeOrder(Menu aMenu, String providerEmail, LocalDateTime deliveryDateAndHour,
                            LocalDateTime orderDateAndHour, Integer aQuantity, DeliveryType typeDelivery) {
         aMenu.validationNumberMenuOrdered(aQuantity);
-        return new Order(aMenu, providerEmail, deliveryDateAndHour, orderDateAndHour, aQuantity, typeDelivery,
-                Status.IN_PROGRESS);
+        return new Order(aMenu, providerEmail, deliveryDateAndHour, orderDateAndHour, aQuantity, typeDelivery
+        );
     }
 
     public List<Menu> searchMenuNamesMatchedWith(String text) {

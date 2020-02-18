@@ -15,20 +15,16 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
@@ -39,21 +35,26 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
+
 @Getter
 @NonNull
 @Entity
 @Table(name = "providers")
-@SequenceGenerator(name="ProviderSeq", sequenceName="PROVIDERseq", allocationSize=1)
 @NoArgsConstructor
 @ToString
+@Slf4j
 public class Provider {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ProviderSeq")
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String name;
     private String logo;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private City city;
     private String location;
     private String description;
@@ -61,17 +62,17 @@ public class Provider {
     @Column(unique = true)
     private String email;
     private String phoneNumber;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = LAZY, cascade = ALL)
     @JoinColumn
     private List<ServiceHours> openingHoursDays;
     @ElementCollection(targetClass = City.class)
     @Setter
     private List<City> deliveryCities;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = LAZY, cascade = ALL)
     @JoinColumn
     @Setter
     private List<Menu> currentMenus;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = LAZY, cascade = ALL)
     @JoinColumn
     @Setter
     private List<CurrentOrder> orders;
@@ -106,6 +107,7 @@ public class Provider {
 
     private List<City> calculateDeliveryCities(final Double km, final String location) {
         List<City> cities = new ArrayList<City>();
+        log.debug("km:{}, location:{}", km, location);
         // TODO: FALTA COMUNICARSE EN GMAP PARA VER TODAS LAS LOCALIDADES DONDE HACE
         // ENTREGAS DESDE LA CIUDAD DEL LOCAL.
         cities.add(City.QUILMES);

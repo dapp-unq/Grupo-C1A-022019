@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface PurchaseRepository extends JpaRepository<Order, Long> {
 
-    List<Order> findByStatus(Status status);
+    List<Order> findAllByStatus(final Status status);
+
+    List<Order> findAllByMenuIdAndStatus(final Long id, final Status status);
 
 }

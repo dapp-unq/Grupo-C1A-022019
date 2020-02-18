@@ -9,32 +9,33 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+
+import static ar.edu.unq.desapp.grupoa.model.enums.Status.CREATED;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Getter
 @NonNull
 @Entity
 @Table(name = "orders")
-@SequenceGenerator(name="OrderSeq", sequenceName="ORDERseq", allocationSize=1)
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "OrderSeq")
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = EAGER, cascade = ALL)
     @JoinColumn
     @Setter
     private Menu menu;
@@ -42,15 +43,16 @@ public class Order {
     private LocalDateTime deliveryDateAndHour;
     private LocalDateTime orderDateAndHour;
     private Integer quantity;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private DeliveryType typeDelivery;
-    @Enumerated(EnumType.STRING)
-    @Setter private Status status;
+    @Enumerated(STRING)
+    @Setter
+    private Status status;
     private Integer ranking;
     private Integer value;
 
     public Order(final Menu menu, final String providerEmail, final LocalDateTime deliveryDateAndHour, final LocalDateTime orderDateAndHour,
-                 final Integer quantity, final DeliveryType typeDelivery, final Status status) {
+                 final Integer quantity, final DeliveryType typeDelivery) {
         this.menu = menu;
         this.providerEmail = providerEmail;
         validationDateDeliveryMenuOrdered(orderDateAndHour, deliveryDateAndHour);
@@ -58,7 +60,7 @@ public class Order {
         this.orderDateAndHour = orderDateAndHour;
         this.quantity = quantity;
         this.typeDelivery = typeDelivery;
-        this.status = status;
+        this.status = CREATED;
         this.ranking = 0;
         this.value = this.calculateValue(quantity);
     }

@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoa.model;
 
 import ar.edu.unq.desapp.grupoa.model.enums.DeliveryType;
-import ar.edu.unq.desapp.grupoa.model.enums.Status;
 import ar.edu.unq.desapp.grupoa.model.exceptions.OrderDateException;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -19,7 +18,7 @@ public class OrderTest {
         LocalDateTime orderDay = LocalDateTime.of(2019, 11, 7, 12, 00);
         LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
         Menu mockMenu = mock(Menu.class);
-        return new Order(mockMenu, "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.HOME_DELIVERY, Status.IN_PROGRESS);
+        return new Order(mockMenu, "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.HOME_DELIVERY);
     }
 
     @Test
@@ -97,13 +96,13 @@ public class OrderTest {
     public void orderWithOrderDayAfter48hsDeliveryDayThrowException() {
         LocalDateTime orderDay = LocalDateTime.of(2019, 8, 30, 12, 00);
         LocalDateTime deliveryDay = LocalDateTime.of(2019, 9, 2, 11, 30);
-        new Order(mock(Menu.class), "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.HOME_DELIVERY, Status.IN_PROGRESS);
+        new Order(mock(Menu.class), "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.HOME_DELIVERY);
     }
 
     @Test(expected = OrderDateException.class)
     public void menuWithOrderDayAfter48hsDeliveryDay2ThrowException() {
         LocalDateTime orderDay = LocalDateTime.of(2019, 10, 14, 12, 00);
         LocalDateTime deliveryDay = LocalDateTime.of(2019, 10, 17, 11, 30);
-        new Order(mock(Menu.class), "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.HOME_DELIVERY, Status.IN_PROGRESS);
+        new Order(mock(Menu.class), "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.HOME_DELIVERY);
     }
 }

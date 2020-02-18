@@ -24,13 +24,13 @@ public class PurchaseController {
     }
 
     @PostMapping
-    public ResponseEntity createPurchase(final @RequestBody PurchaseDTO purchaseDTO) {
+    public ResponseEntity<String> createPurchase(final @RequestBody PurchaseDTO purchaseDTO) {
         purchaseService.createPurchase(purchaseDTO);
         return ResponseEntity.ok("Purchase created successfully");
     }
 
     @GetMapping("/test")
-    public ResponseEntity triggerProcessPurchases(){
+    public ResponseEntity<String> triggerProcessPurchases(){
         purchaseService.processOrders();
         return ResponseEntity.ok("Orders processed");
     }

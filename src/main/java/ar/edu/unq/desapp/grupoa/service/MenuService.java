@@ -2,10 +2,16 @@ package ar.edu.unq.desapp.grupoa.service;
 
 import ar.edu.unq.desapp.grupoa.model.Menu;
 import ar.edu.unq.desapp.grupoa.model.Provider;
+import ar.edu.unq.desapp.grupoa.model.enums.Category;
 import ar.edu.unq.desapp.grupoa.persistence.MenuRepository;
 import ar.edu.unq.desapp.grupoa.service.dto.MenuDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
@@ -46,6 +52,7 @@ public class MenuService {
         Menu menuToUpdate = provider.searchMenu(menuDTO.getName());
         menuToUpdate.setName(menuDTO.getName());
         menuToUpdate.setDescription(menuDTO.getDescription());
+        menuToUpdate.setImage(menuDTO.getImage());
         menuToUpdate.getCategory().clear();
         menuToUpdate.getCategory().addAll(menuDTO.getCategory());
         menuToUpdate.setDeliveryPrice(menuDTO.getDeliveryPrice());
@@ -59,4 +66,22 @@ public class MenuService {
         menuToUpdate.setOffer2(converterHelper.offerDtoToOffer(menuDTO.getOffer2()));
         providerService.updateProviderMenus(provider);
     }
+
+    public Page<Menu> getBetweenMinPriceAndMaxPrice(final Integer minPrice, final Integer maxPrice, final int page, final int itemsPerPage) {
+        return menuRepository.findAllByPriceIsGreaterThanEqualAndPriceIsLessThanEqual(minPrice, maxPrice, PageRequest.of(page, itemsPerPage));
+    }
+
+    public List<Menu> getBetweenMinRankAndMaxRank(final Integer minRank, final Integer maxRank) {
+        List<Menu> menus = menuRepository.findAll();
+        return menus.stream().filter(menu -> {
+            Integer averageRank = menu.averageRating();
+            return averageRank >= minRank && averageRank <= maxRank;
+        }).collect(Collectors.toList());
+    }
+
+    public Page<Menu> getByCategory(final Category category, int page, int itemsPerPage) {
+        return menuRepository.findAllByCategoryEquals(category, PageRequest.of(page, itemsPerPage));
+    }
+
+
 }
