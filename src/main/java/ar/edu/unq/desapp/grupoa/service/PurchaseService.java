@@ -149,7 +149,7 @@ public class PurchaseService {
             } else {
                 List<Order> currentDayOrdersWithSameMenu = purchaseRepository.findAllByMenuIdAndStatus(menu.getId(), CREATED).stream().filter(actualOrder -> LocalDate.now().equals(actualOrder.getOrderDateAndHour().toLocalDate())).collect(Collectors.toList());
                 int totalPurchasesOfSameMenu = currentDayOrdersWithSameMenu.stream().mapToInt(Order::getQuantity).sum();
-                BigDecimal finalPrice = BigDecimal.valueOf(menu.valueForQuantity(totalPurchasesOfSameMenu));
+                BigDecimal finalPrice = valueOf(menu.valueForQuantity(totalPurchasesOfSameMenu));
                 map.put(menu, finalPrice);
                 processOrder(order, menu, provider, user, finalPrice);
             }
