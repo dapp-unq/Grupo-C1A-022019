@@ -85,7 +85,7 @@ public class PurchaseService {
         user.discountMoney(orderValue);
         provider.addMoney(orderValue);
 
-        userService.updateUserOrders(user);
+        //userService.updateUserOrders(user);
         purchaseRepository.save(newOrder);
     }
 
@@ -162,16 +162,15 @@ public class PurchaseService {
         provider.addMoney(priceOffset.multiply(valueOf(order.getQuantity())).negate());
         user.addMoney(priceOffset.multiply(valueOf(order.getQuantity())));
         purchaseRepository.save(order);
-        /*userService.updateUserOrders(user);
-        providerService.updateProviderOrders(provider);*/
-        sendNotifications(menu, provider, /*user.getEmail()*/ "beniteznahueloscar@gmail.com", valueOf(order.getValue()).subtract(priceOffset.multiply(valueOf(order.getQuantity()))), priceOffset.multiply(valueOf(order.getQuantity())));
+        BigDecimal orderFinalPrice = valueOf(menu.getPrice()).multiply(valueOf(order.getQuantity())).add(valueOf(menu.getDeliveryPrice())).subtract(priceOffset.multiply(valueOf(order.getQuantity())));
+        sendNotifications(menu, provider, /*user.getEmail()*/ "beniteznahueloscar@gmail.com", orderFinalPrice, priceOffset.multiply(valueOf(order.getQuantity())));
     }
 
     private void sendNotifications(final Menu menu, final Provider provider, final String userEmail, final BigDecimal finalPrice, final BigDecimal offset) {
         emailService.sendSimpleMessage(userEmail, "[ViandasYa] Compra procesada", "La orden del menu: " + menu.getName() +
-                " del proveedor " + provider.getName() + " ha sido procesada exitosamente. Precio final: " + finalPrice + ". Se reintegraron: $" + offset);
+                " del proveedor " + provider.getName() + " ha sido procesada exitosamente. Precio final: $" + finalPrice + ". Se reintegraron: $" + offset);
         emailService.sendSimpleMessage("beniteznahueloscar@gmail.com", "[ViandasYa] Venta procesada", "La orden del menu: " + menu.getName() +
-                " del usuario " + userEmail + " ha sido procesada exitosamente. Precio final: " + finalPrice + ". Se descontó: $" + offset);
+                " del usuario " + userEmail + " ha sido procesada exitosamente. Precio final: $" + finalPrice + ". Se descontó: $" + offset);
     }
 
     private List<Order> getOrdersByStatus(Status status) {
