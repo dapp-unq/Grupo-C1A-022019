@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,7 @@ public class MenuService {
         this.converterHelper = converterHelper;
     }
 
+    @Transactional
     public void createMenu(final MenuDTO menuDTO) {
         Provider provider = getProvider(menuDTO.getProviderEmail());
         Menu newMenu = converterHelper.menuDtoToMenu(menuDTO);
@@ -41,12 +43,14 @@ public class MenuService {
         return providerService.findProvider(providerEmail);
     }
 
+    @Transactional
     public void deleteMenu(String providerEmail, String menuName) {
         Provider provider = getProvider(providerEmail);
         provider.removeMenuWithName(menuName);
         providerService.updateProviderMenus(provider);
     }
 
+    @Transactional
     public void updateMenu(MenuDTO menuDTO) {
         Provider provider = getProvider(menuDTO.getProviderEmail());
         Menu menuToUpdate = provider.searchMenu(menuDTO.getName());

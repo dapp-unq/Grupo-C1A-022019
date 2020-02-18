@@ -7,6 +7,7 @@ import ar.edu.unq.desapp.grupoa.service.exceptions.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
@@ -24,17 +25,20 @@ public class UserService {
         this.converterHelper = converterHelper;
     }
 
+    @Transactional
     public void createUser(final UserDTO userDTO) {
         final User newUser = converterHelper.userDtoToUser(userDTO);
         userRepository.save(newUser);
         log.info("Created User: {}", newUser);
     }
 
+    @Transactional
     public void deleteUser(final String email) {
         userRepository.deleteByEmail(email);
         log.info("Deleted User: {}", email);
     }
 
+    @Transactional
     public void updateUser(final UserDTO userDTO) {
         User user = findUser(userDTO.getEmail());
         user.setName(userDTO.getName());
@@ -46,11 +50,13 @@ public class UserService {
         log.info("Updated user: {}", userDTO.getEmail());
     }
 
+    @Transactional
     public void updateUserOrders(final User user) {
         userRepository.save(user);
         log.info("Updated orders for user: {}", user.getEmail());
     }
 
+    @Transactional
     public void modifyCurrency(final BigDecimal charge, final String email) {
         userRepository.updateCurrency(charge, email);
     }

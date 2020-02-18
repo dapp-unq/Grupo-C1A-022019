@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -62,6 +63,7 @@ public class PurchaseService {
         this.purchaseRepository = purchaseRepository;
     }
 
+    @Transactional
     public void createPurchase(PurchaseDTO purchaseDTO) throws InsufficientCurrencyException {
         final OrderDTO orderDTO = purchaseDTO.getOrder();
         final Provider provider = providerService.findProvider(orderDTO.getMenu().getProviderEmail());
@@ -114,6 +116,7 @@ public class PurchaseService {
     }
 
     @Scheduled(cron = "0 0 0 ? * * ")
+    @Transactional
     public void processOrders() throws InexistentCurrentOrderException {
         processCreatedForToday();
         processInProgressOfYesterday();

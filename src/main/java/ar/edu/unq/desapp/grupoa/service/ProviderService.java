@@ -7,6 +7,7 @@ import ar.edu.unq.desapp.grupoa.service.exceptions.ProviderNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,17 +25,20 @@ public class ProviderService {
         this.converterHelper = converterHelper;
     }
 
+    @Transactional
     public void createProvider(final ProviderDTO providerDTO) {
         Provider newProvider = converterHelper.providerDtoToProvider(providerDTO);
         providerRepository.save(newProvider);
         log.info("Created provider: {}", newProvider);
     }
 
+    @Transactional
     public void deleteProvider(final String email) {
         providerRepository.deleteByEmail(email);
         log.info("Deleted provider: {}", email);
     }
 
+    @Transactional
     public void updateProvider(final ProviderDTO providerDTO) {
         Provider provider = findProvider(providerDTO.getEmail());
         provider.setName(providerDTO.getName());
@@ -53,14 +57,10 @@ public class ProviderService {
         log.info("Updated provider: {}", providerDTO.getEmail());
     }
 
+    @Transactional
     public void updateProviderMenus(final Provider provider) {
         providerRepository.save(provider);
         log.info("Updated menus for provider: {}", provider.getEmail());
-    }
-
-    public void updateProviderOrders(final Provider provider) {
-        providerRepository.save(provider);
-        log.info("Updated orders for provider: {}", provider.getEmail());
     }
 
     public ProviderDTO getProvider(final String email) {
@@ -71,10 +71,5 @@ public class ProviderService {
     public Provider findProvider(final String email) {
         return providerRepository.findByEmail(email).orElseThrow(ProviderNotFoundException::new);
     }
-
-    public List<Provider> getAll() {
-        return providerRepository.findAll();
-    }
-
 
 }
