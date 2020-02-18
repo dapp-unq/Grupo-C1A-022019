@@ -39,19 +39,19 @@ public class MenuService {
         providerService.updateProviderMenus(provider);
     }
 
-    private Provider getProvider(String providerEmail) {
+    private Provider getProvider(final String providerEmail) {
         return providerService.findProvider(providerEmail);
     }
 
     @Transactional
-    public void deleteMenu(String providerEmail, String menuName) {
+    public void deleteMenu(final String providerEmail, final String menuName) {
         Provider provider = getProvider(providerEmail);
         provider.removeMenuWithName(menuName);
         providerService.updateProviderMenus(provider);
     }
 
     @Transactional
-    public void updateMenu(MenuDTO menuDTO) {
+    public void updateMenu(final MenuDTO menuDTO) {
         Provider provider = getProvider(menuDTO.getProviderEmail());
         Menu menuToUpdate = provider.searchMenu(menuDTO.getName());
         menuToUpdate.setName(menuDTO.getName());
@@ -83,7 +83,7 @@ public class MenuService {
         }).collect(Collectors.toList());
     }
 
-    public Page<Menu> getByCategory(final Category category, int page, int itemsPerPage) {
+    public Page<Menu> getByCategory(final Category category, final int page, final int itemsPerPage) {
         return menuRepository.findAllByCategoryEquals(category, PageRequest.of(page, itemsPerPage));
     }
 
