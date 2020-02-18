@@ -1,7 +1,7 @@
-INSERT INTO users (id, balance, email, location, name, phone_number, surname) VALUES (1, 0.00, 'beniteznahueloscar@gmail.com', 'Quilmes Oeste', 'Nahuel', '+42112555005', 'Benitez');
+INSERT INTO users (id, balance, email, location, name, phone_number, surname) VALUES (1, 30000.00, 'beniteznahueloscar@gmail.com', 'Quilmes Oeste', 'Nahuel', '+42112555005', 'Benitez');
 INSERT INTO users (id, balance, email, location, name, phone_number, surname) VALUES (2, 0.00, 'liza.chambi@gmail.com', 'Luis Guillón', 'Liza', '+42112555005', 'Chambi');
 
-INSERT INTO providers (id, balance, city, description, email, location, logo, menus_removed, name, phone_number, website) VALUES (1, 0.00, 'QUILMES', 'Comida gourmet hecha por los mejores chef de la zona', 'liza.chambi@gmail.com', 'Rivadavia 250', 'https://gourmetnatural.net/wp-content/uploads/2019/05/afs.png', 0, 'Liza''s', '+42112555005', 'https://gourmetnatural.net/es/home/');
+INSERT INTO providers (id, balance, city, description, email, location, logo, menus_removed, name, phone_number, website) VALUES (1, 30000.00, 'QUILMES', 'Comida gourmet hecha por los mejores chef de la zona', 'liza.chambi@gmail.com', 'Rivadavia 250', 'https://gourmetnatural.net/wp-content/uploads/2019/05/afs.png', 0, 'Liza''s', '+42112555005', 'https://gourmetnatural.net/es/home/');
 
 INSERT INTO service_hours (id, closing_hours, day, opening_hours, opening_hours_days_id) VALUES (1, '15:00:00', 'MONDAY', '10:00:00', 1);
 

@@ -62,7 +62,7 @@ public class PurchaseService {
         this.purchaseRepository = purchaseRepository;
     }
 
-    public void createPurchase(PurchaseDTO purchaseDTO) {
+    public void createPurchase(PurchaseDTO purchaseDTO) throws InsufficientCurrencyException {
         final OrderDTO orderDTO = purchaseDTO.getOrder();
         final Provider provider = providerService.findProvider(orderDTO.getMenu().getProviderEmail());
         final Menu menu = provider.searchMenu(orderDTO.getMenu().getName());
@@ -78,10 +78,13 @@ public class PurchaseService {
 
         provider.addOrder(user, newOrder);
 
-        purchaseRepository.save(newOrder);
+        BigDecimal orderValue = valueOf(newOrder.getValue());
 
-        /*providerService.updateProviderMenus(provider);
-        userService.updateUserOrders(user)*/;
+        user.discountMoney(orderValue);
+        provider.addMoney(orderValue);
+
+        userService.updateUserOrders(user);
+        purchaseRepository.save(newOrder);
     }
 
     private void validateStockOfMenu(Menu menu, Provider provider, Integer quantity) {
@@ -137,16 +140,15 @@ public class PurchaseService {
             CurrentOrder actualCurrentOrder = provider.getOrders().stream().filter(currentOrder -> currentOrder.getOrders().contains(order)).findFirst().orElse(null);
 
             User user = actualCurrentOrder.getClient();
+            order.setStatus(IN_PROGRESS);
             if(map.containsKey(menu)){
                 BigDecimal finalPrice = map.get(menu);
-                order.setStatus(IN_PROGRESS);
                 processOrder(order, menu, provider, user, finalPrice);
             } else {
                 List<Order> currentDayOrdersWithSameMenu = purchaseRepository.findAllByMenuIdAndStatus(menu.getId(), CREATED).stream().filter(actualOrder -> LocalDate.now().equals(actualOrder.getOrderDateAndHour().toLocalDate())).collect(Collectors.toList());
                 int totalPurchasesOfSameMenu = currentDayOrdersWithSameMenu.stream().mapToInt(Order::getQuantity).sum();
                 BigDecimal finalPrice = BigDecimal.valueOf(menu.valueForQuantity(totalPurchasesOfSameMenu));
                 map.put(menu, finalPrice);
-                order.setStatus(IN_PROGRESS);
                 processOrder(order, menu, provider, user, finalPrice);
             }
         });
@@ -159,25 +161,14 @@ public class PurchaseService {
         purchaseRepository.save(order);
         /*userService.updateUserOrders(user);
         providerService.updateProviderOrders(provider);*/
-        sendNotifications(menu, provider, /*user.getEmail()*/ "beniteznahueloscar@gmail.com", finalPrice);
+        sendNotifications(menu, provider, /*user.getEmail()*/ "beniteznahueloscar@gmail.com", valueOf(order.getValue()).subtract(priceOffset.multiply(valueOf(order.getQuantity()))), priceOffset.multiply(valueOf(order.getQuantity())));
     }
 
-    private void sendNotifications(final Menu menu, final Provider provider, final String userEmail, final BigDecimal finalPrice) {
+    private void sendNotifications(final Menu menu, final Provider provider, final String userEmail, final BigDecimal finalPrice, final BigDecimal offset) {
         emailService.sendSimpleMessage(userEmail, "[ViandasYa] Compra procesada", "La orden del menu: " + menu.getName() +
-                " del proveedor " + provider.getName() + " ha sido procesada exitosamente. Precio final: " + finalPrice + ". Se reintegraron: $" + valueOf(menu.getPrice()).subtract(finalPrice));
+                " del proveedor " + provider.getName() + " ha sido procesada exitosamente. Precio final: " + finalPrice + ". Se reintegraron: $" + offset);
         emailService.sendSimpleMessage("beniteznahueloscar@gmail.com", "[ViandasYa] Venta procesada", "La orden del menu: " + menu.getName() +
-                " del usuario " + userEmail + " ha sido procesada exitosamente. Precio final: " + finalPrice + ". Se descontó: $" + valueOf(menu.getPrice()).subtract(finalPrice));
-    }
-
-    private BigDecimal getFinalPrice(final Menu menu, List<Order> sameOrdersForToday) {
-        Integer totalOfMenusBought = getTotalQuantity(sameOrdersForToday);
-        return valueOf(menu.valueForQuantity(totalOfMenusBought));
-    }
-
-    private List<Order> getOrdersWithSameMenu(final List<Order> ordersFromToday, final Menu menu, final String providerMail) {
-        return ordersFromToday.stream()
-                        .filter(o -> o.getMenu().equals(menu) && o.getProviderEmail().equals(providerMail))
-                        .collect(Collectors.toList());
+                " del usuario " + userEmail + " ha sido procesada exitosamente. Precio final: " + finalPrice + ". Se descontó: $" + offset);
     }
 
     private List<Order> getOrdersByStatus(Status status) {
@@ -192,14 +183,8 @@ public class PurchaseService {
 
     private List<Order> getYesterdayOrders(final List<Order> ordersInProgress) {
         return ordersInProgress.stream()
-                .filter(this::orderHasTodayDate)
+                .filter(this::orderHasYesterdayDate)
                 .collect(Collectors.toList());
-    }
-
-    private int getTotalQuantity(List<Order> sameOrdersForToday) {
-        return sameOrdersForToday.stream()
-                .mapToInt(Order::getQuantity)
-                .sum();
     }
 
     private boolean orderHasTodayDate(Order order) {
