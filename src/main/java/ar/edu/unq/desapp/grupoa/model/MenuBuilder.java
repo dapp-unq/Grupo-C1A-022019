@@ -10,6 +10,7 @@ import java.util.List;
 public class MenuBuilder {
     private String name = "no name";
     private String description = "no menu description 1";
+    private String image = "no image";
     private List<Category> category = initializeCategory();
     private Integer deliveryPrice = 30;
     private EffectivePeriod effectivePeriod = initializeEffectivePeriod();
@@ -19,6 +20,7 @@ public class MenuBuilder {
     private Integer dailyStock = 50;
     private Offer offer1 = new Offer(10, 8);
     private Offer offer2 = new Offer(0, 0);
+    private String providerEmail = "an@email.com";
 
     private List<Category> initializeCategory() {
         List<Category> categorias = new ArrayList<Category>();
@@ -44,8 +46,8 @@ public class MenuBuilder {
     }
 
     public Menu build() {
-        return new Menu(name, description, category, deliveryPrice, effectivePeriod, deliverySchedules,
-                averageDeliveryTime, price, dailyStock, offer1, offer2);
+        return new Menu(name, description, image, category, deliveryPrice, effectivePeriod, deliverySchedules,
+                averageDeliveryTime, price, dailyStock, offer1, offer2, providerEmail);
     }
 
     public MenuBuilder withName(final String aName) {

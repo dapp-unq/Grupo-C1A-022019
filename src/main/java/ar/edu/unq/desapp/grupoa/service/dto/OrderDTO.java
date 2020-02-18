@@ -20,6 +20,7 @@ public class OrderDTO {
     private LocalDateTime deliveryDateAndHour;
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime orderDateAndHour;
+    private String providerEmail;
     private Integer quantity;
     private DeliveryType typeDelivery;
     private Status status;

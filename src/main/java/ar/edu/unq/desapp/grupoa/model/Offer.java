@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @Entity
 @NoArgsConstructor
+@JsonIgnoreProperties("hibernateLazyInitializer")
 public class Offer {
 
     @Id
