@@ -64,7 +64,7 @@ public class PurchaseService {
     }
 
     @Transactional
-    public void createPurchase(PurchaseDTO purchaseDTO) throws InsufficientCurrencyException {
+    public void createPurchase(final PurchaseDTO purchaseDTO) throws InsufficientCurrencyException {
         final OrderDTO orderDTO = purchaseDTO.getOrder();
         final Provider provider = providerService.findProvider(orderDTO.getMenu().getProviderEmail());
         final Menu menu = provider.searchMenu(orderDTO.getMenu().getName());
@@ -85,11 +85,10 @@ public class PurchaseService {
         user.discountMoney(orderValue);
         provider.addMoney(orderValue);
 
-        //userService.updateUserOrders(user);
         purchaseRepository.save(newOrder);
     }
 
-    private void validateStockOfMenu(Menu menu, Provider provider, Integer quantity) {
+    private void validateStockOfMenu(final Menu menu, final Provider provider, final Integer quantity) {
         int totalQuantity = provider.getOrders().stream()
                 .map(CurrentOrder::getOrders)
                 .flatMap(Collection::stream)
@@ -100,14 +99,14 @@ public class PurchaseService {
                     (menu.getDailyStock() - totalQuantity));
     }
 
-    private Order convertDtoToOrder(OrderDTO orderDTO) {
+    private Order convertDtoToOrder(final OrderDTO orderDTO) {
         final LocalDateTime orderDateAndHour = orderDTO.getOrderDateAndHour();
         final LocalDateTime deliveryDateAndHour = orderDTO.getDeliveryDateAndHour();
         checkForBusinessDays(orderDateAndHour.toLocalDate(), deliveryDateAndHour.toLocalDate());
         return converterHelper.orderDtoToOrder(orderDTO);
     }
 
-    private void checkForBusinessDays(LocalDate orderDate, LocalDate deliveryDate) {
+    private void checkForBusinessDays(final LocalDate orderDate, final LocalDate deliveryDate) {
         if (businessDayCheckerService.isBusinessDay(orderDate)) {
             if (!businessDayCheckerService.isBusinessDay(deliveryDate))
                 throw new NotBusinessDayException("La fecha de delivery es un día feriado");
@@ -157,7 +156,7 @@ public class PurchaseService {
         });
     }
 
-    private void processOrder(Order order, Menu menu, Provider provider, User user, BigDecimal finalPrice) {
+    private void processOrder(final Order order, final Menu menu, final Provider provider, final  User user, final BigDecimal finalPrice) {
         BigDecimal priceOffset = valueOf(menu.getPrice()).subtract(finalPrice);
         provider.addMoney(priceOffset.multiply(valueOf(order.getQuantity())).negate());
         user.addMoney(priceOffset.multiply(valueOf(order.getQuantity())));
@@ -173,7 +172,7 @@ public class PurchaseService {
                 " del usuario " + userEmail + " ha sido procesada exitosamente. Precio final: $" + finalPrice + ". Se descontó: $" + offset);
     }
 
-    private List<Order> getOrdersByStatus(Status status) {
+    private List<Order> getOrdersByStatus(final Status status) {
         return purchaseRepository.findAllByStatus(status);
     }
 
@@ -189,11 +188,11 @@ public class PurchaseService {
                 .collect(Collectors.toList());
     }
 
-    private boolean orderHasTodayDate(Order order) {
+    private boolean orderHasTodayDate(final Order order) {
         return order.getOrderDateAndHour().toLocalDate().equals(LocalDate.now());
     }
 
-    private boolean orderHasYesterdayDate(Order order) {
+    private boolean orderHasYesterdayDate(final Order order) {
         return order.getDeliveryDateAndHour().toLocalDate().equals(LocalDate.now().minusDays(1));
     }
 

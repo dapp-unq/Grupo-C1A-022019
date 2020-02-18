@@ -66,7 +66,7 @@ public class UserService {
         return converterHelper.userToUserDTO(fetchedUser);
     }
 
-    public User findUser(String email) {
+    public User findUser(final String email) {
         return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
     }
 

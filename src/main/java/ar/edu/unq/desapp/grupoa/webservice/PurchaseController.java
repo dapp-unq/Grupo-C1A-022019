@@ -4,7 +4,6 @@ import ar.edu.unq.desapp.grupoa.model.exceptions.InsufficientCurrencyException;
 import ar.edu.unq.desapp.grupoa.service.PurchaseService;
 import ar.edu.unq.desapp.grupoa.service.dto.PurchaseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,14 +22,14 @@ public class PurchaseController {
     private PurchaseService purchaseService;
 
     @Autowired
-    public PurchaseController(PurchaseService purchaseService) {
+    public PurchaseController(final PurchaseService purchaseService) {
         this.purchaseService = purchaseService;
     }
 
     @PostMapping
     public ResponseEntity<String> createPurchase(final @RequestBody PurchaseDTO purchaseDTO) {
         ResponseEntity<String> response;
-        try{
+        try {
             purchaseService.createPurchase(purchaseDTO);
             response = ResponseEntity.ok("Purchase created successfully");
         } catch (InsufficientCurrencyException e) {
@@ -40,7 +39,7 @@ public class PurchaseController {
     }
 
     @GetMapping("/test")
-    public ResponseEntity<String> triggerProcessPurchases(){
+    public ResponseEntity<String> triggerProcessPurchases() {
         purchaseService.processOrders();
         return ResponseEntity.ok("Orders processed");
     }
