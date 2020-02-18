@@ -318,7 +318,7 @@ public class ViandaYaTest {
         assertEquals(deliveryDay, newOrder.getDeliveryDateAndHour());
         assertEquals(orderDay, newOrder.getOrderDateAndHour());
         assertEquals(new Integer(50), newOrder.getQuantity());
-        assertEquals(Status.IN_PROGRESS, newOrder.getStatus());
+        assertEquals(Status.CREATED, newOrder.getStatus());
         assertEquals(DeliveryType.HOME_DELIVERY, newOrder.getTypeDelivery());
         assertEquals(new Integer(7530), newOrder.getValue());
         assertEquals(new Integer(0), newOrder.getRanking());

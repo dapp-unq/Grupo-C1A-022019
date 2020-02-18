@@ -18,9 +18,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+import static ar.edu.unq.desapp.grupoa.model.enums.Status.CREATED;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
-import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Getter
@@ -33,7 +34,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    @OneToOne(fetch = LAZY, cascade = ALL)
+    @OneToOne(fetch = EAGER, cascade = ALL)
     @JoinColumn
     @Setter
     private Menu menu;
@@ -44,12 +45,13 @@ public class Order {
     @Enumerated(STRING)
     private DeliveryType typeDelivery;
     @Enumerated(STRING)
+    @Setter
     private Status status;
     private Integer ranking;
     private Integer value;
 
     public Order(final Menu menu, final String providerEmail, final LocalDateTime deliveryDateAndHour, final LocalDateTime orderDateAndHour,
-                 final Integer quantity, final DeliveryType typeDelivery, final Status status) {
+                 final Integer quantity, final DeliveryType typeDelivery) {
         this.menu = menu;
         this.providerEmail = providerEmail;
         validationDateDeliveryMenuOrdered(orderDateAndHour, deliveryDateAndHour);
@@ -57,7 +59,7 @@ public class Order {
         this.orderDateAndHour = orderDateAndHour;
         this.quantity = quantity;
         this.typeDelivery = typeDelivery;
-        this.status = status;
+        this.status = CREATED;
         this.ranking = 0;
         this.value = this.calculateValue(quantity);
     }

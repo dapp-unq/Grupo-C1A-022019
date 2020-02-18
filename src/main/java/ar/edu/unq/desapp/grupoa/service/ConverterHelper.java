@@ -79,7 +79,7 @@ public class ConverterHelper {
         return new Menu(menuDTO.getName(), menuDTO.getDescription(), menuDTO.getImage(),menuDTO.getCategory(), menuDTO.getDeliveryPrice(),
                 effectivePeriodDtoToEffectivePeriod(menuDTO.getEffectivePeriod()), menuDTO.getDeliverySchedules(),
                 menuDTO.getAverageDeliveryTime(), menuDTO.getPrice(), menuDTO.getDailyStock(), offerDtoToOffer(menuDTO.getOffer1()),
-                offerDtoToOffer(menuDTO.getOffer2()));
+                offerDtoToOffer(menuDTO.getOffer2()), menuDTO.getProviderEmail());
     }
 
     public Offer offerDtoToOffer(final OfferDTO offer) {
@@ -115,6 +115,7 @@ public class ConverterHelper {
 
     private OrderDTO orderToOrderDTO(final Order order) {
         OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setProviderEmail(order.getProviderEmail());
         orderDTO.setDeliveryDateAndHour(order.getDeliveryDateAndHour());
         orderDTO.setOrderDateAndHour(order.getOrderDateAndHour());
         orderDTO.setQuantity(order.getQuantity());
@@ -130,9 +131,9 @@ public class ConverterHelper {
         return orderDTOList.stream().map(this::orderDtoToOrder).collect(Collectors.toList());
     }
 
-    public Order orderDtoToOrder(OrderDTO orderDTO) {
+    public Order orderDtoToOrder(final OrderDTO orderDTO) {
         return new Order(menuDtoToMenu(orderDTO.getMenu()), orderDTO.getMenu().getProviderEmail(), orderDTO.getDeliveryDateAndHour(),
-                orderDTO.getOrderDateAndHour(), orderDTO.getQuantity(), orderDTO.getTypeDelivery(), orderDTO.getStatus());
+                orderDTO.getOrderDateAndHour(), orderDTO.getQuantity(), orderDTO.getTypeDelivery());
     }
 
     private List<ServiceHoursDTO> serviceHoursListToServiceHoursDTOList(final List<ServiceHours> serviceHours) {
@@ -166,6 +167,7 @@ public class ConverterHelper {
         menuDTO.setOffer1(offerToOfferDTO(menu.getOffer1()));
         menuDTO.setOffer2(offerToOfferDTO(menu.getOffer2()));
         menuDTO.setRanking(menu.getRanking());
+        menuDTO.setProviderEmail(menu.getProviderEmail());
         return menuDTO;
     }
 

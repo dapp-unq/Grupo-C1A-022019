@@ -43,6 +43,12 @@
             <artifactId>spring-aop</artifactId>
         </dependency>
 
+        <!--Spring boot mail-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- AspectJ Weaver -->
         <dependency>
             <groupId>org.aspectj</groupId>

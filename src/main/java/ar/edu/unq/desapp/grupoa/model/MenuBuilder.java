@@ -20,6 +20,7 @@ public class MenuBuilder {
     private Integer dailyStock = 50;
     private Offer offer1 = new Offer(10, 8);
     private Offer offer2 = new Offer(0, 0);
+    private String providerEmail = "an@email.com";
 
     private List<Category> initializeCategory() {
         List<Category> categorias = new ArrayList<Category>();
@@ -46,7 +47,7 @@ public class MenuBuilder {
 
     public Menu build() {
         return new Menu(name, description, image, category, deliveryPrice, effectivePeriod, deliverySchedules,
-                averageDeliveryTime, price, dailyStock, offer1, offer2);
+                averageDeliveryTime, price, dailyStock, offer1, offer2, providerEmail);
     }
 
     public MenuBuilder withName(final String aName) {

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,7 @@ public class MenuService {
         this.converterHelper = converterHelper;
     }
 
+    @Transactional
     public void createMenu(final MenuDTO menuDTO) {
         Provider provider = getProvider(menuDTO.getProviderEmail());
         Menu newMenu = converterHelper.menuDtoToMenu(menuDTO);
@@ -37,17 +39,19 @@ public class MenuService {
         providerService.updateProviderMenus(provider);
     }
 
-    private Provider getProvider(String providerEmail) {
+    private Provider getProvider(final String providerEmail) {
         return providerService.findProvider(providerEmail);
     }
 
-    public void deleteMenu(String providerEmail, String menuName) {
+    @Transactional
+    public void deleteMenu(final String providerEmail, final String menuName) {
         Provider provider = getProvider(providerEmail);
         provider.removeMenuWithName(menuName);
         providerService.updateProviderMenus(provider);
     }
 
-    public void updateMenu(MenuDTO menuDTO) {
+    @Transactional
+    public void updateMenu(final MenuDTO menuDTO) {
         Provider provider = getProvider(menuDTO.getProviderEmail());
         Menu menuToUpdate = provider.searchMenu(menuDTO.getName());
         menuToUpdate.setName(menuDTO.getName());
@@ -79,7 +83,7 @@ public class MenuService {
         }).collect(Collectors.toList());
     }
 
-    public Page<Menu> getByCategory(final Category category, int page, int itemsPerPage) {
+    public Page<Menu> getByCategory(final Category category, final int page, final int itemsPerPage) {
         return menuRepository.findAllByCategoryEquals(category, PageRequest.of(page, itemsPerPage));
     }
 
