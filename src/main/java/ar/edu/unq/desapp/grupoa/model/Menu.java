@@ -67,11 +67,12 @@ public class Menu {
     @CollectionTable(name = "menu_rankings", joinColumns = @JoinColumn(name = "menu_id"))
     @Column(name = "menu_ranking")
     private List<Integer> ranking;
+    private String providerEmail;
 
     public Menu(final String name, final String description, final String image, final List<Category> category, final Integer deliveryPrice,
                 final @NonNull EffectivePeriod effectivePeriod, final List<LocalTime> deliverySchedules,
                 final @NonNull LocalTime averageDeliveryTime, final Integer price, final Integer dailyStock, final Offer offer1,
-                final Offer offer2) {
+                final Offer offer2, final String providerEmail) {
         this.name = validateName(name);
         this.description = validateDescription(description);
         this.image = image;
@@ -85,6 +86,7 @@ public class Menu {
         this.offer1 = validationOffer1(offer1);
         this.offer2 = validationOffer2(offer2); // Offer(0,0) = Optional
         this.ranking = new ArrayList<>();
+        this.providerEmail = providerEmail;
     }
 
     private @NonNull Offer validationOffer2(final Offer aOffer) {
