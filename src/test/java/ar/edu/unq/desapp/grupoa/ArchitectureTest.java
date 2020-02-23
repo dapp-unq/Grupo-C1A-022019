@@ -5,8 +5,11 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
+import static java.util.Objects.isNull;
 import static org.junit.Assert.assertTrue;
 
 public class ArchitectureTest {
@@ -17,15 +20,20 @@ public class ArchitectureTest {
         assertTrue(webservicePackage.stream().allMatch(this::checkIfHasCorrectLayers));
     }
 
-    private boolean checkIfHasCorrectLayers(Class clazz) {
+    private boolean checkIfHasCorrectLayers(Class<?> clazz) {
         String name = clazz.getSimpleName().split("Controller")[0].toLowerCase();
         String serviceName = name + "Service";
         String repositoryName = name + "Repository";
+        boolean serviceFound = false;
+        boolean repositoryFound = false;
         Field fieldService = ReflectionUtils.findField(clazz, serviceName);
-        Class serviceClass = fieldService.getType();
-        Field fieldRepository = ReflectionUtils.findField(serviceClass, repositoryName);
-        Class repositoryClass = fieldRepository.getType();
-        return Objects.nonNull(serviceClass) && Objects.nonNull(repositoryClass);
+        serviceFound = !isNull(fieldService);
+        if (serviceFound) {
+            Class<?> serviceClass = fieldService.getType();
+            Field fieldRepository = ReflectionUtils.findField(serviceClass, repositoryName);
+            repositoryFound = !isNull(fieldRepository);
+        }
+        return serviceFound && repositoryFound;
     }
 
 }
