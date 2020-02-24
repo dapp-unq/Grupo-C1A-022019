@@ -98,7 +98,7 @@ public class Provider {
         this.email = validateEmail(email);
         this.phoneNumber = validatePhoneNumber(phone);
         this.openingHoursDays = validateNotEmptyOpeningHoursDays(serviceHours, "horarios y días de atención");
-        this.deliveryCities = calculateDeliveryCities(km, location);
+        this.deliveryCities = new ArrayList<>();
         this.currentMenus = new ArrayList<Menu>();
         this.orders = new ArrayList<CurrentOrder>();
         this.balance = BigDecimal.ZERO;

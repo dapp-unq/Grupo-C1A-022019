@@ -8,6 +8,7 @@ public enum City{
 	CANNING("Canning"),
 	BERNAL_OESTE("Bernal Oeste"),
 	BERNAL_ESTE("Bernal Este"),
+	QUILMES("Quilmes"),
 	QUILMES_OESTE("Quilmes Oeste"),
 	QUILMES_CENTRO("Quilmes Centro"),
 	BERAZATEGUI("Berazategui"),
