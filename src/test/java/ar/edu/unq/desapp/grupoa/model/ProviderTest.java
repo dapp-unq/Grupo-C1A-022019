@@ -248,8 +248,8 @@ public class ProviderTest {
 
 	@Test
 	public void providerCreationWithQuilmesCity() {
-		provider = ProviderBuilder.aProvider().withCity(City.QUILMES).build();
-		assertEquals(City.QUILMES, provider.getCity());
+		provider = ProviderBuilder.aProvider().withCity(City.QUILMES_CENTRO).build();
+		assertEquals(City.QUILMES_CENTRO, provider.getCity());
 	}
 
 	@Test
@@ -534,9 +534,9 @@ public class ProviderTest {
 		provider.addMenu(mockMenu1);
 		provider.addMenu(mockMenu2);
 		
-		assertTrue(provider.menusWithLocation(City.QUILMES).contains(mockMenu1));
-		assertTrue(provider.menusWithLocation(City.QUILMES).contains(mockMenu2));
-		assertEquals(2, provider.menusWithLocation(City.QUILMES).size());
+		assertTrue(provider.menusWithLocation(City.QUILMES_CENTRO).contains(mockMenu1));
+		assertTrue(provider.menusWithLocation(City.QUILMES_CENTRO).contains(mockMenu2));
+		assertEquals(2, provider.menusWithLocation(City.QUILMES_CENTRO).size());
 	}
 	
 	@Test

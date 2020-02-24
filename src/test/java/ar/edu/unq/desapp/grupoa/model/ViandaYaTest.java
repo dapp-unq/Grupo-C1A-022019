@@ -222,11 +222,11 @@ public class ViandaYaTest {
         result.add(mockMenu1);
         result.add(mockMenu2);
 
-        when(mockProvider1.menusWithLocation(City.QUILMES)).thenReturn(new ArrayList<Menu>());
-        when(mockProvider2.menusWithLocation(City.QUILMES)).thenReturn(result);
+        when(mockProvider1.menusWithLocation(City.QUILMES_CENTRO)).thenReturn(new ArrayList<Menu>());
+        when(mockProvider2.menusWithLocation(City.QUILMES_CENTRO)).thenReturn(result);
         viandasYa.addProvider(mockProvider1);
         viandasYa.addProvider(mockProvider2);
-        List<Menu> menus = viandasYa.searchMenusWithLocation(City.QUILMES);
+        List<Menu> menus = viandasYa.searchMenusWithLocation(City.QUILMES_CENTRO);
 
         assertTrue(menus.contains(mockMenu1));
         assertTrue(menus.contains(mockMenu1));
@@ -236,7 +236,7 @@ public class ViandaYaTest {
     @Test
     public void testSearchMenuWithLocationBernalWithoutMenusThenReturnEmptyList() {
         viandasYa = new ViandasYa();
-        assertTrue(viandasYa.searchMenusWithLocation(City.BERNAL).isEmpty());
+        assertTrue(viandasYa.searchMenusWithLocation(City.BERNAL_ESTE).isEmpty());
     }
 
     @Test

@@ -110,9 +110,7 @@ public class Provider {
         log.debug("km:{}, location:{}", km, location);
         // TODO: FALTA COMUNICARSE EN GMAP PARA VER TODAS LAS LOCALIDADES DONDE HACE
         // ENTREGAS DESDE LA CIUDAD DEL LOCAL.
-        cities.add(City.QUILMES);
-        cities.add(City.BERNAL);
-        cities.add(City.EZPELETA);
+        cities.add(City.valueOf(location));
         return cities;
     }
 

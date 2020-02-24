@@ -1,6 +1,8 @@
 package ar.edu.unq.desapp.grupoa.webservice;
 
+import ar.edu.unq.desapp.grupoa.model.enums.City;
 import ar.edu.unq.desapp.grupoa.service.ProviderService;
+import ar.edu.unq.desapp.grupoa.service.dto.CityDTO;
 import ar.edu.unq.desapp.grupoa.service.dto.ProviderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -34,20 +42,25 @@ public class ProviderController {
     }
 
     @PostMapping
-    public ResponseEntity createProvider(final @RequestBody ProviderDTO providerDTO) {
+    public ResponseEntity<String> createProvider(final @RequestBody ProviderDTO providerDTO) {
         providerService.createProvider(providerDTO);
         return new ResponseEntity<>("Provider created successfully", HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{email}")
-    public ResponseEntity deleteProvider(final @PathVariable("email") String email) {
+    public ResponseEntity<String> deleteProvider(final @PathVariable("email") String email) {
         providerService.deleteProvider(email);
         return new ResponseEntity<>("Provider deleted successfully", HttpStatus.valueOf(204));
     }
 
     @PutMapping
-    public ResponseEntity updateProvider(final @RequestBody ProviderDTO providerDTO) {
+    public ResponseEntity<String> updateProvider(final @RequestBody ProviderDTO providerDTO) {
         providerService.updateProvider(providerDTO);
         return new ResponseEntity<>("Provider updated successfully", HttpStatus.valueOf(204));
+    }
+
+    @GetMapping("/cities")
+    public ResponseEntity<List<CityDTO>> cities(){
+        return ResponseEntity.ok(Arrays.stream(City.values()).map(city -> new CityDTO(city, city.getFullName())).collect(Collectors.toList()));
     }
 }
