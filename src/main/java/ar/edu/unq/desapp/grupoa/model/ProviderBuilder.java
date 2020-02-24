@@ -30,7 +30,7 @@ public class ProviderBuilder {
 	}
 
 	public Provider build() {
-		return new Provider(name, logo, city, location, description, website, email, phoneNumber, openingHoursDays, km);
+		return new Provider(name, logo, city, location, description, website, email, phoneNumber, openingHoursDays);
 	}
 
 	public ProviderBuilder withName(final String aName) {

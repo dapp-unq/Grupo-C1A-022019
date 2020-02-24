@@ -88,7 +88,7 @@ public class Provider {
     private final Pattern VALID_PHONE_REGEX = Pattern.compile("^\\+(?:[0-9]?){6,14}[0-9]$");
 
     public Provider(final String name, final String logo, final City city, final String location, final String description, final @NonNull String website,
-                    final String email, final String phone, final List<ServiceHours> serviceHours, final double km) {
+                    final String email, final String phone, final List<ServiceHours> serviceHours) {
         this.name = validateNotEmpty(name, "nombre");
         this.logo = validateNotEmpty(logo, "logo");
         this.city = validateNotEmptyCity(city, "localidad");

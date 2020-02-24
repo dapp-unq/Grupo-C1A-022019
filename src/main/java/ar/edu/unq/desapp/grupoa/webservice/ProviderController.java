@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -60,7 +58,7 @@ public class ProviderController {
     }
 
     @GetMapping("/cities")
-    public ResponseEntity<List<CityDTO>> cities(){
+    public ResponseEntity<List<CityDTO>> cities() {
         return ResponseEntity.ok(Arrays.stream(City.values()).map(city -> new CityDTO(city, city.getFullName())).collect(Collectors.toList()));
     }
 }
