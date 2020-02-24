@@ -11,7 +11,7 @@ public class ProviderBuilder {
 	private String name = "no name i";
 	private String logo = "no logo";
 	private City city = City.LUIS_GUILLON;
-	private String location = "no location";
+	private String location = "QUILMES_CENTRO";
 	private String description = "description with at least 30 characters";
 	private String website = "no webside";
 	private String email = "noe-mail@gmail.com";
@@ -30,7 +30,7 @@ public class ProviderBuilder {
 	}
 
 	public Provider build() {
-		return new Provider(name, logo, city, location, description, website, email, phoneNumber, openingHoursDays, km);
+		return new Provider(name, logo, city, location, description, website, email, phoneNumber, openingHoursDays);
 	}
 
 	public ProviderBuilder withName(final String aName) {

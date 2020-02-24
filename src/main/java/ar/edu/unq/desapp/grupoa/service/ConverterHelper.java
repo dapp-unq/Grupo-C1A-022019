@@ -59,7 +59,7 @@ public class ConverterHelper {
     public Provider providerDtoToProvider(final ProviderDTO providerDTO) {
         Provider provider = new Provider(providerDTO.getName(), providerDTO.getLogo(), providerDTO.getCity(), providerDTO.getLocation(),
                 providerDTO.getDescription(), providerDTO.getWebsite(), providerDTO.getEmail(), providerDTO.getPhoneNumber(),
-                serviceHoursDtoListToServiceHoursList(providerDTO.getOpeningHoursDays()), 0L);
+                serviceHoursDtoListToServiceHoursList(providerDTO.getOpeningHoursDays()));
         return provider;
     }
 
