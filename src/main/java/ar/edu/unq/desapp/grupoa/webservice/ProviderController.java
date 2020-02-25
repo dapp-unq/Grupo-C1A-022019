@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/rest/provider")
@@ -35,8 +37,13 @@ public class ProviderController {
 
     @GetMapping("/{email}")
     public ResponseEntity<ProviderDTO> getProvider(final @PathVariable("email") String email) {
-        ProviderDTO provider = providerService.getProvider(email);
-        return ResponseEntity.ok(provider);
+        ResponseEntity response;
+        try {
+            response = ResponseEntity.ok(providerService.getProvider(email));
+        } catch (RuntimeException ex) {
+            response = new ResponseEntity("No se encontró al proveedor: " + email, INTERNAL_SERVER_ERROR);
+        }
+        return response;
     }
 
     @PostMapping

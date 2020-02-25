@@ -1,11 +1,13 @@
 package ar.edu.unq.desapp.grupoa.service;
 
 import ar.edu.unq.desapp.grupoa.model.User;
+import ar.edu.unq.desapp.grupoa.model.exceptions.UserServiceException;
 import ar.edu.unq.desapp.grupoa.persistence.UserRepository;
 import ar.edu.unq.desapp.grupoa.service.dto.UserDTO;
 import ar.edu.unq.desapp.grupoa.service.exceptions.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +29,13 @@ public class UserService {
 
     @Transactional
     public void createUser(final UserDTO userDTO) {
-        final User newUser = converterHelper.userDtoToUser(userDTO);
-        userRepository.save(newUser);
-        log.info("Created User: {}", newUser);
+        try {
+            final User newUser = converterHelper.userDtoToUser(userDTO);
+            userRepository.save(newUser);
+            log.info("Created User: {}", newUser);
+        } catch (DataIntegrityViolationException ex) {
+            throw new UserServiceException("Ya existe un usuario con ese email", ex);
+        }
     }
 
     @Transactional
@@ -67,7 +73,7 @@ public class UserService {
     }
 
     public User findUser(final String email) {
-        return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("No se encontró al usuario: " + email));
     }
 
 }

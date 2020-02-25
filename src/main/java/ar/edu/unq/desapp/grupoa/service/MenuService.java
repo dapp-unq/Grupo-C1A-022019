@@ -36,7 +36,7 @@ public class MenuService {
         Provider provider = getProvider(menuDTO.getProviderEmail());
         Menu newMenu = converterHelper.menuDtoToMenu(menuDTO);
         provider.addMenu(newMenu);
-        providerService.updateProviderMenus(provider);
+        menuRepository.save(newMenu);
     }
 
     private Provider getProvider(final String providerEmail) {

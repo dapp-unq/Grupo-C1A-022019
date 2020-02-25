@@ -16,6 +16,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -25,10 +27,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -62,18 +66,21 @@ public class Provider {
     @Column(unique = true)
     private String email;
     private String phoneNumber;
-    @OneToMany(fetch = LAZY, cascade = ALL)
+    @OneToMany(fetch = LAZY, cascade = ALL, orphanRemoval = true)
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ServiceHours> openingHoursDays;
     @ElementCollection(targetClass = City.class)
     @Setter
     private List<City> deliveryCities;
-    @OneToMany(fetch = LAZY, cascade = ALL)
-    @JoinColumn
+    @OneToMany(fetch = LAZY, cascade = ALL, orphanRemoval = true)
     @Setter
+    @JoinColumn(name = "current_menus_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Menu> currentMenus;
-    @OneToMany(fetch = LAZY, cascade = ALL)
+    @OneToMany(fetch = LAZY, cascade = ALL, orphanRemoval = true)
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @Setter
     private List<CurrentOrder> orders;
     @Setter
@@ -276,5 +283,10 @@ public class Provider {
     public void cancelMenu(final Menu menu) {
         this.removeMenu(menu);
         this.menusRemoved++;
+    }
+
+    @PreRemove
+    public void preRemove(){
+        orders = Collections.emptyList();
     }
 }
