@@ -32,15 +32,21 @@ public class PurchaseController {
         try {
             purchaseService.createPurchase(purchaseDTO);
             response = ResponseEntity.ok("Purchase created successfully");
-        } catch (InsufficientCurrencyException e) {
-            response = new ResponseEntity<>("Insufficient Currency for purchase", INTERNAL_SERVER_ERROR);
+        } catch (RuntimeException ex) {
+            response = new ResponseEntity<>("No se pudo realizar la compra. " + ex.getMessage(), INTERNAL_SERVER_ERROR);
         }
         return response;
     }
 
     @GetMapping("/test")
     public ResponseEntity<String> triggerProcessPurchases() {
-        purchaseService.processOrders();
-        return ResponseEntity.ok("Orders processed");
+        ResponseEntity<String> response;
+        try {
+            purchaseService.processOrders();
+            response = ResponseEntity.ok("Orders processed");
+        } catch (RuntimeException ex){
+            response = new ResponseEntity<String>("No se pudieron procesar las ordenes. " + ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+        return response;
     }
 }

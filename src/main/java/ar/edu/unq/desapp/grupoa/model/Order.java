@@ -86,6 +86,10 @@ public class Order {
 
     public void validationDateDeliveryMenuOrdered(final LocalDateTime dateHoursOrder,
                                                   final LocalDateTime dateHoursDelivery) {
+        if(dateHoursDelivery.isBefore(LocalDateTime.now()))
+            throw new OrderDateException("La fecha de entrega no puede tener una fecha pasada");
+        if(dateHoursOrder.isBefore(LocalDateTime.now()))
+            throw new OrderDateException("La fecha de orden no puede tener una fecha pasada");
         if (!this.has48HoursBetween(dateHoursOrder, dateHoursDelivery))
             throw new OrderDateException("El pedido debe hacerse al menos 48hs hábiles antes de la entrega del mismo.");
     }

@@ -160,7 +160,8 @@ INSERT INTO menu_deliveries_schedules (menu_id, delivery_schedule) VALUES (20, '
 
 INSERT INTO current_order (id, client_id, orders_id) VALUES (1, 1, 1);
 
-INSERT INTO orders (id, delivery_date_and_hour, order_date_and_hour, provider_email, quantity, ranking, status, type_delivery, value, menu_id, order_history_id, orders_id) VALUES (1, '2020-02-19 13:00:00.000000', '2020-02-18 13:00:00.000000', 'liza.chambi@gmail.com', 5, 0, 'CREATED', 'HOME_DELIVERY', 1010, 1, 1, 1);
+INSERT INTO orders (id, delivery_date_and_hour, order_date_and_hour, provider_email, quantity, ranking, status, type_delivery, value, menu_id, order_history_id, orders_id) VALUES (1, '2020-02-26 13:00:00.000000', '2020-02-25 13:00:00.000000', 'liza.chambi@gmail.com', 5, 0, 'CREATED', 'HOME_DELIVERY', 1010, 1, 1, 1);
+INSERT INTO orders (id, delivery_date_and_hour, order_date_and_hour, provider_email, quantity, ranking, status, type_delivery, value, menu_id, order_history_id, orders_id) VALUES (2, '2020-02-26 13:00:00.000000', '2020-02-25 13:00:00.000000', 'liza.chambi@gmail.com', 80, 0, 'CREATED', 'HOME_DELIVERY', 16010, 1, 1, 1);
 
 --INSERT INTO orders (id, delivery_date_and_hour, order_date_and_hour, provider_email, quantity, ranking, status, type_delivery, value, menu_id, order_history_id) VALUES (1, '2020-02-19 13:00:00.000000', '2020-02-18 13:00:00.000000', 'liza.chambi@gmail.com', 1, 0, 'CREATED', 'HOME_DELIVERY', 210, 1, 1);
 --INSERT INTO orders (id, delivery_date_and_hour, order_date_and_hour, provider_email, quantity, ranking, status, type_delivery, value, menu_id, order_history_id) VALUES (2, '2020-02-17 13:00:00.000000', '2020-02-16 13:00:00.000000', 'liza.chambi@gmail.com', 1, 0, 'IN_PROGRESS', 'HOME_DELIVERY', 210, 1, 1);

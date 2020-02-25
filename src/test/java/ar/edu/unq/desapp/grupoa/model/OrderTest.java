@@ -15,8 +15,10 @@ public class OrderTest {
     private Order order;
 
     private Order anyOrder() {
-        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 7, 12, 00);
-        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
+        LocalDateTime orderDay = LocalDateTime.now().plusDays(1);
+        LocalDateTime deliveryDay = LocalDateTime.now().plusDays(2);
+        /*LocalDateTime orderDay = LocalDateTime.of(2019, 11, 7, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);*/
         Menu mockMenu = mock(Menu.class);
         return new Order(mockMenu, "ViandaLiz", deliveryDay, orderDay, 50, DeliveryType.HOME_DELIVERY);
     }
