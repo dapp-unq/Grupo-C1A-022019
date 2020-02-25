@@ -96,7 +96,7 @@ public class Order {
     }
 
     @PreRemove
-    private void preRemove() {
+    public void preRemove() {
         menu = null;
     }
 

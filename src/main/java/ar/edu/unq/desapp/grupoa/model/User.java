@@ -147,7 +147,7 @@ public class User {
     }
 
     @PreRemove
-    private void preRemove(){
+    public void preRemove(){
         orderHistory = Collections.emptyList();
     }
 }
