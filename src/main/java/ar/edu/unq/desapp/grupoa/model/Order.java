@@ -14,7 +14,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
@@ -34,8 +35,8 @@ public class Order {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    @OneToOne(fetch = EAGER, cascade = ALL)
-    @JoinColumn
+    @ManyToOne(fetch = EAGER, cascade = ALL)
+    @JoinColumn(name = "menu_id", nullable = false)
     @Setter
     private Menu menu;
     private String providerEmail;
@@ -94,5 +95,9 @@ public class Order {
         return from.isAfter(to2DaysBefore) && from.isBefore(to);
     }
 
+    @PreRemove
+    public void preRemove() {
+        menu = null;
+    }
 
 }

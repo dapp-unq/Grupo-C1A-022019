@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/rest/menu")
@@ -35,20 +38,38 @@ public class MenuController {
 
     @PostMapping
     public ResponseEntity<String> createMenu(final @RequestBody MenuDTO menuDTO) {
-        menuService.createMenu(menuDTO);
-        return new ResponseEntity<>("Menu created successfully", HttpStatus.CREATED);
+        ResponseEntity<String> response;
+        try {
+            menuService.createMenu(menuDTO);
+            response = new ResponseEntity<>("Menu created successfully", CREATED);
+        } catch (RuntimeException ex) {
+            response = new ResponseEntity<>("La creación del menú falló. " + ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+        return response;
     }
 
     @DeleteMapping("/{providerEmail}/{menuName}")
     public ResponseEntity<String> deleteMenu(@PathVariable final String providerEmail, final @PathVariable String menuName) {
-        menuService.deleteMenu(providerEmail, menuName);
-        return new ResponseEntity<>("Menu deleted successfully", HttpStatus.valueOf(204));
+        ResponseEntity<String> response;
+        try {
+            menuService.deleteMenu(providerEmail, menuName);
+            response = new ResponseEntity<>("Menú borrado exitosamente", HttpStatus.valueOf(204));
+        } catch (RuntimeException ex) {
+            response = new ResponseEntity<>("No se pudo borrar el menú " + ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+        return response;
     }
 
     @PutMapping
     public ResponseEntity<String> modifyMenu(final @RequestBody MenuDTO menuDTO) {
-        menuService.updateMenu(menuDTO);
-        return new ResponseEntity<>("Menu updated successfully", HttpStatus.valueOf(204));
+        ResponseEntity<String> response;
+        try {
+            menuService.updateMenu(menuDTO);
+            response = new ResponseEntity<>("Menú actualizado exitosamente", HttpStatus.valueOf(204));
+        } catch (RuntimeException ex) {
+            response = new ResponseEntity<>("No se pudo actualizar el menú. " + ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+        return response;
     }
 
     @GetMapping("/price")

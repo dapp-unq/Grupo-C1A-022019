@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,10 +20,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,9 +49,10 @@ public class User {
     private String email;
     private String phoneNumber;
     private String location;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn
     @Setter
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Order> orderHistory;
     @Setter
     private BigDecimal balance;
@@ -139,5 +144,10 @@ public class User {
 
     private boolean isBelowZero(BigDecimal aNumber) {
         return aNumber.compareTo(BigDecimal.ZERO) < 0;
+    }
+
+    @PreRemove
+    public void preRemove(){
+        orderHistory = Collections.emptyList();
     }
 }

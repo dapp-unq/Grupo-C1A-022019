@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -22,11 +24,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PreRemove;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -47,8 +52,9 @@ public class Menu {
     @ElementCollection(targetClass = Category.class)
     private List<Category> category;
     private Integer deliveryPrice;
-    @OneToOne(fetch = LAZY, cascade = ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL, orphanRemoval = true)
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private EffectivePeriod effectivePeriod;
     @ElementCollection
     @CollectionTable(name = "menu_deliveries_schedules", joinColumns = @JoinColumn(name = "menu_id"))
@@ -57,17 +63,22 @@ public class Menu {
     private LocalTime averageDeliveryTime;
     private Integer price;
     private Integer dailyStock;
-    @OneToOne(fetch = LAZY, cascade = ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL, orphanRemoval = true)
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Offer offer1;
-    @OneToOne(fetch = LAZY, cascade = ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL, orphanRemoval = true)
     @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Offer offer2;
     @ElementCollection
     @CollectionTable(name = "menu_rankings", joinColumns = @JoinColumn(name = "menu_id"))
     @Column(name = "menu_ranking")
     private List<Integer> ranking;
     private String providerEmail;
+    @OneToMany(fetch = LAZY, cascade = ALL, orphanRemoval = true, mappedBy = "menu")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Order> order;
 
     public Menu(final String name, final String description, final String image, final List<Category> category, final Integer deliveryPrice,
                 final @NonNull EffectivePeriod effectivePeriod, final List<LocalTime> deliverySchedules,
@@ -296,5 +307,12 @@ public class Menu {
             average = sumRanking / this.ranking.size();
         }
         return average;
+    }
+
+    @PreRemove
+    public void preRemove() {
+        category = emptyList();
+        deliverySchedules = emptyList();
+        ranking = emptyList();
     }
 }

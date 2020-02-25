@@ -67,7 +67,7 @@ public class ProviderService {
     }
 
     public Provider findProvider(final String email) {
-        return providerRepository.findByEmail(email).orElseThrow(ProviderNotFoundException::new);
+        return providerRepository.findByEmail(email).orElseThrow(() -> new ProviderNotFoundException("No se encontró el proveedor"));
     }
 
 }

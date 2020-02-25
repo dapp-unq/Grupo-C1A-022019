@@ -36,7 +36,7 @@ public class MenuService {
         Provider provider = getProvider(menuDTO.getProviderEmail());
         Menu newMenu = converterHelper.menuDtoToMenu(menuDTO);
         provider.addMenu(newMenu);
-        providerService.updateProviderMenus(provider);
+        menuRepository.save(newMenu);
     }
 
     private Provider getProvider(final String providerEmail) {
@@ -46,8 +46,9 @@ public class MenuService {
     @Transactional
     public void deleteMenu(final String providerEmail, final String menuName) {
         Provider provider = getProvider(providerEmail);
+        Menu menu = provider.searchMenu(menuName);
         provider.removeMenuWithName(menuName);
-        providerService.updateProviderMenus(provider);
+        menuRepository.delete(menu);
     }
 
     @Transactional
@@ -68,7 +69,7 @@ public class MenuService {
         menuToUpdate.setDailyStock(menuDTO.getDailyStock());
         menuToUpdate.setOffer1(converterHelper.offerDtoToOffer(menuDTO.getOffer1()));
         menuToUpdate.setOffer2(converterHelper.offerDtoToOffer(menuDTO.getOffer2()));
-        providerService.updateProviderMenus(provider);
+        menuRepository.save(menuToUpdate);
     }
 
     public Page<Menu> getBetweenMinPriceAndMaxPrice(final Integer minPrice, final Integer maxPrice, final int page, final int itemsPerPage) {

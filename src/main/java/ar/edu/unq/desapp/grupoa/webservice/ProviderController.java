@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/rest/provider")
@@ -34,27 +36,50 @@ public class ProviderController {
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<ProviderDTO> getProvider(final @PathVariable("email") String email) {
-        ProviderDTO provider = providerService.getProvider(email);
-        return ResponseEntity.ok(provider);
+    public ResponseEntity getProvider(final @PathVariable("email") String email) {
+        ResponseEntity response;
+        try {
+            response = ResponseEntity.ok(providerService.getProvider(email));
+        } catch (RuntimeException ex) {
+            response = new ResponseEntity<>("No se encontró al proveedor: " + email + ". " + ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+        return response;
     }
 
     @PostMapping
     public ResponseEntity<String> createProvider(final @RequestBody ProviderDTO providerDTO) {
-        providerService.createProvider(providerDTO);
-        return new ResponseEntity<>("Provider created successfully", HttpStatus.CREATED);
+        ResponseEntity response;
+        try {
+            providerService.createProvider(providerDTO);
+            response = new ResponseEntity<>("Proveedor creado exitosamente", HttpStatus.CREATED);
+        } catch (RuntimeException ex) {
+            response = new ResponseEntity<>("No se pudo crear al proveedor. " + ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+        return response;
     }
 
     @DeleteMapping("/{email}")
     public ResponseEntity<String> deleteProvider(final @PathVariable("email") String email) {
-        providerService.deleteProvider(email);
-        return new ResponseEntity<>("Provider deleted successfully", HttpStatus.valueOf(204));
+        ResponseEntity<String> response;
+        try {
+            providerService.deleteProvider(email);
+            response = new ResponseEntity<>("Proveedor borrado exitosamente", HttpStatus.valueOf(204));
+        } catch (RuntimeException ex) {
+            response = new ResponseEntity<>("No se pudo borrar al proveedor: " + email + ". " + ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+        return response;
     }
 
     @PutMapping
     public ResponseEntity<String> updateProvider(final @RequestBody ProviderDTO providerDTO) {
-        providerService.updateProvider(providerDTO);
-        return new ResponseEntity<>("Provider updated successfully", HttpStatus.valueOf(204));
+        ResponseEntity<String> response;
+        try {
+            providerService.updateProvider(providerDTO);
+            response = new ResponseEntity<>("Proveedor actualizado exitosamente", HttpStatus.valueOf(204));
+        } catch (RuntimeException ex){
+            response = new ResponseEntity<>("No se pudo actualizar el proveedor. " + ex.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+        return response;
     }
 
     @GetMapping("/cities")
