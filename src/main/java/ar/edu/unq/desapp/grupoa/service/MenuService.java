@@ -46,8 +46,9 @@ public class MenuService {
     @Transactional
     public void deleteMenu(final String providerEmail, final String menuName) {
         Provider provider = getProvider(providerEmail);
+        Menu menu = provider.searchMenu(menuName);
         provider.removeMenuWithName(menuName);
-        providerService.updateProviderMenus(provider);
+        menuRepository.delete(menu);
     }
 
     @Transactional
