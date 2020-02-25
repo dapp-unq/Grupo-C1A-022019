@@ -86,6 +86,27 @@ public class PurchaseService {
         provider.addMoney(orderValue);
 
         purchaseRepository.save(newOrder);
+
+        sendPurchaseEmails("beniteznahueloscar@gmail.com", provider, menu, newOrder);
+    }
+
+    private void sendPurchaseEmails(String userEmail, Provider provider, Menu menu, Order order) {
+        emailService.sendSimpleMessage(userEmail, "[ViandasYa] Compra creada",
+                new StringBuilder("Orden creada para el menu: ")
+                        .append(menu.getName())
+                        .append(" del proveedor: ")
+                        .append(provider.getName())
+                        .append(". Precio inicial: $")
+                        .append(order.getValue())
+                        .toString());
+        emailService.sendSimpleMessage("beniteznahueloscar@gmail.com", "[ViandasYa] Venta creada",
+                new StringBuilder("Orden creada para el menu: ")
+                        .append(menu.getName())
+                        .append(" para el usuario: ")
+                        .append(userEmail)
+                        .append(". Precio inicial: $")
+                        .append(order.getValue())
+                        .toString());
     }
 
     private void validateStockOfMenu(final Menu menu, final Provider provider, final Integer quantity) {

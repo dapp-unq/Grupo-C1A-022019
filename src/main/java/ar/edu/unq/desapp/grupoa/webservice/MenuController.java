@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoa.webservice;
 
 import ar.edu.unq.desapp.grupoa.model.Menu;
 import ar.edu.unq.desapp.grupoa.model.enums.Category;
+import ar.edu.unq.desapp.grupoa.service.ConverterHelper;
 import ar.edu.unq.desapp.grupoa.service.MenuService;
 import ar.edu.unq.desapp.grupoa.service.dto.MenuDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -31,9 +33,12 @@ public class MenuController {
 
     private MenuService menuService;
 
+    private ConverterHelper converterHelper;
+
     @Autowired
-    public MenuController(MenuService menuService) {
+    public MenuController(final MenuService menuService, final ConverterHelper converterHelper) {
         this.menuService = menuService;
+        this.converterHelper = converterHelper;
     }
 
     @PostMapping
@@ -73,21 +78,21 @@ public class MenuController {
     }
 
     @GetMapping("/price")
-    public ResponseEntity<Page<Menu>> getBetweenMinPriceAndMaxPrice(@RequestParam final int minPrice, @RequestParam final int maxPrice, @RequestParam final int page, @RequestParam final int itemsPerPage) {
+    public ResponseEntity<Page<MenuDTO>> getBetweenMinPriceAndMaxPrice(@RequestParam final int minPrice, @RequestParam final int maxPrice, @RequestParam final int page, @RequestParam final int itemsPerPage) {
         Page<Menu> menus = menuService.getBetweenMinPriceAndMaxPrice(minPrice, maxPrice, page, itemsPerPage);
-        return ResponseEntity.ok(menus);
+        return ResponseEntity.ok(menus.map(menu -> converterHelper.menuToMenuDTO(menu)));
     }
 
     @GetMapping("/rank")
-    public ResponseEntity<List<Menu>> getBetweenMinRankAndMaxRank(final @RequestParam Integer minRank, final @RequestParam Integer maxRank) {
+    public ResponseEntity<List<MenuDTO>> getBetweenMinRankAndMaxRank(final @RequestParam Integer minRank, final @RequestParam Integer maxRank) {
         List<Menu> menus = menuService.getBetweenMinRankAndMaxRank(minRank, maxRank);
-        return ResponseEntity.ok(menus);
+        return ResponseEntity.ok(menus.stream().map(menu -> converterHelper.menuToMenuDTO(menu)).collect(Collectors.toList()));
     }
 
     @GetMapping("/category")
-    public ResponseEntity<Page<Menu>> getByCategory(final @RequestParam Category category, final @RequestParam int page, final @RequestParam int itemsPerPage) {
+    public ResponseEntity<Page<MenuDTO>> getByCategory(final @RequestParam Category category, final @RequestParam int page, final @RequestParam int itemsPerPage) {
         Page<Menu> menus = menuService.getByCategory(category, page, itemsPerPage);
-        return ResponseEntity.ok(menus);
+        return ResponseEntity.ok(menus.map(menu -> converterHelper.menuToMenuDTO(menu)));
     }
 
 }

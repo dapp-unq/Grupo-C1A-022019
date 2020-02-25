@@ -242,8 +242,11 @@ public class ViandaYaTest {
     @Test
     public void testPurchaseMenuCorrectly() throws InsufficientCurrencyException {
         viandasYa = new ViandasYa();
-        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 7, 12, 00);
-        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
+        /*LocalDateTime orderDay = LocalDateTime.of(2019, 11, 7, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);*/
+        LocalDateTime orderDay = LocalDateTime.now().plusDays(1);
+        LocalDateTime deliveryDay = LocalDateTime.now().plusDays(2);
+
         User mockUser = mock(User.class);
         Menu mockMenu = mock(Menu.class);
         Provider mockProvider = mock(Provider.class);
@@ -264,8 +267,10 @@ public class ViandaYaTest {
     @Test(expected = InsufficientCurrencyException.class)
     public void whenUserWithInsufficientMoneyMakeAPurchaseItThrowsException() throws InsufficientCurrencyException {
         viandasYa = new ViandasYa();
-        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 7, 12, 00);
-        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
+        /*LocalDateTime orderDay = LocalDateTime.of(2019, 11, 7, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);*/
+        LocalDateTime orderDay = LocalDateTime.now().plusDays(1);
+        LocalDateTime deliveryDay = LocalDateTime.now().plusDays(2);
         User mockUser = mock(User.class);
         Menu mockMenu = mock(Menu.class);
         Provider mockProvider = mock(Provider.class);
@@ -280,8 +285,10 @@ public class ViandaYaTest {
     @Test(expected = IrrationalAmountException.class)
     public void testPurchaseMenuWithout100DailyStockThenThrowException() throws InsufficientCurrencyException {
         viandasYa = new ViandasYa();
-        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
-        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
+        /*LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);*/
+        LocalDateTime orderDay = LocalDateTime.now().plusDays(1);
+        LocalDateTime deliveryDay = LocalDateTime.now().plusDays(2);
 
         User mockUser = mock(User.class);
         Menu mockMenu = mock(Menu.class);
@@ -305,8 +312,10 @@ public class ViandaYaTest {
     @Test
     public void testMakeAOrderThenReturnAOrder() {
         viandasYa = new ViandasYa();
-        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 7, 12, 00);
-        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
+        /*LocalDateTime orderDay = LocalDateTime.of(2019, 11, 7, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);*/
+        LocalDateTime orderDay = LocalDateTime.now().plusDays(1);
+        LocalDateTime deliveryDay = LocalDateTime.now().plusDays(2);
         Menu mockMenu = mock(Menu.class);
         when(mockMenu.valueForQuantity(50)).thenReturn(150);
         when(mockMenu.getDeliveryPrice()).thenReturn(30);
@@ -327,8 +336,10 @@ public class ViandaYaTest {
     @Test(expected = IrrationalAmountException.class)
     public void testMakeAOrderWithout100DailyStockThenThrowException() {
         viandasYa = new ViandasYa();
-        LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
-        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);
+        /*LocalDateTime orderDay = LocalDateTime.of(2019, 11, 2, 12, 00);
+        LocalDateTime deliveryDay = LocalDateTime.of(2019, 11, 8, 11, 30);*/
+        LocalDateTime orderDay = LocalDateTime.now().plusDays(1);
+        LocalDateTime deliveryDay = LocalDateTime.now().plusDays(2);
         Menu mockMenu = mock(Menu.class);
         doThrow(IrrationalAmountException.class).when(mockMenu).validationNumberMenuOrdered(100);
 
