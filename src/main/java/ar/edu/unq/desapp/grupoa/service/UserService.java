@@ -51,15 +51,8 @@ public class UserService {
         user.setSurname(userDTO.getSurname());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setLocation(userDTO.getLocation());
-        user.setBalance(userDTO.getBalance());
         userRepository.save(user);
         log.info("Updated user: {}", userDTO.getEmail());
-    }
-
-    @Transactional
-    public void updateUserOrders(final User user) {
-        userRepository.save(user);
-        log.info("Updated orders for user: {}", user.getEmail());
     }
 
     @Transactional

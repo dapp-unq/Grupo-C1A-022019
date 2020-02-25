@@ -60,7 +60,7 @@ public class UserController {
         ResponseEntity<String> response;
         try {
             userService.updateUser(userDTO);
-            response = new ResponseEntity<>("Currency updated successfully", HttpStatus.valueOf(204));
+            response = new ResponseEntity<>("Dinero actualizado exitosamente", HttpStatus.valueOf(204));
         } catch (final RuntimeException ex) {
             response = new ResponseEntity<>("No se pudo actualizar el usuario. " + ex.getMessage(), INTERNAL_SERVER_ERROR);
         }

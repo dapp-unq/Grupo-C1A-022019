@@ -69,7 +69,7 @@ public class MenuService {
         menuToUpdate.setDailyStock(menuDTO.getDailyStock());
         menuToUpdate.setOffer1(converterHelper.offerDtoToOffer(menuDTO.getOffer1()));
         menuToUpdate.setOffer2(converterHelper.offerDtoToOffer(menuDTO.getOffer2()));
-        providerService.updateProviderMenus(provider);
+        menuRepository.save(menuToUpdate);
     }
 
     public Page<Menu> getBetweenMinPriceAndMaxPrice(final Integer minPrice, final Integer maxPrice, final int page, final int itemsPerPage) {
